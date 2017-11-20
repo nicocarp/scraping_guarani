@@ -13,7 +13,13 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, scrapingProvider: ScrapingProvider) {
     this.scrapingProvider=scrapingProvider;
+    this.guarani();
   }
-    
+
+  guarani(){
+    console.log("0-por pedir detras");
+    this.scrapingProvider.probandoHttp();
+  }
+     
 
 }

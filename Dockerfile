@@ -17,5 +17,5 @@ USER 1000
 
 EXPOSE 8100 35729
 
-CMD ["ionic", "serve", "--address", "0.0.0.0"]
+CMD ["ionic", "serve","--watch-poll", "--address", "0.0.0.0"]
 

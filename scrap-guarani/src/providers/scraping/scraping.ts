@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ScrapingProvider {
   
+  url = "http://www.dit.ing.unp.edu.ar/v2070/www/";
   constructor(public http: Http) {
     console.log('Hello ScrapingProvider Provider');
   }
@@ -18,4 +19,11 @@ export class ScrapingProvider {
   getLog(){
     return "hola";
   }
+
+  probandoHttp(){
+    console.log("asds");
+    this.http.get('http://www.dit.ing.unp.edu.ar/v2070/www/').subscribe(data => {
+        console.log(data);
+      }, err=>{console.log("ERROR"+err)});
+    }
 }
