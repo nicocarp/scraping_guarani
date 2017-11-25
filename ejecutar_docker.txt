@@ -1,2 +1,0 @@
-docker run -d -p 8100:8100 -v /home/nicoc/Escritorio/codigos/TNT/proyectos/ionic/scrap-guarani/:/code imagen_ionic
-docker run -d -p 8100:8100 -p 35729:35729 -v /home/nicoc/Escritorio/codigos/TNT/proyectos/ionic/scrap-guarani/:/code ionic_user_2
