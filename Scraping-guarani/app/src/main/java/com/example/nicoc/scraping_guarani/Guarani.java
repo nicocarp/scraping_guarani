@@ -1,5 +1,6 @@
 package com.example.nicoc.scraping_guarani;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.nicoc.scraping_guarani.Modelos.Materia;
@@ -60,28 +61,7 @@ public class Guarani {
         this.connection.cookies(this.connection.response().cookies());
     }
 
-    public ArrayList<Mesa> getMesasDeExamen() throws IOException {
-        Mesa m1 = new Mesa();
-
-        m1.setFecha(new Date());
-        Materia materia1 = new Materia();
-        materia1.setNombre("TNT");
-        materia1.setAño(1);
-        materia1.setCodigo("UnCodigo1");
-        m1.setMateria(materia1);
-
-        ArrayList<Profesor> profesores = new ArrayList<Profesor>();
-        profesores.add(new Profesor("Ricardo Lopez"));
-        m1.setProfesores(profesores);
-
-        m1.setTipoMesa(TipoMesa.REGULAR);
-
-        ArrayList<Mesa> mesas= new ArrayList<Mesa>();
-        mesas.add(m1);
-
-        return mesas;
-
-        /*
+    public boolean inscribirseMesaById(String id_materia) throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -89,18 +69,145 @@ public class Guarani {
         url = document.select("[src*=operaciones]").first().attr("abs:src");
         document = this.connection.url(url).get();
 
-        url = document.select("[href*=elegirCarrera]").first().attr("abs:href");
+        url = document.select("a:contains(examen)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        Element link_mesa = document.select("a:contains("+id_materia+")").first();
+
+        System.out.println(link_mesa.attr("abs:href"));
+        url = link_mesa.attr("abs:href");
+        document = this.connection.url(url).get();
+
+        System.out.println(document.html());
+
+        Element form = document.select("form").first();
+        url = form.attr("abs:action");
+
+        System.out.println(url);
+        document = this.connection
+                .data(getPostInscripcionMesa(id_materia))
+                .url(url)
+                .post();
+        System.out.println(document.html());
+        return true;
+    }
+
+    public void getMesasAnotadas() throws IOException {
+        Document document = this.document_base;
+        String url;
+
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+
+        url = document.select("[href*=eliminarInscExamenes]").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        System.out.println(document.html());
+        System.out.println("PARA DESINCRIBIRSE");
+        for (Element mesa : document.select("[href*=desinscribirseExamen]")){
+            System.out.println(mesa.text());
+        }
+    }
+
+    public void desinscribirseDeMesa(String id_materia) throws IOException {
+        Document document = this.document_base;
+        String url;
+
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+
+        url = document.select("[href*=eliminarInscExamenes]").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        Element a_materia = document.select("a:contains(IF017)").first();
+        System.out.println("DEBO ELIMINAR");
+        System.out.println(a_materia.text() + a_materia.attr("abs:href"));
+        url = a_materia.attr("abs:href");
+        document = this.connection.url(url).get();
+        System.out.println(document.html());
+
+    }
+
+    private Map<String, String> getPostInscripcionMesa(String codigo){
+        Map<String, String> m = new HashMap<String, String>();
+        m.put("operacion", "exa00006");
+        m.put("carrera", "38");
+        m.put("legajo", "34-38-5620");
+        m.put("materia", "IF017");
+        m.put("generica", "");
+        m.put("anio_academico", "2017");
+        m.put("turno_examen", "NOVIEMBRE%202017%20%282%29");
+        m.put("mesa_examen", "IF017-REG");
+        m.put("llamado", "1");
+        m.put("tipo inscripcion", "R"); // este cambia a L si es libre
+        m.put("tipo_incripcion0", "L");
+        m.put("mesa", "on");
+        m.put("tipo_inscripcion1", "R");
+        return m;
+    }
+
+    public ArrayList<Mesa> getMesasDeExamen() throws IOException {
+
+        Document document = this.document_base;
+        String url;
+
+        // obtengo frame de operaciones (menu izquierda)
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+
+        url = document.select("a:contains(examen)").first().attr("abs:href");
         document = this.connection.url(url).get();
 
         //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
         Element e = document.select("[text*=LICENCIATURA]").first();
 
-        System.out.print(e);
+        Elements link_carreras = document.select("[href*=elegirMateriaInscCursada]");
+        for (Element elem : link_carreras){
+            System.out.print(elem.text());
+            System.out.println(elem.attr("abs:href"));
+        }
+
+        //url = link_carreras.get(1).attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        Elements link_materias = document.select("[href*=elegirMesaInscExamen]");
+        for (Element element : link_materias){
+            Mesa mesa = new Mesa();
+            String codigo_materia = getCodigoMateria(element.text());
+            String nombre_materia = getNombreMateria(element.text());
+            System.out.println("Un codigo de mesa disponible"+ codigo_materia.toString());
+        }
+
+
         //document = this.connection.url(url).get();
 
-return null;
-        */
+        return null;
 
+
+    }
+
+    private String getCodigoMateria(String cadena){
+        Pattern patron_codigo = Pattern.compile("(\\([A-Z0-9]+\\))");
+        Matcher matcher = patron_codigo.matcher(cadena);
+        String codigo_masteria="";
+        while (matcher.find())
+            codigo_masteria = matcher.group(1);
+        return codigo_masteria;
+    }
+
+    private String getNombreMateria(String cadena){
+        Pattern patron_nombre = Pattern.compile("([\\s | [A-ZÑÁÉÍÓÚ]]+)");
+        Matcher matcher = patron_nombre.matcher(cadena);
+        String nombre_materia="";
+        while (matcher.find()) {
+            nombre_materia = matcher.group(1);
+        }
+        return nombre_materia;
     }
 
     public boolean login(String username, String password) throws IOException {
@@ -203,8 +310,12 @@ return null;
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
         g.login("38147310", "n0r1m2n3");
-        g.getMesasDeExamen();
+        //g.getMesasDeExamen();
+        //g.inscribirseMesaById("IF017");
+        //g.getMesasAnotadas();
+        g.desinscribirseDeMesa("uncodigo");
         //List<Materia> materias = new ArrayList<Mater  ia>();
+
     }
 
     /**
