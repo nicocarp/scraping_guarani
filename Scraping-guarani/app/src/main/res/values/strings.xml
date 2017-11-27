@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Scraping-guarani</string>
+    <string name="app_name">Siu Guarani</string>
+    <string name="usuario_campo">Usuario</string>
+    <string name="contrasenia_campo">Contraseña</string>
+    <string name="iniciarsesion_titulo">Iniciar Sesion</string>
+    <string name="login_button">Login</string>
 </resources>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlanco"
+    tools:context="com.example.nicoc.scraping_guarani.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/footer"
+            android:layout_width="match_parent"
+            tools:layout_editor_absoluteX="53dp"
+            tools:layout_editor_absoluteY="58dp" />
+
+        <ImageView
+            android:id="@+id/imageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="48dp"
+            android:layout_alignLeft="@+id/txtUsername"
+            android:layout_alignStart="@+id/txtUsername"
+            android:layout_alignRight="@+id/txtUsername"
+            android:layout_alignEnd="@+id/txtUsername" />
+
+        <TextView
+            android:id="@+id/iniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtUsername"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"
+            android:fontFamily="cursive"
+            android:text="@string/iniciarsesion_titulo"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <EditText
+            android:id="@+id/txtUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtPassword"
+            android:layout_alignLeft="@+id/txtPassword"
+            android:layout_alignStart="@+id/txtPassword"
+            android:layout_marginBottom="25dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="@string/usuario_campo"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textColor="@color/colorNegro"
+            android:textSize="18sp"
+            android:typeface="sans"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textColor="@color/colorNegro"
+
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/contrasenia_campo"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp"
+            android:layout_above="@+id/btnLogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="22dp" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="@string/login_button"
+            android:textColor="@color/colorBlanco"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:layout_above="@+id/include"
+            android:layout_marginBottom="73dp"
+            android:layout_alignLeft="@+id/txtPassword"
+            android:layout_alignStart="@+id/txtPassword"
+            android:layout_alignRight="@+id/txtPassword"
+            android:layout_alignEnd="@+id/txtPassword" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
