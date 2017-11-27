@@ -35,9 +35,25 @@ public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
     public void logueado() {
         Toast.makeText(MainActivity.this, "lOGUEADO CON EXITO", Toast.LENGTH_LONG).show();
         Log.i("ACTIVITY....","por llamar a get mesas");
+
+        //me voy a principal...
         Intent intent = new Intent(this, PrincipalActivity.class);
         startActivity(intent);
+        //aca habria que poner una progressbar o algo esperando a que se ejecute el servicio...
+
         //getMesas();
+
+
+        //Aca inicio el servicio
+        Alarma alarma = new Alarma(this,Servicio.class);
+        alarma.start();
+
+        /* Pasos
+        * obtengo hs actual y le resto 1.
+        * lanzo alarma
+        * inicio el servicio
+        * */
+
     }
 
     @Override
