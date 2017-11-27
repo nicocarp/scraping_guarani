@@ -27,7 +27,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private void verificar_login(){
         // lee de la base de datos o preferencias y verifica que haya usuario y contraseña activa.
-        boolean hay_usuario_en_bd = true;
+        boolean hay_usuario_en_bd = false;
         if (!hay_usuario_en_bd) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

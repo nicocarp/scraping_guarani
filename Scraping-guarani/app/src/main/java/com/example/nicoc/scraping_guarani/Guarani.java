@@ -8,6 +8,7 @@ import com.example.nicoc.scraping_guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Modelos.Profesor;
 import com.example.nicoc.scraping_guarani.Modelos.TipoMesa;
 
+import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -155,12 +156,35 @@ public class Guarani {
         Document document = this.document_base;
         String url;
 
+        // DATOS DEL ALUMNO
+        url = document.select("[src*=barra]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+        String nombre_alumno = getNombreAlumno(document.html(), "NombreUsuario   = \"([A-Z | \\s]+)\";");
+        String apellido_alumno = getNombreAlumno(document.html(), "ApellidoUsuario = \"([A-Z | \\s]+)\";");
+
+
+
+        document = this.document_base;
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            url = document.select("[href*=elegirCertificado]").first().attr("abs:href");
+        document = this.connection.url(url).get();
+        url = document.select("[href*=elegirCarreraCertificado]").first().attr("abs:href");
+        document = this.connection.url(url).get();
+        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+        String legajo_alumno = document.select("input[name=legajo]").first().attr("value");
+
+        System.out.println("Alumno "+ legajo_alumno+ " "+nombre_alumno +" "+ apellido_alumno);
+
+
+        document = this.document_base;
         // obtengo frame de operaciones (menu izquierda)
         url = document.select("[src*=operaciones]").first().attr("abs:src");
         document = this.connection.url(url).get();
 
-        url = document.select("a:contains(examen)").first().attr("abs:href");
-        document = this.connection.url(url).get();
+        String url_inscripcion = document.select("a:contains(examen)").first().attr("abs:href");
+        document = this.connection.url(url_inscripcion).get();
 
         //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
         Element e = document.select("[text*=LICENCIATURA]").first();
@@ -171,20 +195,47 @@ public class Guarani {
             System.out.println(elem.attr("abs:href"));
         }
 
-        //url = link_carreras.get(1).attr("abs:href");
+        // IGNORAMOS LAS CARRERAS SOLO MIRAMOS LICENCIATURA
         url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
         document = this.connection.url(url).get();
 
         Elements link_materias = document.select("[href*=elegirMesaInscExamen]");
-        for (Element element : link_materias){
-            Mesa mesa = new Mesa();
-            String codigo_materia = getCodigoMateria(element.text());
-            String nombre_materia = getNombreMateria(element.text());
-            System.out.println("Un codigo de mesa disponible"+ codigo_materia.toString());
+
+        String cod;
+        String nombre;
+        String fecha;
+        String hora;
+        Element elem;
+        String profesores;
+        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
+        for (int i = 0;  i < link_materias.size(); i++ ){
+            elem = link_materias.get(i);
+            cod = getCodigoMateria(elem.text());
+            nombre = getNombreMateria(elem.text());
+            url = elem.attr("abs:href");
+            document = this.connection.url(url).get();
+
+            Element div_errores = document.select("div.mensaje_ua_contenido").first();
+            System.out.print("MATERIA "+ cod + nombre );
+            if (div_errores == null){
+                fecha = document.select("td:matches(^[0-9]{2}/[0-9]{2}/[0-9]{4})").first().text();
+                hora  = document.select("td:matches(^[0-9]{2}:[0-9]{2})").first().text();
+                url = document.select("[href*=verDetalle]").first().attr("abs:href");
+                document = this.connection.url(url).get();
+                profesores = document.select("span.detalle_resaltado").first().text();
+
+                System.out.println(" "+fecha + " " +hora +" "+ profesores);
+            }
+            else{
+                System.out.println(div_errores.html());
+                System.out.println(getMatches(div_errores.html(), "([A-Z]+[0-9]+)"));
+            }
+            document = this.connection.url(url_inscripcion).get();
+            url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+            document = this.connection.url(url).get();
+            link_materias = document.select("[href*=elegirMesaInscExamen]");
         }
 
-
-        //document = this.connection.url(url).get();
 
         return null;
 
@@ -192,16 +243,33 @@ public class Guarani {
     }
 
     private String getCodigoMateria(String cadena){
-        Pattern patron_codigo = Pattern.compile("(\\([A-Z0-9]+\\))");
+        Pattern patron_codigo = Pattern.compile("\\(([A-Z0-9]+)\\)");
         Matcher matcher = patron_codigo.matcher(cadena);
         String codigo_masteria="";
         while (matcher.find())
             codigo_masteria = matcher.group(1);
         return codigo_masteria;
     }
+    private String getNombreAlumno(String cadena, String regex){
+        Pattern patron_codigo = Pattern.compile(regex);
+        Matcher matcher = patron_codigo.matcher(cadena);
+        String codigo_masteria="";
+        while (matcher.find())
+            codigo_masteria = matcher.group(1);
+        return codigo_masteria;
+    }
+    private ArrayList<String> getMatches(String cadena, String regex){
+        Pattern patron_codigo = Pattern.compile(regex);
+        Matcher matcher = patron_codigo.matcher(cadena);
+        String codigo_masteria="";
+        ArrayList<String> result = new ArrayList();
+        while (matcher.find())
+            result.add(matcher.group(1));
+        return result;
+    }
 
     private String getNombreMateria(String cadena){
-        Pattern patron_nombre = Pattern.compile("([\\s | [A-ZÑÁÉÍÓÚ]]+)");
+        Pattern patron_nombre = Pattern.compile("([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
         Matcher matcher = patron_nombre.matcher(cadena);
         String nombre_materia="";
         while (matcher.find()) {
@@ -309,11 +377,11 @@ public class Guarani {
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
-        g.login("38147310", "n0r1m2n3");
-        //g.getMesasDeExamen();
+        g.login("27042881", "valenti2");
+        g.getMesasDeExamen();
         //g.inscribirseMesaById("IF017");
         //g.getMesasAnotadas();
-        g.desinscribirseDeMesa("uncodigo");
+        //g.desinscribirseDeMesa("uncodigo");
         //List<Materia> materias = new ArrayList<Mater  ia>();
 
     }
