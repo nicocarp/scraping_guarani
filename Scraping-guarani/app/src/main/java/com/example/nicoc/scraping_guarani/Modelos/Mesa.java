@@ -8,6 +8,21 @@ public class Mesa{
     private String sede;
     private TipoMesa tipoMesa; // libre o regular
     private ArrayList<Profesor> profesores;
+    private Materia materia;
+    private ArrayList<Materia> materias_necesarias;
+
+    /**
+     * Materias que el alumno necesita aprobar para inscribirse a una mesa de la Materia
+     * @return Listado de materias.
+     */
+    public ArrayList<Materia> getMaterias_necesarias() {
+        return materias_necesarias;
+    }
+
+    public void setMaterias_necesarias(ArrayList<Materia> materias_necesarias) {
+        this.materias_necesarias = materias_necesarias;
+    }
+
 
     public Materia getMateria() {
         return materia;
@@ -17,7 +32,7 @@ public class Mesa{
         this.materia = materia;
     }
 
-    private Materia materia;
+
 
     public Date getFecha() {
         return fecha;

@@ -8,10 +8,15 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+import com.example.nicoc.scraping_guarani.Modelos.Profesor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +105,40 @@ public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
         };
         thread.start();
 
+    }
+
+    /**
+     * mocks de datos que deben venir de guarani. Borrar despues.
+     */
+    public void mockDatosListado(){
+        Alumno alumno = new Alumno();
+        alumno.setNombre("Un nombre");
+        alumno.setLegajo("23-3455-322");
+
+        Materia materia = new Materia();
+        materia.setNombre("Ingenieria 3");
+        materia.setCodigo("IF0345");
+
+        Mesa mesa = new Mesa();
+        mesa.setMateria(materia);
+        mesa.setProfesores(new ArrayList<Profesor>(Arrays.asList(new Profesor("Ricardo Lopez"), new Profesor("Gabriel Ingravallo"))));
+        mesa.setFecha(new Date());
+        mesa.setMaterias_necesarias(null); // se puede anotar a esta materia
+
+        Materia materia_2 = new Materia();
+        materia.setNombre("Administracion de redes y seguridad");
+        materia.setCodigo("IF0323");
+
+        // si un alumno no se puede inscribir a una mesa, no tiene fecha ni profes, solo las materias necesarias.
+        Mesa mesa_2 = new Mesa();
+        mesa.setMateria(materia_2);
+        mesa.setProfesores(null);
+        mesa.setFecha(null);
+        mesa.setMaterias_necesarias(new ArrayList<Materia>(Arrays.asList(materia))); // Para rendir seguridad necesitas ing3
+        // a partir de estos objetos: alumno y mesas se llena el listado.
+        // al dar click en boton inscribir, es necesario el legajo del alumno y codigo materia.
+        // falta defnir listado de materias a las que el alumno ya esta inscripto para desincribirse y no dejar inscribir
+        
     }
 
 

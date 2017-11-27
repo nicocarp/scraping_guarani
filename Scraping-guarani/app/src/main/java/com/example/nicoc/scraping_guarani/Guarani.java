@@ -8,6 +8,7 @@ import com.example.nicoc.scraping_guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Modelos.Profesor;
 import com.example.nicoc.scraping_guarani.Modelos.TipoMesa;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -210,8 +211,8 @@ public class Guarani {
         ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         for (int i = 0;  i < link_materias.size(); i++ ){
             elem = link_materias.get(i);
-            cod = getCodigoMateria(elem.text());
-            nombre = getNombreMateria(elem.text());
+            cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
+            nombre = getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
             url = elem.attr("abs:href");
             document = this.connection.url(url).get();
 
@@ -235,12 +236,9 @@ public class Guarani {
             document = this.connection.url(url).get();
             link_materias = document.select("[href*=elegirMesaInscExamen]");
         }
-
-
         return null;
-
-
     }
+
 
     private String getCodigoMateria(String cadena){
         Pattern patron_codigo = Pattern.compile("\\(([A-Z0-9]+)\\)");
@@ -258,6 +256,13 @@ public class Guarani {
             codigo_masteria = matcher.group(1);
         return codigo_masteria;
     }
+
+    /**
+     * Devuelve listado de todos los matches
+     * @param cadena donde buscar
+     * @param regex expresion regular del patron.
+     * @return ArrayList<String> de todos los match
+     */
     private ArrayList<String> getMatches(String cadena, String regex){
         Pattern patron_codigo = Pattern.compile(regex);
         Matcher matcher = patron_codigo.matcher(cadena);
@@ -266,6 +271,22 @@ public class Guarani {
         while (matcher.find())
             result.add(matcher.group(1));
         return result;
+    }
+
+    /**
+     * Recibe una cadena y un patron, devuelve el ultimo match
+     * @param cadena donde buscar
+     * @param regex expresion regular del patron que se desea buscar.
+     * @return String del ultimo match
+     */
+    private String getMatch(String cadena, String regex){
+        Pattern patron = Pattern.compile(regex);
+        Matcher matcher = patron.matcher(cadena);
+        String result = "";
+        while (matcher.find())
+            result = matcher.group(1);
+        return result;
+
     }
 
     private String getNombreMateria(String cadena){
@@ -377,8 +398,9 @@ public class Guarani {
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
-        g.login("", "");
-        g.getMesasDeExamen();
+
+        //g.login("27042881", "valenti2");
+        //g.getMesasDeExamen();
         //g.inscribirseMesaById("IF017");
         //g.getMesasAnotadas();
         //g.desinscribirseDeMesa("uncodigo");
