@@ -377,7 +377,7 @@ public class Guarani {
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
-        g.login("27042881", "valenti2");
+        g.login("", "");
         g.getMesasDeExamen();
         //g.inscribirseMesaById("IF017");
         //g.getMesasAnotadas();
