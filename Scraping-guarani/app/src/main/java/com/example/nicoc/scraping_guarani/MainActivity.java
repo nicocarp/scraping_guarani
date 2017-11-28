@@ -1,145 +1,86 @@
 package com.example.nicoc.scraping_guarani;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Modelos.Materia;
-import com.example.nicoc.scraping_guarani.Modelos.Mesa;
-import com.example.nicoc.scraping_guarani.Modelos.Profesor;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
+public class MainActivity extends AppCompatActivity {
 
-    public static String URL_BASE = "http://www.dit.ing.unp.edu.ar/v2070/www/";
-    @BindView(R.id.txtUsername) TextView txtUsername;
-    @BindView(R.id.txtPassword) TextView txtPassword;
-
+    @BindView(R.id.lblAlumno)    TextView lblAlumno;
+    @BindView(R.id.lblMaterias)    TextView lblMaterias;
+    @BindView(R.id.listaMaterias)    ListView listaMatrias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_principal);
         ButterKnife.bind(this);
+        verificar_login();
+        //start_service();
+        //consultar_bd_mesas();
+
+
+
+        //Escucho por mensajes que vienen a mi.....
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter("MainActivity");
+        //filter.addAction(CountService.EXTRA_COUNT_TARGET);
+        broadcastManager.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.i("MainActivity....","encontre el mensaje brodcasteado!");
+                        Bundle bundle = intent.getExtras();
+
+                        //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
+                        Toast.makeText(MainActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+
+                        //aca elimino la notificacion
+                        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        mNotifyMgr.cancel(1);
+                    }
+                },
+                filter
+        );
+
     }
 
-    @Override
-    public void logueado() {
-        Toast.makeText(MainActivity.this, "lOGUEADO CON EXITO", Toast.LENGTH_LONG).show();
-        Log.i("ACTIVITY....","por llamar a get mesas");
-
-        //me voy a principal...
-        Intent intent = new Intent(this, PrincipalActivity.class);
-        startActivity(intent);
-        //aca habria que poner una progressbar o algo esperando a que se ejecute el servicio...
-
-        //getMesas();
+    private void verificar_login(){
+        // lee de la base de datos o preferencias y verifica que haya usuario y contraseña activa.
 
 
-        //Aca inicio el servicio
-        Alarma alarma = new Alarma(this,Servicio.class);
-        alarma.start();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
 
-        /* Pasos
-        * obtengo hs actual y le resto 1.
-        * lanzo alarma
-        * inicio el servicio
-        * */
+        SharedPreferences.Editor editor = pref.edit();
+
+        String u = pref.getString("username", null);
+
+        if (u!=null)
+            cargarMaterias();
+        else{
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            //Alarma.cancelarAlarma();
+        }
 
     }
 
-    @Override
-    public void mostrarError(String s){
-        Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
+    public void cargarMaterias(){
+        Toast.makeText(MainActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
+
     }
-
-    @OnClick(R.id.btnLogin)
-    public void login(){
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
-
-        String[] parametros = { URL_BASE, username, password};
-        AsyncTask<String, Void, Boolean> myAsyncTask = new AsyncLogin(this).execute(parametros);
-        Toast.makeText(MainActivity.this, "Logueando ...", Toast.LENGTH_SHORT).show();
-    }
-
-    /*public void getMesas(){
-
-        Thread thread = new Thread(){
-            public void run(){
-                Log.i("HILO....","0-iniciando RUN");
-
-                ArrayList<Mesa> mesas = null;
-
-                try {
-                    mesas = ManagerGuarani.getInstance().getMesasDeExamen();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Mesa mesa = mesas.get(0);
-                String mensaje = "CONEXION"+ mesa.getFecha() + mesa.getMateria();
-                Log.i("CONEXION EXITOSA", "EXITO");
-                //Toast.makeText(getBaseContext(), mensaje, Toast.LENGTH_LONG).show();
-                try {
-                    Log.i("HILO....","Empecemos a contar");
-                    sleep(10000);
-                    Log.i("HILO","no mori");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Log.i("Empecemos a contar....","wenassssss");
-            }
-        };
-        thread.start();
-
-    }*/
-
-    /**
-     * mocks de datos que deben venir de guarani. Borrar despues.
-     */
-    public void mockDatosListado(){
-        Alumno alumno = new Alumno();
-        alumno.setNombre("Un nombre");
-        alumno.setLegajo("23-3455-322");
-
-        Materia materia = new Materia();
-        materia.setNombre("Ingenieria 3");
-        materia.setCodigo("IF0345");
-
-        Mesa mesa = new Mesa();
-        mesa.setMateria(materia);
-        mesa.setProfesores(new ArrayList<Profesor>(Arrays.asList(new Profesor("Ricardo Lopez"), new Profesor("Gabriel Ingravallo"))));
-        mesa.setFecha("asi por ahora");
-        mesa.setMaterias_necesarias(null); // se puede anotar a esta materia
-
-        Materia materia_2 = new Materia();
-        materia.setNombre("Administracion de redes y seguridad");
-        materia.setCodigo("IF0323");
-
-        // si un alumno no se puede inscribir a una mesa, no tiene fecha ni profes, solo las materias necesarias.
-        Mesa mesa_2 = new Mesa();
-        mesa.setMateria(materia_2);
-        mesa.setProfesores(null);
-        mesa.setFecha(null);
-        mesa.setMaterias_necesarias(new ArrayList<Materia>(Arrays.asList(materia))); // Para rendir seguridad necesitas ing3
-        // a partir de estos objetos: alumno y mesas se llena el listado.
-        // al dar click en boton inscribir, es necesario el legajo del alumno y codigo materia.
-        // falta defnir listado de materias a las que el alumno ya esta inscripto para desincribirse y no dejar inscribir
-        
-    }
-
 
 }
