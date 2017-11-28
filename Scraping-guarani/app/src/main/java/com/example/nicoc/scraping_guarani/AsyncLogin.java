@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
 
     public interface IView{
+
         public void mostrarError(String s);
         public void logueado(Alumno alumno);
     }
