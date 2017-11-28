@@ -1,14 +1,18 @@
 package com.example.nicoc.scraping_guarani.Modelos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Alumno{
 
     private String nombre;
     private String legajo;
-    private List<Carrera> carreras;
+    private ArrayList<Carrera> carreras;
     private boolean regular;
 
+    public Alumno(){
+        this.carreras = new ArrayList<Carrera>();
+    }
     public String getNombre() {
         return nombre;
     }
@@ -29,7 +33,7 @@ public class Alumno{
         return carreras;
     }
 
-    public void setCarreras(List<Carrera> carreras) {
+    public void setCarreras(ArrayList<Carrera> carreras) {
         this.carreras = carreras;
     }
 
@@ -39,5 +43,9 @@ public class Alumno{
 
     public void setRegular(boolean regular) {
         this.regular = regular;
+    }
+
+    public void addCarrera(Carrera carrera) {
+        this.carreras.add(carrera);
     }
 }

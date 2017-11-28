@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
         Toast.makeText(MainActivity.this, "Logueando ...", Toast.LENGTH_SHORT).show();
     }
 
-    public void getMesas(){
+    /*public void getMesas(){
 
         Thread thread = new Thread(){
             public void run(){
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
         };
         thread.start();
 
-    }
+    }*/
 
     /**
      * mocks de datos que deben venir de guarani. Borrar despues.
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements AsyncLogin.IView{
         Mesa mesa = new Mesa();
         mesa.setMateria(materia);
         mesa.setProfesores(new ArrayList<Profesor>(Arrays.asList(new Profesor("Ricardo Lopez"), new Profesor("Gabriel Ingravallo"))));
-        mesa.setFecha(new Date());
+        mesa.setFecha("asi por ahora");
         mesa.setMaterias_necesarias(null); // se puede anotar a esta materia
 
         Materia materia_2 = new Materia();

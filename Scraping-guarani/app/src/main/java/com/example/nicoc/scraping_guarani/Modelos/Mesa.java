@@ -4,13 +4,28 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Mesa{
-    private Date fecha;
+    private String fecha;
     private String sede;
     private TipoMesa tipoMesa; // libre o regular
     private ArrayList<Profesor> profesores;
     private Materia materia;
     private ArrayList<Materia> materias_necesarias;
+    private String turno; // esto es necesario para lanzar post de inscripcion
 
+    public Mesa(){
+        this.materias_necesarias = new ArrayList<Materia>();
+    }
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public void addMateriaNecesariaById(Materia materia){
+        this.materias_necesarias.add(materia);
+    }
     /**
      * Materias que el alumno necesita aprobar para inscribirse a una mesa de la Materia
      * @return Listado de materias.
@@ -34,11 +49,11 @@ public class Mesa{
 
 
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -65,4 +80,6 @@ public class Mesa{
     public void setProfesores(ArrayList<Profesor> profesores) {
         this.profesores = profesores;
     }
+
+
 }

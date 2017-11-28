@@ -8,7 +8,18 @@ public class Materia {
     private String codigo;
     private String nombre;
     private Carrera carrera;
-    private Integer año;
+    private String  año;
+    private String periodoLectivo;
+    private String correlatividad;
+
+    public String getCorrelatividad() {
+        return correlatividad;
+    }
+
+    public void setCorrelatividad(String correlatividad) {
+        this.correlatividad = correlatividad;
+    }
+
 
 
     public String getCodigo() {
@@ -35,13 +46,19 @@ public class Materia {
         this.carrera = carrera;
     }
 
-    public Integer getAño() {
+    public String getAño() {
         return año;
     }
 
-    public void setAño(Integer año) {
+    public void setAño(String año) {
         this.año = año;
     }
 
+    public void setPeriodoLectivo(String periodoLectivo) {
+        this.periodoLectivo = periodoLectivo;
+    }
+    public String getPeriodoLectivo() {
+        return this.periodoLectivo;
+    }
 }
 

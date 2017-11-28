@@ -3,6 +3,8 @@ package com.example.nicoc.scraping_guarani;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Modelos.Profesor;
@@ -147,31 +149,41 @@ public class Guarani {
         m.put("tipo_inscripcion1", "R");
         return m;
     }
-
-    public ArrayList<Mesa> getMesasDeExamen() throws IOException {
-
+    public Alumno getDatosAlumno(Carrera carrera) throws IOException {
         Document document = this.document_base;
         String url;
+
+        Alumno alumno = new Alumno();
 
         // DATOS DEL ALUMNO
         url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
         String nombre_alumno = getNombreAlumno(document.html(), "NombreUsuario   = \"([A-Z | \\s]+)\";");
         String apellido_alumno = getNombreAlumno(document.html(), "ApellidoUsuario = \"([A-Z | \\s]+)\";");
-
         // LEGAJO DEL ALUMNO
         document = this.document_base;
         url = document.select("[src*=operaciones]").first().attr("abs:src");
         document = this.connection.url(url).get();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            url = document.select("[href*=elegirCertificado]").first().attr("abs:href");
+        url = document.select("[href*=elegirCertificado]").first().attr("abs:href");
         document = this.connection.url(url).get();
         url = document.select("[href*=elegirCarreraCertificado]").first().attr("abs:href");
         document = this.connection.url(url).get();
         url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
         document = this.connection.url(url).get();
         String legajo_alumno = document.select("input[name=legajo]").first().attr("value");
-
         System.out.println("Alumno "+ legajo_alumno+ " "+nombre_alumno +" "+ apellido_alumno);
+
+        alumno.setLegajo(legajo_alumno);
+        alumno.setNombre(nombre_alumno + " "+apellido_alumno);
+        alumno.addCarrera(carrera);
+        return alumno;
+
+    }
+
+    public ArrayList<Mesa> getMesasDeExamen(Carrera carrera) throws IOException {
+
+        Document document = this.document_base;
+        String url;
 
 
         document = this.document_base;
@@ -200,12 +212,9 @@ public class Guarani {
         String cod, nombre, fecha, hora, profesores, turno;
         Element elem;
 
-        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         ArrayList<String> resultados = new ArrayList<>();
         String result = " {\"Result:\" { \"alumno\": [[alumno]], \"mesas\": [[mesas]], \"inscripciones\": [[inscripciones]] }}";
 
-        String alumno = String.format("{ \"nombre\":%s, \"apellido\":%s, \"legajo\":%s }", nombre_alumno, apellido_alumno,legajo_alumno);
-        result = result.replace("[[alumno]]", alumno);
 
         String mesas_json="";
         String base_mesa_json = "{\"codigo\": [[codigo]], " +
@@ -216,10 +225,16 @@ public class Guarani {
                 "\"correlativas\": [[correlativas]] }";
 
 
+        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         for (int i = 0;  i < link_materias.size(); i++ ){
+            Mesa mesa = new Mesa();
             elem = link_materias.get(i);
+
             cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
             nombre = getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
+
+            mesa.setMateria(carrera.getMateriaById(cod));
+
             url = elem.attr("abs:href");
             document = this.connection.url(url).get();
 
@@ -238,15 +253,21 @@ public class Guarani {
                 mesa_json = mesa_json.replace("[[hora]]", hora);
                 mesa_json = mesa_json.replace("[[turno]]", turno);
 
+                mesa.setFecha(fecha+hora);
+                mesa.setTurno(turno);
+
                 url = document.select("[href*=verDetalle]").first().attr("abs:href");
                 document = this.connection.url(url).get();
-                profesores = document.select("span.detalle_resaltado").first().text();
+                profesores = document.select("span.detalle_resaltado").first().html();
                 mesa_json= mesa_json.replace("[[profesores]]", profesores);
+
+
                 System.out.println(" "+fecha + " " +hora +" "+ profesores+ " Turno "+turno);
             }
             else{
-                String correlativas = getMatches(div_errores.html(), "([A-Z]+[0-9]+)").toString();
-                mesa_json= mesa_json.replace("[[correlativas]]", correlativas);
+                for (String _cod_materia :  getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
+                    mesa.addMateriaNecesariaById(carrera.getMateriaById(_cod_materia));
+                }
                 System.out.println("Debe aprobar "+ getMatches(div_errores.html(), "([A-Z]+[0-9]+)"));
             }
             // vuelvo a navegar hacia el listado e mesas.
@@ -255,6 +276,7 @@ public class Guarani {
             document = this.connection.url(url).get();
             link_materias = document.select("[href*=elegirMesaInscExamen]");
             mesas_json = mesas_json.concat(mesa_json);
+            mesas.add(mesa);
         }
         //mesas_json= mesas_json.replaceAll("[\\[\\[\\D\\]\\]]", "");
         result = result.replace("[[mesas]]", mesas_json);
@@ -263,7 +285,7 @@ public class Guarani {
         System.out.println("RESULT \n"+ result);
 
         // AHORA RECORRO LAS MATERIAS PARA LAS CUALES ESTOY ANOTADO.
-        return null;
+        return mesas;
     }
 
 
@@ -434,7 +456,12 @@ public class Guarani {
         System.out.println(result);
     }
 
-    public void getPlanMateria() throws IOException {
+    /**
+     * Solo devolvemos el plan de la materia de la LICENCIATURA.
+     * @return
+     * @throws IOException
+     */
+    public Carrera getPlanMateria() throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -444,23 +471,52 @@ public class Guarani {
         document = this.connection.url(url).get();
         url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
         document = this.connection.url(url).get();
+        String nombre_carrera = document.select("div.detalle_contenido").first().children().get(0).text();
+        String codigo_carrera = getMatch(nombre_carrera, "\\(([0-9]+)\\)");
+        nombre_carrera = getMatch(nombre_carrera, "([A-Z][[A-Z]+ | [,\\(\\)\\s]{1}]+)");
+        String plan_carrera = document.select("div.detalle_contenido").first().children().get(2).text();
         Element tabla = document.select("table.normal_plana_plan_estudios").first();
-        System.out.println(tabla.html());
 
+        Elements trs = tabla.select("tr[class*=normal_plana]");
+        Element td;
 
+        Carrera carrera = new Carrera();
+        carrera.setNombre(nombre_carrera);
+        carrera.setCodigo(codigo_carrera);
+        carrera.setPlan(plan_carrera);
 
+        ArrayList<Materia> materias = new ArrayList<Materia>();
 
+        for (Element tr : trs){
+            Materia materia = new Materia();
 
+            materia.setAño(tr.children().get(0).text());
+            materia.setCodigo(tr.children().get(1).text());
+            materia.setNombre(tr.children().get(2).text());
+            materia.setPeriodoLectivo(tr.children().get(3).text());
 
+            if (tr.children().get(6).text().contains("correlativas")){
+                Element tr_correlatividad = tr.nextElementSibling();
+                Elements divs = tr_correlatividad.children().get(1).children();
+                materia.setCorrelatividad(tr_correlatividad.children().get(1).text());
+            }
+            materias.add(materia);
+        }
+        carrera.setMaterias(materias);
+        return carrera;
 
     }
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
         //g.testReplace();
-        g.login("", "");
-        g.getMesasDeExamen();
-        //g.getPlanMateria();
+        g.login("27042881", "valenti2");
+
+        Carrera carrera = g.getPlanMateria();
+        Alumno alumno = g.getDatosAlumno(carrera);
+
+        ArrayList<Mesa> mesas = g.getMesasDeExamen(carrera);
+
         //g.getMesasAnotadas();
         //g.desinscribirseDeMesa("IF054");
         //g.inscribirseMesaById("IF054", "34-38-4606");
