@@ -86,7 +86,7 @@ public class Servicio extends Service {
             NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
             int icono = R.mipmap.ic_launcher;
-            Intent intent = new Intent(Servicio.this, MainActivity.class);
+            Intent intent = new Intent(Servicio.this, AlumnoActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(Servicio.this, 0, intent, 0);
             //aca iria toda la informacion que recibimos del scraping dentro del intent
 
@@ -116,7 +116,7 @@ public class Servicio extends Service {
             Log.i("MyService....","estoy en sendBroadcast.");
             LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(Servicio.this);
 
-            Intent resultIntent = new Intent("MainActivity");//le pongo un nombre al intent asi se como atraparlo despues.
+            Intent resultIntent = new Intent("AlumnoActivity");//le pongo un nombre al intent asi se como atraparlo despues.
             //resultIntent.putExtra("TNT", "Hay mesas de examenes");
             Bundle bundle = new Bundle();
             bundle.putString("Nombre","Soy Ivan");

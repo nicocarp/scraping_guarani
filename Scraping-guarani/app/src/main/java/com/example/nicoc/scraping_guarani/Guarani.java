@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 
 public class Guarani {
 
+    private final static String URL  = "http://www.dit.ing.unp.edu.ar/v2070/www/";
     private Document document_base;
     private Connection connection;
     private String url_base;
@@ -49,8 +50,8 @@ public class Guarani {
 
     private String error;
 
-    public Guarani(String url) throws IOException {
-        this.url_base = url;
+    public Guarani() throws IOException {
+        this.url_base = URL;
         this.startConnection();
     }
 
@@ -448,13 +449,7 @@ public class Guarani {
         return null;
     }
 
-    public void testReplace(){
-        String s = "123 [[hola]] eso no se debe borrar [[chau]] 12312 {}";
 
-        String result = s.replaceAll(" \\[\\[\\D+\\]\\] ", "");
-        System.out.println(s);
-        System.out.println(result);
-    }
 
     /**
      * Solo devolvemos el plan de la materia de la LICENCIATURA.
@@ -507,15 +502,29 @@ public class Guarani {
 
     }
 
+    public void testReplace(){
+        String s = "123 [[hola]] eso no se debe borrar [[chau]] 12312 {}";
+        // resultado "123 eso no se debe borrar 12312 {}"
+        String result = s.replaceAll(" \\[\\[\\D+\\]\\] ", "");
+        System.out.println(s);
+        System.out.println(result);
+    }
+
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
-        Guarani g = new Guarani("http://www.dit.ing.unp.edu.ar/v2070/www/");
+        Guarani g = new Guarani();
         //g.testReplace();
-        g.login("27042881", "valenti2");
+        // obtener alumno activo de la bd. sacas user password y alumno.
+        if (g.login("27042881", "valenti2")){
+            Carrera carrera = g.getPlanMateria();
+            Alumno alumno = g.getDatosAlumno(carrera);
+            ArrayList<Mesa> mesas = g.getMesasDeExamen(carrera);
+        }
+        else{
+            System.out.println(g.getError());
+        }
 
-        Carrera carrera = g.getPlanMateria();
-        Alumno alumno = g.getDatosAlumno(carrera);
 
-        ArrayList<Mesa> mesas = g.getMesasDeExamen(carrera);
+
 
         //g.getMesasAnotadas();
         //g.desinscribirseDeMesa("IF054");

@@ -17,7 +17,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class AlumnoActivity extends AppCompatActivity {
 
     @BindView(R.id.lblAlumno)    TextView lblAlumno;
     @BindView(R.id.lblMaterias)    TextView lblMaterias;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
+        setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
         verificar_login();
         //start_service();
@@ -36,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
         //Escucho por mensajes que vienen a mi.....
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter filter = new IntentFilter("MainActivity");
+        IntentFilter filter = new IntentFilter("AlumnoActivity");
         //filter.addAction(CountService.EXTRA_COUNT_TARGET);
         broadcastManager.registerReceiver(
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        Log.i("MainActivity....","encontre el mensaje brodcasteado!");
+                        Log.i("AlumnoActivity....","encontre el mensaje brodcasteado!");
                         Bundle bundle = intent.getExtras();
 
                         //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
-                        Toast.makeText(MainActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+                        Toast.makeText(AlumnoActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
 
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cargarMaterias(){
-        Toast.makeText(MainActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AlumnoActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
 
     }
 

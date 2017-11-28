@@ -9,20 +9,36 @@ import java.io.IOException;
 public class ManagerGuarani {
     private static Guarani instance = null;
     private static String url_base = "";
+    private String username = "";
+    private String password = "";
+    private static String error="";
 
-    public ManagerGuarani(String url, String username, String password){
-        this.url_base = url;
-        Guarani g = null;
-        try {
-            g = new Guarani(url);
-            if (g.login(username, password))
-                this.instance = g;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
+    private static void setError(String error) {
+        error = error;
     }
 
-    public static Guarani getInstance(){
+
+    public ManagerGuarani(){
+    }
+
+    public static String getError(){
+        return error;
+    }
+    public static Guarani getInstance(String username, String password){
+
+        if (instance == null){
+            try {
+                Guarani g = new Guarani();
+                if (g.login(username, password)){
+                    instance = g;
+                }else
+                    error = g.getError();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return instance;
     }
 
