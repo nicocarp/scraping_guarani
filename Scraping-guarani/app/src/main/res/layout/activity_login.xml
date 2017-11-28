@@ -108,12 +108,12 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans"
+            android:layout_marginTop="57dp"
             android:layout_below="@+id/txtPassword"
             android:layout_alignLeft="@+id/txtPassword"
             android:layout_alignStart="@+id/txtPassword"
-            android:layout_marginTop="43dp"
             android:layout_alignRight="@+id/txtPassword"
             android:layout_alignEnd="@+id/txtPassword" />
 
-    </RelativeLayout>
+       </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

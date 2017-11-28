@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,12 +71,34 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     public void login(){
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
+        if(username.isEmpty()){
+            Toast.makeText(this, "Ingrese Usuario! ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(password.isEmpty()){
+            Toast.makeText(this, "Ingrese Contraseña! ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] parametros = { username, password};
+        /*if (checkBoxRememberMe.isChecked()){
+            txtUsername.setText(username);
+            txtPassword.setText(password);
+        }
+*/
+        AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
+        Toast.makeText(LoginActivity.this, "Iniciando Sesion ...", Toast.LENGTH_SHORT).show();
+    }
+
+   /* @OnClick(R.id.btnLogout)
+    public void logout(){
+        String username = txtUsername.getText().toString();
+        String password = txtPassword.getText().toString();
 
         String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
-        Toast.makeText(LoginActivity.this, "Logueando ...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "Cerrando sesion ...", Toast.LENGTH_SHORT).show();
     }
-
+*/
     /**
      * mocks de datos que deben venir de guarani. Borrar despues.
      */
