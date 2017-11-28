@@ -1,11 +1,11 @@
 <resources>
-
     <string name="app_name">Siu Guarani</string>
-    <string name="er_nombre_materia">([\\s | [- | A-ZÑÁÉÍÓÚ]]+)</string>
-    <string name="er_codigo_materia">\\(([A-Z0-9]+)\\)</string>
     <string name="usuario_campo">Usuario</string>
     <string name="contrasenia_campo">Contraseña</string>
+    <string name="alumno_campo">Alumno</string>
+    <string name="fecha_campo">Fecha</string>
     <string name="iniciarsesion_titulo">Iniciar Sesion</string>
-    <string name="login_button">Login</string>
-
+    <string name="login_button">Continuar</string>
+    <string name="materias_titulo">Materias</string>
+    <string name="anotar_button">Anotarme</string>
 </resources>
