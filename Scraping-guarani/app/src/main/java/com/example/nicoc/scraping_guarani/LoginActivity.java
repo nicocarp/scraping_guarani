@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,22 +27,36 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView{
 
     public static String URL_BASE = "http://www.dit.ing.unp.edu.ar/v2070/www/";
-    @BindView(R.id.txtUsername) TextView txtUsername;
-    @BindView(R.id.txtPassword) TextView txtPassword;
-
+    @BindView(R.id.txtUsername) EditText txtUsername;
+    @BindView(R.id.txtPassword) EditText txtPassword;
+    @BindView(R.id.checkBoxRememberMe) CheckBox checkBoxRememberMe;
+    //private String username,password;
+    public SharedPreferences loginPreferences;
+    public SharedPreferences.Editor loginPrefsEditor;
+    public Boolean saveLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        //AGREGADO
+        checkBoxRememberMe = (CheckBox)findViewById(R.id.checkBoxRememberMe);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            txtUsername.setText(loginPreferences.getString("username", ""));
+            txtPassword.setText(loginPreferences.getString("password", ""));
+            checkBoxRememberMe.setChecked(true);
+        }
     }
 
     @Override
     public void logueado(Alumno alumno) {
 
-        Toast.makeText(LoginActivity.this, "lOGUEADO CON EXITO" + alumno.getNombre(), Toast.LENGTH_LONG).show();
-
+        Toast.makeText(LoginActivity.this, "Logueado con exito " + alumno.getNombre(), Toast.LENGTH_LONG).show();
         // REFACTORIZAR ESTO DE SHAREDPREFERENCES es solo de prueba.
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -52,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         editor.apply();
 
         Log.i("ACTIVITY....","por llamar a get mesas");
-
         //Aca inicio el servicio
         Alarma alarma = new Alarma(this,Servicio.class);
         alarma.start();
@@ -79,26 +93,24 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
             Toast.makeText(this, "Ingrese Contraseña! ", Toast.LENGTH_SHORT).show();
             return;
         }
-        String[] parametros = { username, password};
-        /*if (checkBoxRememberMe.isChecked()){
-            txtUsername.setText(username);
-            txtPassword.setText(password);
+        if (checkBoxRememberMe.isChecked()) {
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putString("username", username);
+            loginPrefsEditor.putString("password", password);
+            loginPrefsEditor.commit();
+        } else {
+            loginPrefsEditor.putBoolean("saveLogin", false);
+            loginPrefsEditor.putString("username", username);
+            loginPrefsEditor.putString("password", password);
+            loginPrefsEditor.commit();
+            //loginPrefsEditor.clear();
+            //loginPrefsEditor.commit();
         }
-*/
+        String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
         Toast.makeText(LoginActivity.this, "Iniciando Sesion ...", Toast.LENGTH_SHORT).show();
     }
 
-   /* @OnClick(R.id.btnLogout)
-    public void logout(){
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
-
-        String[] parametros = { username, password};
-        AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
-        Toast.makeText(LoginActivity.this, "Cerrando sesion ...", Toast.LENGTH_SHORT).show();
-    }
-*/
     /**
      * mocks de datos que deben venir de guarani. Borrar despues.
      */
@@ -132,6 +144,4 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         // falta defnir listado de materias a las que el alumno ya esta inscripto para desincribirse y no dejar inscribir
         
     }
-
-
 }
