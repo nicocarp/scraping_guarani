@@ -26,6 +26,19 @@ public class ManagerGuarani {
     public static String getError(){
         return error;
     }
+
+    public static Guarani _getInstance(){
+        if (instance == null){
+            try {
+                instance = new Guarani();
+            } catch (IOException e) {
+                e.printStackTrace();
+                setError("Error IO"); // mejorar este mensaje y leerlo de strings
+            }
+        }
+        return instance;
+    }
+
     public static Guarani getInstance(String username, String password){
 
         if (instance == null){

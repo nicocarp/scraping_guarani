@@ -9,4 +9,10 @@
     <string name="login_button">Continuar</string>
     <string name="materias_titulo">Materias</string>
     <string name="anotar_button">Anotarme</string>
+
+    <!--> // mensajes de error <-->
+    <string name="exceptionIO">Error de IO</string>
+
+
+
 </resources>

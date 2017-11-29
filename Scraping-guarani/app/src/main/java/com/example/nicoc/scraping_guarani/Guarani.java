@@ -1,17 +1,10 @@
 package com.example.nicoc.scraping_guarani;
 
-import android.os.SystemClock;
-import android.util.Log;
-
 import com.example.nicoc.scraping_guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Modelos.Mesa;
-import com.example.nicoc.scraping_guarani.Modelos.Profesor;
-import com.example.nicoc.scraping_guarani.Modelos.TipoMesa;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,9 +14,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +46,6 @@ public class Guarani {
         this.startConnection();
     }
 
-
     /**
      * Este metodo existe fundamentalmente para setear las cookies y mantener la misma conexion.
      * @throws IOException
@@ -78,7 +68,7 @@ public class Guarani {
         document = this.connection.url(url).get();
 
         //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
-        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
         document = this.connection.url(url).get();
 
         Element link_mesa = document.select("a:contains("+id_materia+")").first();
@@ -196,7 +186,7 @@ public class Guarani {
         document = this.connection.url(url_inscripcion).get();
 
         //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
-        Element e = document.select("[text*=LICENCIATURA]").first();
+        Element e = document.select("[text*=LICENCIATURA EN SISTEMAS]").first();
 
         Elements link_carreras = document.select("[href*=elegirMateriaInscCursada]");
         for (Element elem : link_carreras){
@@ -205,7 +195,7 @@ public class Guarani {
         }
 
         // IGNORAMOS LAS CARRERAS SOLO MIRAMOS LICENCIATURA
-        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
         document = this.connection.url(url).get();
 
         Elements link_materias = document.select("[href*=elegirMesaInscExamen]");
@@ -273,7 +263,7 @@ public class Guarani {
             }
             // vuelvo a navegar hacia el listado e mesas.
             document = this.connection.url(url_inscripcion).get();
-            url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+            url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
             document = this.connection.url(url).get();
             link_materias = document.select("[href*=elegirMesaInscExamen]");
             mesas_json = mesas_json.concat(mesa_json);
@@ -456,7 +446,7 @@ public class Guarani {
      * @return
      * @throws IOException
      */
-    public Carrera getPlanMateria() throws IOException {
+    public Carrera getPlanCarrera() throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -464,7 +454,7 @@ public class Guarani {
         document = this.connection.url(url).get();
         url = document.select("a:contains(Plan de Estudios)").first().attr("abs:href");
         document = this.connection.url(url).get();
-        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
         document = this.connection.url(url).get();
         String nombre_carrera = document.select("div.detalle_contenido").first().children().get(0).text();
         String codigo_carrera = getMatch(nombre_carrera, "\\(([0-9]+)\\)");
@@ -509,13 +499,23 @@ public class Guarani {
         System.out.println(s);
         System.out.println(result);
     }
+    public Alumno _getDatosAlumno(String username, String password) throws IOException {
+        if(login(username, password)){
+            Carrera carrera = getPlanCarrera();
+            
+
+        }
+        return null;
+
+
+    }
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
         Guarani g = new Guarani();
         //g.testReplace();
         // obtener alumno activo de la bd. sacas user password y alumno.
         if (g.login("27042881", "valenti2")){
-            Carrera carrera = g.getPlanMateria();
+            Carrera carrera = g.getPlanCarrera();
             Alumno alumno = g.getDatosAlumno(carrera);
             ArrayList<Mesa> mesas = g.getMesasDeExamen(carrera);
         }
