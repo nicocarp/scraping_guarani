@@ -169,7 +169,7 @@ public class Guarani {
         document = this.connection.url(url).get();
         url = document.select("[href*=elegirCarreraCertificado]").first().attr("abs:href");
         document = this.connection.url(url).get();
-        url = document.select("a:contains(LICENCIATURA)").first().attr("abs:href");
+        url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
         document = this.connection.url(url).get();
         String legajo_alumno = document.select("input[name=legajo]").first().attr("value");
         System.out.println("Alumno "+ legajo_alumno+ " "+nombre_alumno +" "+ apellido_alumno);
