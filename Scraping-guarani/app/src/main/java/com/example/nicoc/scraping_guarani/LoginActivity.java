@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.nicoc.scraping_guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Modelos.Mesa;
@@ -27,33 +30,38 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView{
 
     public static String URL_BASE = "http://www.dit.ing.unp.edu.ar/v2070/www/";
+    private AwesomeValidation validator;
     @BindView(R.id.txtUsername) EditText txtUsername;
     @BindView(R.id.txtPassword) EditText txtPassword;
     @BindView(R.id.checkBoxRememberMe) CheckBox checkBoxRememberMe;
-    //private String username,password;
-    public SharedPreferences loginPreferences;
-    public SharedPreferences.Editor loginPrefsEditor;
-    public Boolean saveLogin;
+
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
+        this.validator = new AwesomeValidation(ValidationStyle.BASIC);
 
-        //AGREGADO
-        checkBoxRememberMe = (CheckBox)findViewById(R.id.checkBoxRememberMe);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
-        saveLogin = loginPreferences.getBoolean("saveLogin", false);
-        if (saveLogin == true) {
+        this.iniciarViews();
+
+
+    }
+
+    private void iniciarViews(){
+        if ((loginPreferences.getBoolean("saveLogin", false)) == true) {
             txtUsername.setText(loginPreferences.getString("username", ""));
             txtPassword.setText(loginPreferences.getString("password", ""));
             checkBoxRememberMe.setChecked(true);
         }
+
+        validator.addValidation(txtUsername, RegexTemplate.NOT_EMPTY, "Ingrese usuario");
+        validator.addValidation(txtPassword, RegexTemplate.NOT_EMPTY, "Ingrese contraseña");
     }
 
     /**
@@ -63,23 +71,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @Override
     public void logueado(Alumno alumno) {
 
-        // REFACTORIZAR ESTO DE SHAREDPREFERENCES es solo de prueba.
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("username", username); // Storing string
-        editor.putString("password", password); // Storing string
-        editor.apply();
-
-        //Aca inicio el servicio
         //Alarma alarma = new Alarma(this,Servicio.class);
         //alarma.start();
-
         Intent intent = new Intent(this, AlumnoActivity.class);
         startActivity(intent);
-
     }
 
     @Override
@@ -89,65 +84,22 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
     @OnClick(R.id.btnLogin)
     public void login(){
+        this.validator.clear();
+        if (!this.validator.validate())
+            return;
+
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
-        if(username.isEmpty()){
-            Toast.makeText(this, "Ingrese Usuario! ", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(password.isEmpty()){
-            Toast.makeText(this, "Ingrese Contraseña! ", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (checkBoxRememberMe.isChecked()) {
-            loginPrefsEditor.putBoolean("saveLogin", true);
-            loginPrefsEditor.putString("username", username);
-            loginPrefsEditor.putString("password", password);
-            loginPrefsEditor.commit();
-        } else {
-            loginPrefsEditor.putBoolean("saveLogin", false);
-            loginPrefsEditor.putString("username", username);
-            loginPrefsEditor.putString("password", password);
-            loginPrefsEditor.commit();
-            //loginPrefsEditor.clear();
-            //loginPrefsEditor.commit();
-        }
+
+        // esta logica deberia ir en logueado.
+        loginPrefsEditor = loginPreferences.edit();
+        loginPrefsEditor.putBoolean("saveLogin", (checkBoxRememberMe.isChecked()));
+        loginPrefsEditor.putString("username", username);
+        loginPrefsEditor.putString("password", password);
+        loginPrefsEditor.commit();
+
         String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
         Toast.makeText(LoginActivity.this, "Iniciando Sesion ...", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * mocks de datos que deben venir de guarani. Borrar despues.
-     */
-    public void mockDatosListado(){
-        Alumno alumno = new Alumno();
-        alumno.setNombre("Un nombre");
-        alumno.setLegajo("23-3455-322");
-
-        Materia materia = new Materia();
-        materia.setNombre("Ingenieria 3");
-        materia.setCodigo("IF0345");
-
-        Mesa mesa = new Mesa();
-        mesa.setMateria(materia);
-        mesa.setProfesores(new ArrayList<Profesor>(Arrays.asList(new Profesor("Ricardo Lopez"), new Profesor("Gabriel Ingravallo"))));
-        mesa.setFecha("asi por ahora");
-        mesa.setMaterias_necesarias(null); // se puede anotar a esta materia
-
-        Materia materia_2 = new Materia();
-        materia.setNombre("Administracion de redes y seguridad");
-        materia.setCodigo("IF0323");
-
-        // si un alumno no se puede inscribir a una mesa, no tiene fecha ni profes, solo las materias necesarias.
-        Mesa mesa_2 = new Mesa();
-        mesa.setMateria(materia_2);
-        mesa.setProfesores(null);
-        mesa.setFecha(null);
-        mesa.setMaterias_necesarias(new ArrayList<Materia>(Arrays.asList(materia))); // Para rendir seguridad necesitas ing3
-        // a partir de estos objetos: alumno y mesas se llena el listado.
-        // al dar click en boton inscribir, es necesario el legajo del alumno y codigo materia.
-        // falta defnir listado de materias a las que el alumno ya esta inscripto para desincribirse y no dejar inscribir
-        
     }
 }

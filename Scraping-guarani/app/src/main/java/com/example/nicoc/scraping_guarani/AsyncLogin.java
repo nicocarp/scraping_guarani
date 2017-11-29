@@ -18,8 +18,6 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         public void logueado(Alumno alumno);
     }
     private IView activity;
-    private String error;
-
 
     public AsyncLogin(IView activity) {
         this.activity = activity;
