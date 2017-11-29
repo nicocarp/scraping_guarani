@@ -26,8 +26,10 @@ import butterknife.ButterKnife;
 public class AlumnoActivity extends AppCompatActivity {
 
     @BindView(R.id.lblAlumno)    TextView lblAlumno;
-    @BindView(R.id.lblMaterias)    TextView lblMaterias;
-    @BindView(R.id.listaMaterias)    ListView listaMatrias;
+    @BindView(R.id.lblLegajo)    TextView lblLegajo;
+   // @BindView(R.id.lblFecha)    TextView lblFecha;
+   // @BindView(R.id.lblMaterias)    TextView lblMaterias;
+   // @BindView(R.id.listaMaterias)    ListView listaMatrias;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,6 +71,7 @@ public class AlumnoActivity extends AppCompatActivity {
 
                         //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
                         Toast.makeText(AlumnoActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+                        Toast.makeText(AlumnoActivity.this,bundle.getString("Legajo"),Toast.LENGTH_LONG).show();
 
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
