@@ -32,14 +32,15 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
      */
     @Override
     protected Alumno doInBackground(String... parametros) {
-        Guarani guarani = ManagerGuarani.getInstance(parametros[0], parametros[1]);
+        String username = parametros[0];
+        String password = parametros[1];
+
+        Guarani guarani = ManagerGuarani._getInstance();
         if (guarani == null){
             return null;
         }
-
         try {
-            Carrera carrera = guarani.getPlanCarrera();
-            Alumno alumno = guarani.getDatosAlumno(carrera);
+            Alumno alumno = guarani._getDatosAlumno(username, password);
             ManagerGuarani.alumno = alumno;
             return alumno;
         } catch (IOException e) {

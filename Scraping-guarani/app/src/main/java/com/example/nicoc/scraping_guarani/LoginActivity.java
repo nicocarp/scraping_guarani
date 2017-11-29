@@ -56,27 +56,30 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         }
     }
 
+    /**
+     * Precondicion: el alumno no debe ser nullo.     *
+     * @param alumno instancia de Alumno no null.
+     */
     @Override
     public void logueado(Alumno alumno) {
 
-        //Toast.makeText(LoginActivity.this, "Logueado con exito " + alumno.getNombre(), Toast.LENGTH_LONG).show();
         // REFACTORIZAR ESTO DE SHAREDPREFERENCES es solo de prueba.
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
         editor.putString("username", username); // Storing string
         editor.putString("password", password); // Storing string
         editor.apply();
 
-        Log.i("ACTIVITY....","por llamar a get mesas");
         //Aca inicio el servicio
-        Alarma alarma = new Alarma(this,Servicio.class);
-        alarma.start();
-        //me voy a la pantalla de ALUMNO y con un intent pasarle la instancia de alumno ...
+        //Alarma alarma = new Alarma(this,Servicio.class);
+        //alarma.start();
+
         Intent intent = new Intent(this, AlumnoActivity.class);
         startActivity(intent);
-        //aca habria que poner una progressbar o algo esperando a que se ejecute el servicio...
+
     }
 
     @Override

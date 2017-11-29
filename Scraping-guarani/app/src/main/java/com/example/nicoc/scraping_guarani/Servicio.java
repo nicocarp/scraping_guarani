@@ -138,7 +138,7 @@ public class Servicio extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
 
-        Toast.makeText(this,"Service Started...",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Service Started...",Toast.LENGTH_LONG).show();
         Thread thread = new Thread(new MyThreadClass(startId));
         thread.start();
         return START_STICKY;
@@ -148,7 +148,7 @@ public class Servicio extends Service {
     public void onDestroy()
     {
 
-        Toast.makeText(this,"Service Destroyed...",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Service Destroyed...",Toast.LENGTH_LONG).show();
 
 
     }

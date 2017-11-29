@@ -25,6 +25,7 @@ import com.example.nicoc.scraping_guarani.Modelos.Alumno;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AlumnoActivity extends AppCompatActivity {
 
@@ -61,6 +62,7 @@ public class AlumnoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         this.alumno= ManagerGuarani.alumno;
+
         Toast.makeText(AlumnoActivity.this, "Alumno"+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
         //start_service();
@@ -92,26 +94,22 @@ public class AlumnoActivity extends AppCompatActivity {
 
 
     private void verificar_login(){
-        // lee de la base de datos o preferencias y verifica que haya usuario y contraseña activa.
-
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        String u = pref.getString("username", null);
-
-        if (u!=null)
-            cargarMaterias();
+        if (this.alumno!=null)
+            setDatosAlumno();
         else{
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-            //Alarma.cancelarAlarma();
         }
-
+    }
+    private void setDatosAlumno(){
+        lblAlumno.setText(this.alumno.getNombre());
+        lblLegajo.setText(this.alumno.getLegajo());
     }
 
+    @OnClick(R.id.buttonMesas)
     public void cargarMaterias(){
         Toast.makeText(AlumnoActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
-
+        // lanzar la otra activity, necesaria para chupar datos de materias.
     }
 
 }
