@@ -9,6 +9,16 @@ public class Carrera{
     private List<Materia> materias;
     private List<Correlatividad> correlatividades;
 
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    private Boolean activo;
+
     public String getCodigo() {
         return codigo;
     }

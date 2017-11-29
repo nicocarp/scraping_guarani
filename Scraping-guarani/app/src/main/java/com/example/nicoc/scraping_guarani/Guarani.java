@@ -494,8 +494,98 @@ public class Guarani {
         }
         carrera.setMaterias(materias);
         return carrera;
-
     }
+    public ArrayList<Carrera> _getPlanCarrera() throws IOException {
+        Document document = this.document_base;
+        String url;
+
+        ArrayList<Carrera> carreras = new ArrayList<Carrera>();
+
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+        url = document.select("a:contains(Plan de Estudios)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+        String url_plan_estudios = url;
+
+        Elements a_carreras = document.select("href*=[planDeEstudios]");
+        for (int i = 0; i< a_carreras.size() ; i++){
+            Element a_carrera = a_carreras.get(i);
+            String nombre_carrera = getMatch(a_carrera.text(), "([A-Z][[A-Z]+ | [,\\(\\)\\s]{1}]+)");
+            String codigo_carrera = getMatch(a_carrera.text(), "\\(([0-9]+)\\)");
+
+            url = document.select("a:contains("+nombre_carrera+")").first().attr("abs:href");
+            document = this.connection.url(url).get();
+
+            String plan_carrera = document.select("div.detalle_contenido").first().children().get(2).text();
+            Element tabla = document.select("table.normal_plana_plan_estudios").first();
+
+            Elements trs = tabla.select("tr[class*=normal_plana]");
+
+            Carrera carrera = new Carrera();
+            carrera.setNombre(nombre_carrera);
+            carrera.setCodigo(codigo_carrera);
+            carrera.setPlan(plan_carrera);
+
+            ArrayList<Materia> materias = new ArrayList<Materia>();
+
+            for (Element tr : trs){
+                Materia materia = new Materia();
+
+                materia.setAño(tr.children().get(0).text());
+                materia.setCodigo(tr.children().get(1).text());
+                materia.setNombre(tr.children().get(2).text());
+                materia.setPeriodoLectivo(tr.children().get(3).text());
+
+                if (tr.children().get(6).text().contains("correlativas")){
+                    Element tr_correlatividad = tr.nextElementSibling();
+                    Elements divs = tr_correlatividad.children().get(1).children();
+                    materia.setCorrelatividad(tr_correlatividad.children().get(1).text());
+                }
+                materias.add(materia);
+            }
+            carrera.setMaterias(materias);
+            carreras.add(carrera);
+            System.out.println("PrimeraVuelta");
+
+            // recargamos la apgina.
+            document = this.connection.url(url_plan_estudios).get();
+            a_carreras = document.select("href*=[planDeEstudios]");
+        }
+
+        return carreras;
+    }
+
+    /**
+     * Precondicion: el listado de carrera deben ser las carreras del alumno.
+     * @param carreras
+     * @throws IOException
+     */
+    private void setRegularidadEnCarrera(ArrayList<Carrera> carreras) throws IOException {
+        Document document = this.document_base;
+        String url;
+
+        url = document.select("[src*=operaciones]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+        String url_certificado = document.select("[href*=elegirCertificado]").first().attr("abs:href");
+        document = this.connection.url(url_certificado).get();
+        System.out.println(document.html());
+        // click sobre alumno regular
+        url = document.select("a:contains(Alumno Regular)").first().attr("abs:href");
+        document = this.connection.url(url).get();
+
+        for (Carrera carrera : carreras){
+            url = document.select("a:contains("+carrera.getNombre()+")").first().attr("abs:href");
+            document = this.connection.url(url).get();
+            Element div_errores = document.select("div.mensaje_ua_contenido").first();
+            carrera.setActivo( (div_errores == null) );
+            // recargamos la pagin
+            document = this.connection.url(url_certificado).get();
+            url = document.select("a:contains(Alumno Regular)").first().attr("abs:href");
+            document = this.connection.url(url).get();
+        }
+    }
+
+
 
     public void testReplace(){
         String s = "123 [[hola]] eso no se debe borrar [[chau]] 12312 {}";
@@ -513,6 +603,7 @@ public class Guarani {
         if(login(username, password)){
             Carrera carrera = getPlanCarrera();
             Alumno alumno = getDatosAlumno(carrera);
+            setRegularidadEnCarrera(alumno.getCarreras());
             return alumno;
         }
         return null;
@@ -522,6 +613,9 @@ public class Guarani {
         Guarani g = new Guarani();
         //g.testReplace();
         // obtener alumno activo de la bd. sacas user password y alumno.
+        // testear que funcione el scraping sobre muchas carreras
+        // g._getPlanCarrera()
+        //
         if (g.login("27042881", "valenti2")){
             Carrera carrera = g.getPlanCarrera();
             Alumno alumno = g.getDatosAlumno(carrera);

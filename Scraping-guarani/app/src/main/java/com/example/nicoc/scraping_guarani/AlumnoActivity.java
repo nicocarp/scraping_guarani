@@ -17,11 +17,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +66,7 @@ public class AlumnoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         this.alumno= ManagerGuarani.alumno;
+        testInscripciones();
 
         Toast.makeText(AlumnoActivity.this, "Alumno"+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
@@ -112,4 +117,9 @@ public class AlumnoActivity extends AppCompatActivity {
         // lanzar la otra activity, necesaria para chupar datos de materias.
     }
 
+    private void testInscripciones(){
+        Guarani guarani = ManagerGuarani._getInstance();
+        //ArrayList<Mesa> mesas = guarani.getMesasDeExamen();
+
+    }
 }

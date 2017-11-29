@@ -1,12 +1,9 @@
 package com.example.nicoc.scraping_guarani.Modelos;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alumno implements Parcelable {
+public class Alumno{
 
     private String nombre;
     private String legajo;
@@ -32,7 +29,7 @@ public class Alumno implements Parcelable {
         this.legajo = legajo;
     }
 
-    public List<Carrera> getCarreras() {
+    public ArrayList<Carrera> getCarreras() {
         return carreras;
     }
 
@@ -50,15 +47,5 @@ public class Alumno implements Parcelable {
 
     public void addCarrera(Carrera carrera) {
         this.carreras.add(carrera);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
     }
 }
