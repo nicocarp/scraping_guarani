@@ -19,10 +19,8 @@ import com.example.nicoc.scraping_guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Modelos.Profesor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,8 +47,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
-
-
     }
 
     private void iniciarViews(){
@@ -70,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
      */
     @Override
     public void logueado(Alumno alumno) {
-
         //Alarma alarma = new Alarma(this,Servicio.class);
         //alarma.start();
         Intent intent = new Intent(this, AlumnoActivity.class);
