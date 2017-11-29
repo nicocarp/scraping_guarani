@@ -1,13 +1,46 @@
 package com.example.nicoc.scraping_guarani;
 
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MesaActivity extends AppCompatActivity {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main_m, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.cerrarSesion:
+                this.finish();
+                return true;
+            case R.id.atras:
+                //onBackPressed();
+                //Aca tiene que volver al activity anterior
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Toolbar
+        getSupportActionBar().setTitle("Mesas");
+        Drawable myIcon = getResources().getDrawable(R.drawable.ic_action_name );
+        DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
+        Drawable myIcon2 = getResources().getDrawable(R.drawable.ic_action_atras );
+        DrawableCompat.setTint(myIcon2, getResources().getColor(R.color.colorPrimary));
+
         setContentView(R.layout.activity_mesa);
     }
 }

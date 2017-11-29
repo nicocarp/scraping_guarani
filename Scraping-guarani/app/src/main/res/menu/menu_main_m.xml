@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/cerrarSesion"
+        android:icon="@drawable/ic_action_name"
+        android:title="CerrarSesion"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/atras"
+        android:icon="@drawable/ic_action_atras"
+        app:showAsAction="ifRoom"
+        android:title="Atras">
+    </item>
+</menu>

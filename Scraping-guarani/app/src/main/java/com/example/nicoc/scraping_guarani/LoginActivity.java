@@ -38,7 +38,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_login);
+
         ButterKnife.bind(this);
 
         //AGREGADO
