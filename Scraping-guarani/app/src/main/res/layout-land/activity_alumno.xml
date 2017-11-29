@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    android:orientation="vertical"
+    android:orientation="landscape"
     android:background="@color/colorBlanco"
     tools:context="com.example.nicoc.scraping_guarani.AlumnoActivity">
     <RelativeLayout
@@ -116,7 +116,6 @@
             android:textStyle="bold"
             android:typeface="sans"
             android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="59dp" />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </ScrollView>

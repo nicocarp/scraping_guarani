@@ -18,14 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlumnoActivity" />
+        <activity android:name=".AlumnoActivity" android:screenOrientation="sensor"/>
 
         <service
             android:name=".Servicio"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MesaActivity"></activity>
+        <activity android:name=".MesaActivity" android:screenOrientation="sensor"></activity>
     </application>
 
 </manifest>
