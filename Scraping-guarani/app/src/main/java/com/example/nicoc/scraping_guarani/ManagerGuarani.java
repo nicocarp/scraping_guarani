@@ -17,8 +17,8 @@ public class ManagerGuarani {
     public static Alumno alumno;
 
 
-    private static void setError(String error) {
-        error = error;
+    private static void setError(String err) {
+        error = err;
     }
 
     private static void setAlumno(Alumno a){
@@ -37,7 +37,7 @@ public class ManagerGuarani {
                 instance = new Guarani();
             } catch (IOException e) {
                 e.printStackTrace();
-                setError("Error IO"); // mejorar este mensaje y leerlo de strings
+                setError("Error en la conexion"); // mejorar este mensaje y leerlo de strings
             }
         }
         return instance;
