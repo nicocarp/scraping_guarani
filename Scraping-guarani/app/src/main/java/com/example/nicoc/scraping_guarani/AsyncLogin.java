@@ -38,9 +38,9 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         }
 
         try {
-
             Carrera carrera = guarani.getPlanCarrera();
             Alumno alumno = guarani.getDatosAlumno(carrera);
+            ManagerGuarani.alumno = alumno;
             return alumno;
         } catch (IOException e) {
             e.printStackTrace();

@@ -30,6 +30,7 @@ public class Guarani {
     private Connection connection;
     private String url_base;
     private String last_cookies;
+    private String username;
 
     public String getError() {
         return error;
@@ -43,6 +44,7 @@ public class Guarani {
 
     public Guarani() throws IOException {
         this.url_base = URL;
+        this.username = "";
         this.startConnection();
     }
 
@@ -345,6 +347,8 @@ public class Guarani {
     public boolean login(String username, String password) throws IOException {
         if (this.connection == null)
             this.startConnection();
+        if (!this.username.isEmpty()  && !this.username.equals(username))
+            desloguearse();
 
         Document document;
         String url;
@@ -376,6 +380,7 @@ public class Guarani {
             this.setError(div_mensajes_errores.first().text());
             return false;
         }
+        this.username = username;
         return true;
     }
 
@@ -499,15 +504,18 @@ public class Guarani {
         System.out.println(s);
         System.out.println(result);
     }
+    public void desloguearse() throws IOException {
+        this.connection.cookies(new HashMap<String,String>());
+        this.username = "";
+        this.startConnection();
+    }
     public Alumno _getDatosAlumno(String username, String password) throws IOException {
         if(login(username, password)){
             Carrera carrera = getPlanCarrera();
-            
-
+            Alumno alumno = getDatosAlumno(carrera);
+            return alumno;
         }
         return null;
-
-
     }
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {

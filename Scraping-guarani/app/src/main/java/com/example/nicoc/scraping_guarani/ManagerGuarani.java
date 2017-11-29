@@ -1,5 +1,7 @@
 package com.example.nicoc.scraping_guarani;
 
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+
 import java.io.IOException;
 
 /**
@@ -12,14 +14,16 @@ public class ManagerGuarani {
     private String username = "";
     private String password = "";
     private static String error="";
-
+    public static Alumno alumno;
 
 
     private static void setError(String error) {
         error = error;
     }
 
-
+    private static void setAlumno(Alumno a){
+        alumno = a;
+    }
     public ManagerGuarani(){
     }
 

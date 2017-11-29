@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @Override
     public void logueado(Alumno alumno) {
 
-        Toast.makeText(LoginActivity.this, "Logueado con exito " + alumno.getNombre(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(LoginActivity.this, "Logueado con exito " + alumno.getNombre(), Toast.LENGTH_LONG).show();
         // REFACTORIZAR ESTO DE SHAREDPREFERENCES es solo de prueba.
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();

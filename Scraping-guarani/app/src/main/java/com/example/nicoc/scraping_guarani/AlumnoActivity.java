@@ -20,6 +20,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,6 +30,7 @@ public class AlumnoActivity extends AppCompatActivity {
 
     @BindView(R.id.lblAlumno)    TextView lblAlumno;
     @BindView(R.id.lblLegajo)    TextView lblLegajo;
+    Alumno alumno;
    // @BindView(R.id.lblFecha)    TextView lblFecha;
    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
    // @BindView(R.id.listaMaterias)    ListView listaMatrias;
@@ -55,6 +59,9 @@ public class AlumnoActivity extends AppCompatActivity {
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
+
+        this.alumno= ManagerGuarani.alumno;
+        Toast.makeText(AlumnoActivity.this, "Alumno"+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
         //start_service();
         //consultar_bd_mesas();
