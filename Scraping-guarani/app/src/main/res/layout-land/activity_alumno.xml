@@ -27,23 +27,48 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentTop="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/lblAlumno"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="3dp"
-                android:layout_weight="0.00"
-                android:fontFamily="cursive"
-                android:text="@string/alumno_campo"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:typeface="sans"
-                tools:text="@string/alumno_campo" />
+            <LinearLayout
+                android:layout_width="97dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.13"
+                    android:fontFamily="cursive"
+                    android:text="@string/alumno_campo"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lblAlumno"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/alumno_campo"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:typeface="sans"
+                    tools:text="@string/alumno_campo" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -52,24 +77,49 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:orientation="horizontal"
+            android:weightSum="1"
             android:layout_below="@+id/linearLayout2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <TextView
-                android:id="@+id/lblLegajo"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="3dp"
-                android:fontFamily="cursive"
-                android:text="@string/legajo_campo"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:typeface="sans"
-                tools:text="Legajo" />
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textLegajo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="cursive"
+                    android:text="@string/legajo_campo"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lblLegajo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/legajo_campo"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:typeface="sans"
+                    tools:text="Legajo" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -79,24 +129,50 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/linearLayout3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/lblFecha"
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/linearLayout"
-                android:layout_weight="0.00"
-                android:fontFamily="cursive"
-                android:text="@string/fecha_campo"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:typeface="sans"
-                tools:text="Fecha" />
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="cursive"
+                    android:text="@string/fecha_campo"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lblFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/linearLayout"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/fecha_campo"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:typeface="sans"
+                    tools:text="Fecha" />
+            </LinearLayout>
+
         </LinearLayout>
         <include
             android:id="@+id/include"
@@ -115,7 +191,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
+            android:layout_above="@+id/include"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="13dp" />
     </RelativeLayout>
 </ScrollView>
