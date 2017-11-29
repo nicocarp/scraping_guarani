@@ -1,9 +1,13 @@
 package com.example.nicoc.scraping_guarani.Modelos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Mesa{
+public class Mesa implements Parcelable {
     private String fecha;
     private String sede;
     private TipoMesa tipoMesa; // libre o regular
@@ -15,6 +19,7 @@ public class Mesa{
     public Mesa(){
         this.materias_necesarias = new ArrayList<Materia>();
     }
+
     public String getTurno() {
         return turno;
     }
@@ -82,4 +87,19 @@ public class Mesa{
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(fecha);
+        parcel.writeString(sede);
+        //parcel.writeSerializable(tipoMesa);
+        //parcel.writeSerializable(profesores);
+        //parcel.writeSerializable(materia);
+        //parcel.writeSerializable(materias_necesarias);
+        parcel.writeString(turno);
+    }
 }

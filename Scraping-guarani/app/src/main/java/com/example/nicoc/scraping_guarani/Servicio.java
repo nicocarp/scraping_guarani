@@ -11,6 +11,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Modelos.Carrera;
+import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Servicio extends Service {
 
     private static final int COUNT_NOTIFICATION_ID = 123456;
@@ -35,48 +42,91 @@ public class Servicio extends Service {
         public void run() {
 
 
-            int i = 0;
+
             synchronized (this)
             {
                 //aca iria la llamada a la API de scraping
                 boolean estoy_logueado = true;
                 boolean hay_mesas = true;
-                if (estoy_logueado==false){
+
+                //1. consultar la BD para traer user y pass
+                String usuario = "27042881";
+                String password = "valenti2";
+
+
+                //2.Verifico si ese usuario esta logueado
+                Guarani guarani = ManagerGuarani.getInstance(usuario, password);
+                if (guarani == null){//usuario no logueado
+                    //3.a Hago una notificacion mostrando el error.
+                    //3.b Si estoy en cualquiera de las 2 activitys, muestro mje y vuelvo a activity_login: broadcastear en ambas.
+                    String error = ManagerGuarani.getError();
                     Alarma.cancelarAlarma();
-
                 }
-                else if (hay_mesas){
-                    //guardar las mesas en la BD.
-                    crearNotificacion(); //aparecera un mensaje en la barra de notificaciones cuando termine el servicio.
-                    sendBroadcast(); //Si estoy en SecondActivity, se me actualiza
-                }
-                else
-                {
-                    //no hago nada....
-                }
+                else{
+                    //4a.Consulto al modulo de scraping: carrera, alumno, mesas.
+                    try
+                    {
+                        Carrera carrera = guarani.getPlanCarrera();
+                        Alumno alumno = guarani.getDatosAlumno(carrera);
+                        ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carrera);
 
-                /*
-                while (i<10)
-                {
-                    try {
-                        wait(1500);
-                        i++;
-                        /*if (i == 5){
+                        if (mesas.size()>0){//si hay mesas
+                            //4.b Pasar las mesas
+                            //4.b.1 No estoy usando la app: armo notificación con pendingIntent
+                            //4.b.2 Estoy en activity_login: consulto la bd.
+                            //4.b.3 Estoy en activity_alumno: consulto la bd.
+                            //4.b.4 Estoy en activty_mesa: recibo un broadcast y refresco pantalla.
 
-                            Alarma.cancelarAlarma();
-                            Log.i("Cuenta a 5....","Cago la alarma!!!!");
-                            break;
+                            //Nota: por ahora mando notificacion
+                            Log.i("creando notificacion....","....");
+                            crearNotificacionMesasDisponibles(mesas);
                         }
-                    } catch (InterruptedException e) {
+
+
+
+
+
+                    }catch(IOException e){
                         e.printStackTrace();
+                        Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
+                        //5.¿Como prosigo?
                     }
-                }*/
+
+                }
+
+
+
+
 
                 //crearNotificacion(); //aparecera un mensaje en la barra de notificaciones cuando termine el servicio.
                 //sendBroadcast(); //Si estoy en SecondActivity, se me actualiza
                 stopSelf(service_id); //este lo usamos para detener el servicio
             }
 
+        }
+
+
+        private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas){
+            NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+
+            int icono = R.mipmap.ic_launcher;
+            Intent intent = new Intent(Servicio.this, MesaActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("Mesas",mesas);
+            intent.putExtras(bundle);
+            PendingIntent pendingIntent = PendingIntent.getActivity(Servicio.this, 0, intent, 0);
+            //aca iria toda la informacion que recibimos del scraping dentro del intent
+
+
+            mBuilder =new NotificationCompat.Builder(getApplicationContext())
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(icono)
+                    .setContentTitle("TNT")
+                    .setContentText("Hay mesas de examenes disponibles.")
+                    .setVibrate(new long[] {100, 250, 100, 500})
+                    .setAutoCancel(true);
+
+            mNotifyMgr.notify(2, mBuilder.build());//
         }
 
 
@@ -87,6 +137,7 @@ public class Servicio extends Service {
 
             int icono = R.mipmap.ic_launcher;
             Intent intent = new Intent(Servicio.this, AlumnoActivity.class);
+            //aca poner las mesas....
             PendingIntent pendingIntent = PendingIntent.getActivity(Servicio.this, 0, intent, 0);
             //aca iria toda la informacion que recibimos del scraping dentro del intent
 
@@ -138,7 +189,7 @@ public class Servicio extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
 
-        //Toast.makeText(this,"Service Started...",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Service Started...",Toast.LENGTH_LONG).show();
         Thread thread = new Thread(new MyThreadClass(startId));
         thread.start();
         return START_STICKY;
@@ -148,7 +199,7 @@ public class Servicio extends Service {
     public void onDestroy()
     {
 
-        //Toast.makeText(this,"Service Destroyed...",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Service Destroyed...",Toast.LENGTH_LONG).show();
 
 
     }
@@ -161,3 +212,4 @@ public class Servicio extends Service {
         return null;
     }
 }
+

@@ -12,6 +12,18 @@ public class MesaActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_m, menu);
+
+
+        // Para que esto ande todos los modelos tienen que implementar Parcelable
+        //y redefinir los metodos writeToParcel()
+        /*
+        Log.i("Datos de las Mesas. ","...");
+        Bundle bundle_mesas = this.getIntent().getExtras();
+        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
+        Log.i("Mesas.cantidad: ", "" + mesas.size());
+        */
+
+
         return true;
     }
     @Override
