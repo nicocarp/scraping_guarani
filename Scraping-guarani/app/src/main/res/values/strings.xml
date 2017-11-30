@@ -1,16 +1,24 @@
 <resources>
+
     <string name="app_name">Siu Guarani</string>
+
+    <!--> Nombre campos <-->
     <string name="usuario_campo">Usuario</string>
     <string name="contrasenia_campo">Contraseña</string>
     <string name="alumno_campo">Alumno</string>
     <string name="fecha_campo">Fecha</string>
     <string name="legajo_campo">Legajo</string>
-    <string name="iniciarsesion_titulo">Iniciar Sesion</string>
+
+    <!--> Buttons <-->
     <string name="login_button">Continuar</string>
-    <string name="materias_titulo">Materias</string>
     <string name="anotar_button">Anotarme</string>
 
-    <!--> // mensajes de error <-->
+    <!--> Titulos <-->
+    <string name="seleccioneCarrera_titulo">Seleccione Carrera</string>
+    <string name="materias_titulo">Materias</string>
+    <string name="iniciarsesion_titulo">Iniciar Sesion</string>
+
+    <!--> Mensajes de error <-->
     <string name="exceptionIO">Error de IO</string>
 
 
