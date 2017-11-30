@@ -34,8 +34,6 @@ public class MesaActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.atras:
-                //onBackPressed();
-                //Aca tiene que volver al activity anterior
                 super.onBackPressed();
                 return true;
             default:

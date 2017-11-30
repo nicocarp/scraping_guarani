@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ public class AlumnoActivity extends AppCompatActivity {
     @BindView(R.id.lblAlumno)    TextView lblAlumno;
     @BindView(R.id.lblLegajo)    TextView lblLegajo;
     Alumno alumno;
+    @BindView(R.id.buttonMesas) Button buttonMesas;
    // @BindView(R.id.lblFecha)    TextView lblFecha;
    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
    // @BindView(R.id.listaMaterias)    ListView listaMatrias;
@@ -68,7 +70,7 @@ public class AlumnoActivity extends AppCompatActivity {
         this.alumno= ManagerGuarani.alumno;
         testInscripciones();
 
-        Toast.makeText(AlumnoActivity.this, "Alumno"+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
         //start_service();
         //consultar_bd_mesas();
@@ -85,7 +87,6 @@ public class AlumnoActivity extends AppCompatActivity {
 
                         //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
                         Toast.makeText(AlumnoActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
-                        Toast.makeText(AlumnoActivity.this,bundle.getString("Legajo"),Toast.LENGTH_LONG).show();
 
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
@@ -113,6 +114,8 @@ public class AlumnoActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonMesas)
     public void cargarMaterias(){
+        Intent intent = new Intent(this, MesaActivity.class);
+        startActivity(intent);
         Toast.makeText(AlumnoActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
         // lanzar la otra activity, necesaria para chupar datos de materias.
     }

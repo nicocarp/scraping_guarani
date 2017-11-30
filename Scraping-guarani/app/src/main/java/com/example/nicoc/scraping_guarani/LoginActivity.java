@@ -2,6 +2,7 @@ package com.example.nicoc.scraping_guarani;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,7 +45,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
         ButterKnife.bind(this);
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
-
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
     }
