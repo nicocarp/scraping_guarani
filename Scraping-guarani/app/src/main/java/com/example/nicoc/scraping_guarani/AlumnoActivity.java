@@ -52,7 +52,7 @@ public class AlumnoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.cerrarSesion:
-                this.finish();
+                cerrarSesion();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -98,6 +98,11 @@ public class AlumnoActivity extends AppCompatActivity {
 
     }
 
+    private void cerrarSesion() {
+        Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void verificar_login(){
         if (this.alumno!=null)

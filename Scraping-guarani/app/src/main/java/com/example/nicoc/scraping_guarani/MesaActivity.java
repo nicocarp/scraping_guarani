@@ -1,5 +1,6 @@
 package com.example.nicoc.scraping_guarani;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +23,6 @@ public class MesaActivity extends AppCompatActivity {
         ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
         Log.i("Mesas.cantidad: ", "" + mesas.size());
         */
-
-
         return true;
     }
     @Override
@@ -31,7 +30,7 @@ public class MesaActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.cerrarSesion:
-                this.finish();
+                cerrarSesion();
                 return true;
             case R.id.atras:
                 super.onBackPressed();
@@ -41,6 +40,11 @@ public class MesaActivity extends AppCompatActivity {
         }
     }
 
+    private void cerrarSesion() {
+        Intent intent = new Intent(MesaActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
