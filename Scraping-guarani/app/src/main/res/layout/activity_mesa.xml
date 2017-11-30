@@ -25,7 +25,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout7">
 
             <TextView
                 android:id="@+id/tituloElija"
@@ -40,7 +41,38 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout7">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_carrera"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:visibility="visible">
+
+                <Spinner
+                    android:id="@+id/cmb_carreras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/linearLayout7"
+                    android:layout_weight="1"
+                    android:popupBackground="#becaf2"
+                    android:textSize="20sp"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="0dp" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
         <include
             android:id="@+id/include"
             layout="@layout/footer"
