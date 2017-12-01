@@ -1,10 +1,12 @@
 package com.example.nicoc.scraping_guarani.Modelos;
 
+import java.io.Serializable;
+
 /**
  * Created by nicoc on 24/11/17.
  */
 
-public class Materia {
+public class Materia implements Serializable {
     private String codigo;
     private String nombre;
     private Carrera carrera;

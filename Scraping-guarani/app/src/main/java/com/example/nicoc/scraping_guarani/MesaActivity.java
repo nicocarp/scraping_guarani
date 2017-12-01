@@ -19,15 +19,6 @@ public class MesaActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_m, menu);
 
-
-        // Para que esto ande todos los modelos tienen que implementar Parcelable
-        //y redefinir los metodos writeToParcel()
-
-        /*Log.i("Datos de las Mesas. ","...");
-        Bundle bundle_mesas = this.getIntent().getExtras();
-        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-        Log.i("Mesas.cantidad: ", "" + mesas.size());*/
-
         return true;
     }
     @Override
@@ -61,5 +52,18 @@ public class MesaActivity extends AppCompatActivity {
         DrawableCompat.setTint(myIcon2, getResources().getColor(R.color.colorPrimary));
 
         setContentView(R.layout.activity_mesa);
+
+
+        // Para que esto ande todos los modelos tienen que implementar Parcelable
+        //y redefinir los metodos writeToParcel()
+
+        /*Log.i("Datos de las Mesas. ","...");
+        Bundle bundle_mesas = this.getIntent().getExtras();
+        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
+        Log.i("Mesas.cantidad: ", "" + mesas.size());*/
+
+        ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
+        Log.i("Mesas.cantidad: ", "" + mesas.size());
+
     }
 }

@@ -1,8 +1,9 @@
 package com.example.nicoc.scraping_guarani.Modelos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Carrera{
+public class Carrera implements Serializable{
     private String codigo;
     private String nombre;
     private String plan;

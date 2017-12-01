@@ -102,10 +102,13 @@ public class ServicioIntent extends IntentService {
         Intent intent = new Intent(ServicioIntent.this, MesaActivity.class);
 
         /* Hacerrrrrrrr  */
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("Mesas",mesas);
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelableArrayList("Mesas",mesas);
+        //intent.putExtras(bundle);
 
-        intent.putExtras(bundle);
+        intent.putParcelableArrayListExtra("Mesas",mesas);
+
+
         PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
         //aca iria toda la informacion que recibimos del scraping dentro del intent
 

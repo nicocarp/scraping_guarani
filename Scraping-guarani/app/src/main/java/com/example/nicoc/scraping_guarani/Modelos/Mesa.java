@@ -23,6 +23,34 @@ public class Mesa implements Parcelable {
         this.materias_necesarias = new ArrayList<Materia>();
     }
 
+
+    //Desde aca
+    protected Mesa(Parcel in) {
+        fecha = in.readString();
+        sede = in.readString();
+        tipoMesa = (TipoMesa) in.readSerializable();
+        profesores = in.readArrayList(null);
+        carrera = (Carrera) in.readSerializable();
+        materia = (Materia) in.readSerializable();
+        materias_necesarias = in.readArrayList(null);
+        turno = in.readString();
+
+    }
+
+
+
+    public static final Creator<Mesa> CREATOR = new Creator<Mesa>() {
+        @Override
+        public Mesa createFromParcel(Parcel in) {
+            return new Mesa(in);
+        }
+
+        @Override
+        public Mesa[] newArray(int size) {
+            return new Mesa[size];
+        }
+    };//hasta aca
+
     public Carrera getCarrera() {
         return carrera;
     }
@@ -106,10 +134,13 @@ public class Mesa implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(fecha);
         parcel.writeString(sede);
-        //parcel.writeSerializable(tipoMesa);
-        //parcel.writeSerializable(profesores);
-        //parcel.writeSerializable(materia);
-        //parcel.writeSerializable(materias_necesarias);
+        parcel.writeSerializable(tipoMesa);
+        parcel.writeList(profesores);
+        parcel.writeSerializable(carrera);
+        parcel.writeSerializable(materia);
+        parcel.writeList(materias_necesarias);
         parcel.writeString(turno);
     }
+
+
 }
