@@ -2,11 +2,20 @@ package com.example.nicoc.scraping_guarani;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Modelos.Carrera;
+import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -18,6 +27,7 @@ import java.util.Calendar;
  */
 public class ServicioIntent extends IntentService {
 
+    NotificationCompat.Builder mBuilder;
 
     public ServicioIntent() {
         super(" Intent Servicio Scraping");
@@ -34,10 +44,83 @@ public class ServicioIntent extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i("Entre al intent service...: ","Estoy funcionado!!!!!");
 
-        
+        //1. consultar la BD para traer user y pass
+        String usuario = "27042881";
+        String password = "valenti2";
 
+        //2.Verifico si ese usuario esta logueado
+        Guarani guarani = ManagerGuarani.getInstance(usuario, password);
+        if (guarani == null){//usuario no logueado
+            //3.a Hago una notificacion mostrando el error.
+            //3.b Si estoy en cualquiera de las 2 activitys, muestro mje y vuelvo a activity_login: broadcastear en ambas.
+            Log.i("Guarani...: ","Estoy Muerto");
+            String error = ManagerGuarani.getError();
+            Alarma.cancelarAlarma();
+        }
+        else{
+            //4a.Consulto al modulo de scraping: carrera, alumno, mesas.
+            try
+            {
+                ArrayList<Carrera> carreras = guarani.getPlanDeEstudios();
+                Alumno alumno = guarani.getDatosAlumno(carreras);
+                ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carreras.get(1));
+                Log.i("Guarani...: ","Estoy Vivo");
+                if (mesas.size()>0){//si hay mesas
+                    //4.b Pasar las mesas
+                    //4.b.1 No estoy usando la app: armo notificación con pendingIntent
+                    //4.b.2 Estoy en activity_login: consulto la bd.
+                    //4.b.3 Estoy en activity_alumno: consulto la bd.
+                    //4.b.4 Estoy en activty_mesa: recibo un broadcast y refresco pantalla.
+
+                    //Nota: por ahora mando notificacion
+                    Log.i("Guarani...: ","Hay Mesas");
+                    crearNotificacionMesasDisponibles(mesas);
+                }
+
+
+
+
+
+            }catch(IOException e){
+                e.printStackTrace();
+                Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
+                //5.¿Como prosigo?
+            }
+
+        }
+
+
+        //Me mato !!!!!!! waaaaa
         stopSelf();
     }
+
+
+    private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas){
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+
+        int icono = R.mipmap.ic_launcher;
+        Intent intent = new Intent(ServicioIntent.this, MesaActivity.class);
+
+        /* Hacerrrrrrrr  */
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("Mesas",mesas);
+
+        intent.putExtras(bundle);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
+        //aca iria toda la informacion que recibimos del scraping dentro del intent
+
+
+        mBuilder =new NotificationCompat.Builder(getApplicationContext())
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(icono)
+                .setContentTitle("TNT")
+                .setContentText("Hay mesas de examenes disponibles.")
+                .setVibrate(new long[] {100, 250, 100, 500})
+                .setAutoCancel(true);
+
+        mNotifyMgr.notify(2, mBuilder.build());//
+    }
+
 
     @Override
     public void onDestroy() {
