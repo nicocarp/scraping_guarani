@@ -12,14 +12,24 @@ public class Mesa implements Parcelable {
     private String sede;
     private TipoMesa tipoMesa; // libre o regular
     private ArrayList<Profesor> profesores;
+
+    private Carrera carrera;
     private Materia materia;
     private ArrayList<Materia> materias_necesarias;
     private String turno; // esto es necesario para lanzar post de inscripcion
+
 
     public Mesa(){
         this.materias_necesarias = new ArrayList<Materia>();
     }
 
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
     public String getTurno() {
         return turno;
     }

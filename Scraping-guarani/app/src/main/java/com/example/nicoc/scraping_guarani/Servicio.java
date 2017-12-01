@@ -66,9 +66,9 @@ public class Servicio extends Service {
                     //4a.Consulto al modulo de scraping: carrera, alumno, mesas.
                     try
                     {
-                        Carrera carrera = guarani.getPlanCarrera();
-                        Alumno alumno = guarani.getDatosAlumno(carrera);
-                        ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carrera);
+                        ArrayList<Carrera> carreras = guarani.getPlanDeEstudios();
+                        Alumno alumno = guarani.getDatosAlumno(carreras);
+                        ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carreras.get(1));
 
                         if (mesas.size()>0){//si hay mesas
                             //4.b Pasar las mesas

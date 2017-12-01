@@ -33,12 +33,12 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         String username = parametros[0];
         String password = parametros[1];
 
-        Guarani guarani = ManagerGuarani._getInstance();
+        Guarani guarani = ManagerGuarani.getInstance(username, password);
         if (guarani == null){
             return null;
         }
         try {
-            Alumno alumno = guarani._getDatosAlumno(username, password);
+            Alumno alumno = guarani.getAlumno();
             ManagerGuarani.alumno = alumno;
             return alumno;
         } catch (IOException e) {

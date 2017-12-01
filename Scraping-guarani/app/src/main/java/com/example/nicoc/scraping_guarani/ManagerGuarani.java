@@ -51,9 +51,10 @@ public class ManagerGuarani {
                 if (g.login(username, password)){
                     instance = g;
                 }else
-                    error = g.getError();
+                    setError(g.getError());
             } catch (IOException e) {
                 e.printStackTrace();
+                setError("Error en la conexion");
             }
         }
         return instance;
