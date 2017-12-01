@@ -25,7 +25,7 @@ public class Alarma extends Thread{
     private Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    private int tiempo_repeticion = 1000 * 60;//60 segundos
+    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 1 hs
     private int hora;
 
 

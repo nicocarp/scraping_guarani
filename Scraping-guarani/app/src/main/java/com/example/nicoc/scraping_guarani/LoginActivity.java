@@ -66,8 +66,18 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
      */
     @Override
     public void logueado(Alumno alumno) {
+        //opcion 1
         //Alarma alarma = new Alarma(this,Servicio.class);
         //alarma.start();
+
+        //opcion 2
+        //Alarma alarma2 = new Alarma(this,ServicioPrueba.class);
+        //alarma2.start();
+
+        //opcion 3
+        Alarma alarma3 = new Alarma(this,ServicioIntent.class);
+        alarma3.start();
+
         Intent intent = new Intent(this, AlumnoActivity.class);
         startActivity(intent);
     }
