@@ -73,8 +73,24 @@ public class ServicioIntent extends IntentService {
                     //4.b.4 Estoy en activty_mesa: recibo un broadcast y refresco pantalla.
 
                     //Nota: por ahora mando notificacion
-                    Log.i("Guarani...: ","Hay Mesas");
-                    crearNotificacionMesasDisponibles(mesas);
+                    try{
+                        Log.i("Guarani...: ","Hay Mesas");
+                        Log.i("Guarani...: ", mesas.get(0).getFecha());
+                        Log.i("Guarani...: ", mesas.get(0).getSede());
+                        Log.i("Guarani...: ","" + mesas.get(0).getTipoMesa());
+                        Log.i("Guarani...: ", "" + mesas.get(0).getProfesores());
+                        Log.i("Guarani...: ", mesas.get(0).getCarrera()+"");
+                        Log.i("Guarani...: ", mesas.get(0).getMateria()+"");
+                        Log.i("Guarani...: ", mesas.get(0).getMaterias_necesarias()+"");
+                        Log.i("Guarani...: ", mesas.get(0).getTurno());
+                        crearNotificacionMesasDisponibles(mesas);
+                    }catch(Exception e){
+                        Log.i("Guarani...ERROR: ", e.getMessage());
+                    }
+
+
+
+
                 }
 
 
