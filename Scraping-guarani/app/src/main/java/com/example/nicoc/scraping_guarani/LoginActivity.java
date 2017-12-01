@@ -75,8 +75,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         //alarma2.start();
 
         //opcion 3
+        Log.i("Antes: ","ha comenzado la alarma");
         Alarma alarma3 = new Alarma(this,ServicioIntent.class);
         alarma3.start();
+        Log.i("Despues: ","ha comenzado la alarma");
 
         Intent intent = new Intent(this, AlumnoActivity.class);
         startActivity(intent);
