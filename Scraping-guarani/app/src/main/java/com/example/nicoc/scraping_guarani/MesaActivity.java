@@ -57,13 +57,13 @@ public class MesaActivity extends AppCompatActivity {
         // Para que esto ande todos los modelos tienen que implementar Parcelable
         //y redefinir los metodos writeToParcel()
 
-        /*Log.i("Datos de las Mesas. ","...");
+        Log.i("Datos de las Mesas. ","...");
         Bundle bundle_mesas = this.getIntent().getExtras();
         ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-        Log.i("Mesas.cantidad: ", "" + mesas.size());*/
-
-        ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
         Log.i("Mesas.cantidad: ", "" + mesas.size());
+
+        //ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
+        //Log.i("Mesas.cantidad: ", "" + mesas.size());
 
     }
 }
