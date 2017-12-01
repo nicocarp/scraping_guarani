@@ -1,6 +1,4 @@
-package com.example.nicoc.scraping_guarani.Modelos;
-
-import java.util.Date;
+package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 /**
  * Created by nicoc on 30/11/17.

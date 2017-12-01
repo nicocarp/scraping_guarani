@@ -1,0 +1,150 @@
+package com.example.nicoc.scraping_guarani.Mesa.Listado;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+import com.example.nicoc.scraping_guarani.Login.LoginActivity;
+import com.example.nicoc.scraping_guarani.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+
+public class MesaActivity extends AppCompatActivity implements IListado.View{
+
+    @BindView(R.id.listMesas) ListView listaMesas;
+
+    private IListado.Presenter presenter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Toolbar
+        getSupportActionBar().setTitle("Mesas");
+        Drawable myIcon = getResources().getDrawable(R.drawable.ic_action_name );
+        DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
+        Drawable myIcon2 = getResources().getDrawable(R.drawable.ic_action_atras );
+        DrawableCompat.setTint(myIcon2, getResources().getColor(R.color.colorPrimary));
+
+        setContentView(R.layout.activity_mesa);
+        ButterKnife.bind(this);
+
+        this.presenter = new ListadoPresenter(this);
+        this.getItems();
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_m, menu);
+        // Para que esto ande todos los modelos tienen que implementar Parcelable
+        //y redefinir los metodos writeToParcel()
+
+        /*Bundle bundle_mesas = this.getIntent().getExtras();
+        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
+        this.setItems(mesas);
+
+        */
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.cerrarSesion:
+                cerrarSesion();
+                return true;
+            case R.id.atras:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void cerrarSesion() {
+        Intent intent = new Intent(MesaActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void getItems() {
+        this.presenter.getItems();
+    }
+
+    @Override
+    public void setItems(List<Mesa> items) {
+        listaMesas.setAdapter(new ListadoAdapter(this, items, ManagerGuarani.alumno));
+        if (items.size() == 0)
+            mostrarError("Sin mesas de examen");
+        else
+            filtroMesas(); // esto cambiar, hacer un combo para q seleccione carrera
+    }
+
+    // capturar evento on Change select carrera
+    private void filtroMesas(){
+        ListadoAdapter adapter = (ListadoAdapter)this.listaMesas.getAdapter();
+        adapter.filtrado("38");
+    }
+
+    @Override
+    public void mostrarError(String error) {
+        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void lanzarDetalleMesa(Mesa mesa) {
+
+    }
+    public void inscribirse(Mesa mesa, String tipo){
+        Alumno alumno = ManagerGuarani.alumno;
+        this.presenter.inscribirse(mesa, alumno, tipo);
+    }
+
+    @OnItemClick(R.id.listMesas) void itemClick(int position){
+        Alumno alumno = ManagerGuarani.alumno;
+        final Mesa mesa = (Mesa)listaMesas.getAdapter().getItem(position);
+        if (alumno.estaInscripto(mesa.getMateria()))
+            mostrarError("Desea desinscribirse?");
+
+        final EditText txtNuevoStock = new EditText(this);
+        txtNuevoStock.setInputType(InputType.TYPE_CLASS_TEXT);
+        txtNuevoStock.setText("regular");
+
+
+        new AlertDialog.Builder(this)
+                .setTitle("Detalle de la mesa")
+                .setMessage(mesa.getMateria().getNombre() +" "+ mesa.getMateria().getCarrera().getCodigo())
+                .setView(txtNuevoStock)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String tipo =txtNuevoStock.getText().toString();
+                        inscribirse(mesa, tipo);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+}

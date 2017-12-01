@@ -7,7 +7,7 @@
     android:fillViewport="true"
     android:orientation="horizontal"
     android:background="@color/colorBlanco"
-    tools:context="com.example.nicoc.scraping_guarani.AlumnoActivity">
+    tools:context="com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

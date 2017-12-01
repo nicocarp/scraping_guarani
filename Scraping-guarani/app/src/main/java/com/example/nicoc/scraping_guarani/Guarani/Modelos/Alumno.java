@@ -1,8 +1,7 @@
-package com.example.nicoc.scraping_guarani.Modelos;
+package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Alumno{
 
@@ -94,6 +93,17 @@ public class Alumno{
         inscripcion.setMateria(materia);
         inscripcion.setTipo(insc_map.get("tipo"));
         addInscripcion(inscripcion);
+    }
+    public Boolean estaInscripto(Materia materia){
+        Boolean result = false;
+        for (Inscripcion inscripcion : this.getInscripciones()){
+            if (inscripcion.getMateria().equals(materia)){
+                result = true;
+                break;
+            }
+        }
+        return result;
+
     }
 
 }

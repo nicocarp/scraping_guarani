@@ -1,14 +1,10 @@
-package com.example.nicoc.scraping_guarani;
+package com.example.nicoc.scraping_guarani.Alumno;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -17,16 +13,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Modelos.Mesa;
-
-import java.util.ArrayList;
+import com.example.nicoc.scraping_guarani.Guarani.Guarani;
+import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
+import com.example.nicoc.scraping_guarani.Login.LoginActivity;
+import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +64,6 @@ public class AlumnoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         this.alumno= ManagerGuarani.alumno;
-        testInscripciones();
 
         Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
@@ -125,9 +120,5 @@ public class AlumnoActivity extends AppCompatActivity {
         // lanzar la otra activity, necesaria para chupar datos de materias.
     }
 
-    private void testInscripciones(){
-        Guarani guarani = ManagerGuarani._getInstance();
-        //ArrayList<Mesa> mesas = guarani.getMesasDeExamen();
 
-    }
 }
