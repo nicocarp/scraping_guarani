@@ -1,10 +1,10 @@
-package com.example.nicoc.scraping_guarani;
+package com.example.nicoc.scraping_guarani.Guarani;
 
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Modelos.Carrera;
-import com.example.nicoc.scraping_guarani.Modelos.Inscripcion;
-import com.example.nicoc.scraping_guarani.Modelos.Materia;
-import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -75,7 +75,7 @@ public class Guarani {
     public boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String tipo) throws IOException {
         Document document = this.document_base;
         String url;
-        if (tipo != "libre" && tipo != "regular"){
+        if (!tipo.equals("libre") && !tipo.equals("regular")){
             this.setError("Error en tipo de mesa. {libre, regular}");
             return false;
         }else{

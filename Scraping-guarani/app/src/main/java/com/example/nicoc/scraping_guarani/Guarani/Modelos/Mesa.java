@@ -1,11 +1,9 @@
-package com.example.nicoc.scraping_guarani.Modelos;
+package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Mesa implements Parcelable {
     private String fecha;
@@ -53,6 +51,9 @@ public class Mesa implements Parcelable {
         this.materias_necesarias = materias_necesarias;
     }
 
+    public long getId(){
+        return 1;
+    }
 
     public Materia getMateria() {
         return materia;

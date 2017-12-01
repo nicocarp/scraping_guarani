@@ -1,27 +1,23 @@
-package com.example.nicoc.scraping_guarani;
+package com.example.nicoc.scraping_guarani.Login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Modelos.Materia;
-import com.example.nicoc.scraping_guarani.Modelos.Mesa;
-import com.example.nicoc.scraping_guarani.Modelos.Profesor;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.example.nicoc.scraping_guarani.Alarma;
+import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.R;
+import com.example.nicoc.scraping_guarani.ServicioIntent;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

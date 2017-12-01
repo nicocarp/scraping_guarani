@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Login.LoginActivity"
             android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AlumnoActivity"
+            android:name=".Alumno.AlumnoActivity"
             android:screenOrientation="sensor" />
 
         <service
@@ -29,7 +29,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".MesaActivity"
+            android:name=".Mesa.Listado.MesaActivity"
             android:screenOrientation="sensor" />
 
         <service
@@ -38,7 +38,8 @@
             android:exported="true" />
         <service
             android:name=".ServicioIntent"
-            android:exported="false"></service>
+            android:exported="false" />
+
     </application>
 
 </manifest>

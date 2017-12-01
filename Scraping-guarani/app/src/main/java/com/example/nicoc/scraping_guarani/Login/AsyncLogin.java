@@ -1,9 +1,10 @@
-package com.example.nicoc.scraping_guarani;
+package com.example.nicoc.scraping_guarani.Login;
 
 import android.os.AsyncTask;
 
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Modelos.Carrera;
+import com.example.nicoc.scraping_guarani.Guarani.Guarani;
+import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 
 import java.io.IOException;
 

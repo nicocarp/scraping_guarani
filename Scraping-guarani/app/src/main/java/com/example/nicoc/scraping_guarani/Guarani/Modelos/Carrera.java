@@ -1,4 +1,4 @@
-package com.example.nicoc.scraping_guarani.Modelos;
+package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import java.util.List;
 

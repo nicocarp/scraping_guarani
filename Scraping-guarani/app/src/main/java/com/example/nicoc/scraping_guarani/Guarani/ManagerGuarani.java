@@ -1,6 +1,6 @@
-package com.example.nicoc.scraping_guarani;
+package com.example.nicoc.scraping_guarani.Guarani;
 
-import com.example.nicoc.scraping_guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 
 import java.io.IOException;
 
