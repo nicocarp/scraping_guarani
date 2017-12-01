@@ -59,14 +59,8 @@ public class MesaActivity extends AppCompatActivity {
 
         Log.i("Datos de las Mesas. ","...");
         Bundle bundle_mesas = this.getIntent().getExtras();
-        //Log.i("Mesas.cantidad: ", "" + bundle_mesas.toString());
-        try{
-            ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-            Log.i("Mesas.cantidad: ", "" + mesas.size());
-        }catch(Exception e){
-            Log.i("Mesas.cantidad: ", e.getMessage());
-        }
-
+        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
+        Log.i("Mesas.cantidad: ", "" + mesas.size());
 
         //ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
         //Log.i("Mesas.cantidad: ", "" + mesas.size());
