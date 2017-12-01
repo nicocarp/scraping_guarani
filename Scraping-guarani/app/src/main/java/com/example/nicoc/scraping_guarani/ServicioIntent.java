@@ -37,12 +37,12 @@ public class ServicioIntent extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("Entre al intent service...: ","Me creeeeee!!");
+        Log.i("Intent Service: ","Me creeeeee!!");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("Entre al intent service...: ","Estoy funcionado!!!!!");
+        Log.i("Intent Service: ","Estoy funcionado!!!!!");
 
         //1. consultar la BD para traer user y pass
         String usuario = "27042881";
@@ -125,7 +125,7 @@ public class ServicioIntent extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("Entre al intent service...: ","Me moriii!!");
+        Log.i("Intent Service:  ","Me moriii!!");
     }
 
     /* public static void main(String [] args)

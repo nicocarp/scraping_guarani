@@ -5,8 +5,13 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.nicoc.scraping_guarani.Modelos.Mesa;
+
+import java.util.ArrayList;
 
 public class MesaActivity extends AppCompatActivity {
     @Override
@@ -17,12 +22,12 @@ public class MesaActivity extends AppCompatActivity {
 
         // Para que esto ande todos los modelos tienen que implementar Parcelable
         //y redefinir los metodos writeToParcel()
-        /*
-        Log.i("Datos de las Mesas. ","...");
+
+        /*Log.i("Datos de las Mesas. ","...");
         Bundle bundle_mesas = this.getIntent().getExtras();
         ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-        Log.i("Mesas.cantidad: ", "" + mesas.size());
-        */
+        Log.i("Mesas.cantidad: ", "" + mesas.size());*/
+
         return true;
     }
     @Override
