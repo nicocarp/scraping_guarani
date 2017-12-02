@@ -50,18 +50,27 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         this.presenter = new ListadoPresenter(this);
         this.getItems();
 
+
+        //Paso 1: Obtener las mesas del intent que me pasa el servicio a traves de la notificacion.
+        // Para que esto ande todos los modelos tienen que implementar Parcelable
+        //y redefinir los metodos writeToParcel()
+        //Problema: el codigo lanza parcelable stackoverflow.
+
+        /* Esto pincha  por Parselable
+        Log.i("Datos de las Mesas. ","...");
+        Bundle bundle_mesas = this.getIntent().getExtras();
+        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
+        Log.i("Mesas.cantidad: ", "" + mesas.size()); */
+
+
+         /*Log.i("Datos de las Mesas. ","...");
+         ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
+         Log.i("Mesas.cantidad: ", "" + mesas.size());*/
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_m, menu);
-        // Para que esto ande todos los modelos tienen que implementar Parcelable
-        //y redefinir los metodos writeToParcel()
-
-        /*Bundle bundle_mesas = this.getIntent().getExtras();
-        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-        this.setItems(mesas);
-
-        */
         return true;
     }
 

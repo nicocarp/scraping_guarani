@@ -3,7 +3,9 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Mesa implements Parcelable {
     private String fecha;
@@ -28,8 +30,10 @@ public class Mesa implements Parcelable {
         sede = in.readString();
         tipoMesa = (TipoMesa) in.readSerializable();
         profesores = in.readArrayList(null);
-        carrera = (Carrera) in.readSerializable();
-        materia = (Materia) in.readSerializable();
+        //carrera = (Carrera) in.readSerializable();
+        //materia = (Materia) in.readSerializable();
+        carrera = in.readParcelable(Carrera.class.getClassLoader());
+        materia = in.readParcelable(Materia.class.getClassLoader());
         materias_necesarias = in.readArrayList(null);
         turno = in.readString();
 
@@ -79,9 +83,6 @@ public class Mesa implements Parcelable {
         this.materias_necesarias = materias_necesarias;
     }
 
-    public long getId(){
-        return 1;
-    }
 
     public Materia getMateria() {
         return materia;
@@ -137,8 +138,8 @@ public class Mesa implements Parcelable {
         parcel.writeString(sede);
         parcel.writeSerializable(tipoMesa);
         parcel.writeList(profesores);
-        parcel.writeSerializable(carrera);
-        parcel.writeSerializable(materia);
+        parcel.writeParcelable(carrera,i);
+        parcel.writeParcelable(materia,i);
         parcel.writeList(materias_necesarias);
         parcel.writeString(turno);
     }

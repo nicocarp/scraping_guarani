@@ -1,8 +1,9 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Correlatividad{
+public class Correlatividad implements Serializable {
 
     private String codigo_materia;
     private List<String> correlativas_aprobacion;

@@ -89,13 +89,13 @@ public class ServicioIntent extends IntentService {
                         Log.i("Guarani...: ", mesas.get(0).getMateria()+"");
                         Log.i("Guarani...: ", mesas.get(0).getMaterias_necesarias()+"");
                         Log.i("Guarani...: ", mesas.get(0).getTurno());
-                        crearNotificacionMesasDisponibles(mesas);
+                        //crearNotificacionMesasDisponibles(mesas);
                     }catch(Exception e){
                         Log.i("Guarani...ERROR: ", e.getMessage());
                     }
                 }
 
-
+                crearNotificacionMesasDisponibles(mesas);
 
 
 
@@ -104,6 +104,8 @@ public class ServicioIntent extends IntentService {
                 Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
                 //5.¿Como prosigo?
             }
+
+
 
         }
 
@@ -119,12 +121,17 @@ public class ServicioIntent extends IntentService {
         int icono = R.mipmap.ic_launcher;
         Intent intent = new Intent(ServicioIntent.this, MesaActivity.class);
 
-        /* Hacerrrrrrrr  */
+        /* Nota: yo necesito pasar las mesas por intent. Problema: lanza parcelable stackoverflow
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Mesas",mesas);
         intent.putExtras(bundle);
+        */
 
-        //intent.putParcelableArrayListExtra("Mesas",mesas);
+        /*try{
+            intent.putParcelableArrayListExtra("Mesas",mesas);
+        }catch(Exception e){
+            Log.i("Intent Service ERROR:  ",e.getMessage());
+        }*/
 
 
         PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);

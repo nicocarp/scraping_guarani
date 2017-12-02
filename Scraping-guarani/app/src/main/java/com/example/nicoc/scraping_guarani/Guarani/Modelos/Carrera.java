@@ -1,14 +1,52 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Carrera implements Serializable{
+public class Carrera implements Parcelable {
     private String codigo;
     private String nombre;
     private String plan;
-    private List<Materia> materias;
-    private List<Correlatividad> correlatividades;
+    private ArrayList<Materia> materias;
+    private ArrayList<Correlatividad> correlatividades;
+
+    public Carrera()
+    {
+        this.codigo = "";
+        this.nombre = "";
+        this.plan = "";
+        this.materias = new ArrayList<Materia>();
+        this.correlatividades = new ArrayList<Correlatividad>();
+    }
+
+    protected Carrera(Parcel in) {
+        codigo = in.readString();
+        nombre = in.readString();
+        plan = in.readString();
+        //materias = in.readArrayList(null);
+        materias = in.readArrayList(Materia.class.getClassLoader());
+        //correlatividades = in.readArrayList(null);
+        materias = in.readArrayList(Correlatividad.class.getClassLoader());
+
+
+    }
+
+    public static final Creator<Carrera> CREATOR = new Creator<Carrera>() {
+        @Override
+        public Carrera createFromParcel(Parcel in) {
+            return new Carrera(in);
+        }
+
+        @Override
+        public Carrera[] newArray(int size) {
+            return new Carrera[size];
+        }
+    };
 
     public Boolean getActivo() {
         return activo;
@@ -44,7 +82,7 @@ public class Carrera implements Serializable{
         this.plan = plan;
     }
 
-    public List<Materia> getMaterias() {
+    public ArrayList<Materia> getMaterias() {
         return materias;
     }
 
@@ -59,19 +97,33 @@ public class Carrera implements Serializable{
         return result;
 
     }
-    public void setMaterias(List<Materia> materias) {
+    public void setMaterias(ArrayList<Materia> materias) {
         for (Materia materia : materias){
             materia.setCarrera(this);
         }
         this.materias = materias;
     }
 
-    public List<Correlatividad> getCorrelatividades() {
+    public ArrayList<Correlatividad> getCorrelatividades() {
         return correlatividades;
     }
 
-    public void setCorrelatividades(List<Correlatividad> correlatividades) {
+    public void setCorrelatividades(ArrayList<Correlatividad> correlatividades) {
         this.correlatividades = correlatividades;
     }
-}
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(codigo);
+        parcel.writeString(nombre);
+        parcel.writeString(plan);
+        parcel.writeList(materias);
+        parcel.writeList(correlatividades);
+
+    }
+}
