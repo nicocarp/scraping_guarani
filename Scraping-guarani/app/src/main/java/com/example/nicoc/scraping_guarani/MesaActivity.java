@@ -62,8 +62,10 @@ public class MesaActivity extends AppCompatActivity {
         ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
         Log.i("Mesas.cantidad: ", "" + mesas.size());
 
-        //ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
+
+         //ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
         //Log.i("Mesas.cantidad: ", "" + mesas.size());
+
 
     }
 }
