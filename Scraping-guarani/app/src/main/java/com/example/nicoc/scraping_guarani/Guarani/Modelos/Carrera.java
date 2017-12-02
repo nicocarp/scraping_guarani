@@ -31,7 +31,7 @@ public class Carrera implements Parcelable {
         //materias = in.readArrayList(null);
         materias = in.readArrayList(Materia.class.getClassLoader());
         //correlatividades = in.readArrayList(null);
-        materias = in.readArrayList(Correlatividad.class.getClassLoader());
+        correlatividades = in.readArrayList(Correlatividad.class.getClassLoader());
 
 
     }
