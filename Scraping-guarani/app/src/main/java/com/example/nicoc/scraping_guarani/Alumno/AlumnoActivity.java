@@ -69,6 +69,11 @@ public class AlumnoActivity extends AppCompatActivity {
         verificar_login();
         //start_service();
         //consultar_bd_mesas();
+        escucharBroadcasts();
+
+    }
+
+    private void escucharBroadcasts(){
         //Escucho por mensajes que vienen a mi.....
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter("AlumnoActivity");
@@ -85,12 +90,11 @@ public class AlumnoActivity extends AppCompatActivity {
 
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        mNotifyMgr.cancel(1);
+                        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                     }
                 },
                 filter
         );
-
     }
 
     private void cerrarSesion() {

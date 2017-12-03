@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
@@ -148,6 +149,27 @@ public class ServicioIntent extends IntentService {
 
         mNotifyMgr.notify(2, mBuilder.build());//
     }
+
+
+
+
+    private void sendBroadcast()
+    {
+        Log.i("MyService....","estoy en sendBroadcast.");
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(ServicioIntent.this);
+
+        Intent resultIntent = new Intent("AlumnoActivity");//le pongo un nombre al intent asi se como atraparlo despues.
+        //resultIntent.putExtra("TNT", "Hay mesas de examenes");
+        Bundle bundle = new Bundle();
+        bundle.putString("Nombre","Soy Ivan");
+        resultIntent.putExtras(bundle);
+        broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
+
+    }
+
+
+
+
 
 
     @Override
