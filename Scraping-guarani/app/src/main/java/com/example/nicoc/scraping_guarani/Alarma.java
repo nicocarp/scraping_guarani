@@ -132,9 +132,16 @@ public class Alarma extends Thread{
                 new Intent("com.my.package.MY_UNIQUE_ACTION"),
                 PendingIntent.FLAG_NO_CREATE) != null);*/
 
+
+        //Primera forma de saber si alarma esta viva....
         boolean alarmUp = (PendingIntent.getBroadcast(contexto, 0,
                 new Intent("com.example.nicoc.scraping_guarani.Alarma"),
                 PendingIntent.FLAG_NO_CREATE) != null);
+
+
+        //Segunda forma de saber si alarma esta viva....
+        //PendingIntent pendingIntent = PendingIntent.getBroadcast(contexto, 234324243, intent, PendingIntent.FLAG_NO_CREATE);
+        //si pendingIntent es null significa que la alarma no existe.
     }
 
 
