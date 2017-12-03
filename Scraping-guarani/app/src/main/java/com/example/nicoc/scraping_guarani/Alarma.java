@@ -125,4 +125,17 @@ public class Alarma extends Thread{
     }
 
 
+    //Este es el codigo que debo poner en la activity donde deseo verificar si la alarma esta viva
+    //en caso de que no lo este, la creo de nuevo!!!!
+    private void estoyVivo(){
+        /*boolean alarmUp = (PendingIntent.getBroadcast(context, 0,
+                new Intent("com.my.package.MY_UNIQUE_ACTION"),
+                PendingIntent.FLAG_NO_CREATE) != null);*/
+
+        boolean alarmUp = (PendingIntent.getBroadcast(contexto, 0,
+                new Intent("com.example.nicoc.scraping_guarani.Alarma"),
+                PendingIntent.FLAG_NO_CREATE) != null);
+    }
+
+
 }
