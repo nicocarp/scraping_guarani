@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nicoc.scraping_guarani.Alarma;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
@@ -100,6 +101,12 @@ public class AlumnoActivity extends AppCompatActivity {
     private void cerrarSesion() {
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
         startActivity(intent);
+
+        Alarma.cancelarAlarma();
+        //al servicio no lo puedo parar mientras se esta ejecutando, porque puede dejar incosistente la bd
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+
         finish();
     }
 
@@ -124,5 +131,9 @@ public class AlumnoActivity extends AppCompatActivity {
         // lanzar la otra activity, necesaria para chupar datos de materias.
     }
 
-
+    @Override
+    public void onBackPressed() {
+        //no hago nada
+        return;
+    }
 }

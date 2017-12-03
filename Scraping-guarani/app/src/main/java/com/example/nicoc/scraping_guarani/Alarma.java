@@ -86,10 +86,18 @@ public class Alarma extends Thread{
     public static void cancelarAlarma()
     {
         // If the alarm has been set, cancel it.
-        if (alarmMgr!= null) {
-            alarmMgr.cancel(alarmIntent);
-            Log.i("Alarma: ","ha sido cancelada");
+        try{
+            if (alarmMgr!= null) {
+                alarmMgr.cancel(alarmIntent);
+                Log.i("Alarma: ","ha sido cancelada");
+            }
+        }catch(Exception e){
+            Log.i("Alarma: ","ha ocurrido un error al intentar cancelar la alarma, \n, " +
+                    "puede haber sido provocado en LoginActivity, al cerrar sesion, \n," +
+                    "lo cual hizo que el servicio se parara mientras se estaba ejecutando. \n" +
+                    " Datos del Error: " + e.getMessage());
         }
+
 
     }
 
