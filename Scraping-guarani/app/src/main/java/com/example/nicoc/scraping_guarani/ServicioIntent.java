@@ -94,9 +94,14 @@ public class ServicioIntent extends IntentService {
                     }catch(Exception e){
                         Log.i("Guarani...ERROR: ", e.getMessage());
                     }
+
+                    crearNotificacionMesasDisponibles(mesas);//solucion 4.b.1
+                }
+                else{
+                    Log.i("Intent Service: ", "No hay mesas disponibles.");
                 }
 
-                crearNotificacionMesasDisponibles(mesas);
+
 
 
 
