@@ -96,6 +96,7 @@ public class ServicioIntent extends IntentService {
                     }
 
                     crearNotificacionMesasDisponibles(mesas);//solucion 4.b.1
+                    sendBroadcast();//solucion 4.b.2, 4.b.3 y 4.b.4
                 }
                 else{
                     Log.i("Intent Service: ", "No hay mesas disponibles.");
@@ -163,7 +164,7 @@ public class ServicioIntent extends IntentService {
         Log.i("MyService....","estoy en sendBroadcast.");
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(ServicioIntent.this);
 
-        Intent resultIntent = new Intent("AlumnoActivity");//le pongo un nombre al intent asi se como atraparlo despues.
+        Intent resultIntent = new Intent("MesasActivity");//le pongo un nombre al intent asi se como atraparlo despues.
         //resultIntent.putExtra("TNT", "Hay mesas de examenes");
         Bundle bundle = new Bundle();
         bundle.putString("Nombre","Soy Ivan");
