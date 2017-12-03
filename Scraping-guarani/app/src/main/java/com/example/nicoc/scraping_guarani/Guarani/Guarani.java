@@ -489,6 +489,16 @@ public class Guarani {
         return result;
     }
 
+    public Boolean estaLogueado() throws IOException {
+        Document document = this.connection.url(URL).get();
+        String url = document_base.select("[src*=barra]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+
+        // click sobre boton iniciar Sesion
+        if (document.select("[href*=identificarse]").first() == null)
+            return true;
+        return false;
+    }
     /**
      * Intentamos hacer un login al servidor. Si hubo error, retrorno false y seteo mensaje de error.
      * @param username nombre de usuario plano.
@@ -499,7 +509,10 @@ public class Guarani {
     public boolean login(String username, String password) throws IOException {
         if (this.connection == null)
             this.startConnection();
-        if (!this.username.isEmpty()  && !this.username.equals(username))
+        if (this.username.equals(username) && estaLogueado()){
+            return true;
+        }
+        if (!this.username.equals(username))
             desloguearse();
 
         Document document;
