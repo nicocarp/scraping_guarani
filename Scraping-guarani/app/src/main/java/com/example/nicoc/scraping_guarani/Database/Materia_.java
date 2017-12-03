@@ -15,18 +15,18 @@ public class Materia_ {
 
     @NotNull@Unique private String codigo;
     @NotNull private String periodoLectivo;
-    @NotNull private Integer año;
+    @NotNull private Integer anio;
     @NotNull private String nombre;
     @NotNull private long carreraId;
     @NotNull private String correlatividad;
-    @Generated(hash = 1727064333)
+    @Generated(hash = 172260849)
     public Materia_(Long id, @NotNull String codigo, @NotNull String periodoLectivo,
-            @NotNull Integer año, @NotNull String nombre, long carreraId,
+            @NotNull Integer anio, @NotNull String nombre, long carreraId,
             @NotNull String correlatividad) {
         this.id = id;
         this.codigo = codigo;
         this.periodoLectivo = periodoLectivo;
-        this.año = año;
+        this.anio = anio;
         this.nombre = nombre;
         this.carreraId = carreraId;
         this.correlatividad = correlatividad;
@@ -52,11 +52,11 @@ public class Materia_ {
     public void setPeriodoLectivo(String periodoLectivo) {
         this.periodoLectivo = periodoLectivo;
     }
-    public Integer getAño() {
-        return this.año;
+    public Integer getAnio() {
+        return this.anio;
     }
-    public void setAño(Integer año) {
-        this.año = año;
+    public void setAnio(Integer año) {
+        this.anio = año;
     }
     public String getNombre() {
         return this.nombre;

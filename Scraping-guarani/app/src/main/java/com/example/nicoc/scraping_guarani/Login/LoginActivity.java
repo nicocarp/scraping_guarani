@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @BindView(R.id.txtUsername) EditText txtUsername;
     @BindView(R.id.txtPassword) EditText txtPassword;
     @BindView(R.id.checkBoxRememberMe) CheckBox checkBoxRememberMe;
+    @BindView(R.id.btnLogin) Button btnLogin;
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -52,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
-
+        botonHabilitar();
         escucharBroadcasts();
     }
 
@@ -124,6 +127,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
     @OnClick(R.id.btnLogin)
     public void login(){
+        botonDeshabilitar();
+        btnLogin.setBackgroundColor(Color.GRAY);
         this.validator.clear();
         if (!this.validator.validate())
             return;
@@ -141,5 +146,35 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
         Toast.makeText(LoginActivity.this, "Iniciando Sesion ...", Toast.LENGTH_SHORT).show();
+
     }
+
+    public void botonDeshabilitar(){
+        btnLogin.setEnabled(false);
+        int color = R.color.colorGris;
+        btnLogin.setBackgroundColor(getResources().getColor(color));
+    }
+
+    public void botonHabilitar(){
+        btnLogin.setEnabled(true);
+        int color = R.color.colorPrimary;
+        btnLogin.setBackgroundColor(getResources().getColor(color));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        botonHabilitar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        botonHabilitar();
+
+    }
+
+
+    
+
 }

@@ -17,6 +17,7 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
     public interface IView{
         public void mostrarError(String s);
         public void logueado(Alumno alumno);
+        public void botonHabilitar();
     }
     private IView activity;
 
@@ -57,6 +58,7 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         else{
             String error = ManagerGuarani.getError();
             this.activity.mostrarError(error);
+            this.activity.botonHabilitar();
         }
     }
 }
