@@ -153,7 +153,7 @@ public class ServicioIntent extends IntentService {
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
 
-        mNotifyMgr.notify(2, mBuilder.build());//
+        mNotifyMgr.notify(1, mBuilder.build());//
     }
 
 
@@ -167,7 +167,7 @@ public class ServicioIntent extends IntentService {
         Intent resultIntent = new Intent("MesasActivity");//le pongo un nombre al intent asi se como atraparlo despues.
         //resultIntent.putExtra("TNT", "Hay mesas de examenes");
         Bundle bundle = new Bundle();
-        bundle.putString("Nombre","Soy Ivan");
+        bundle.putString("Nombre","Nuevas mesas disponibles!.");
         resultIntent.putExtras(bundle);
         broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
 
