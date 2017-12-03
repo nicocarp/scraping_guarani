@@ -1,8 +1,13 @@
 package com.example.nicoc.scraping_guarani.Login;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +52,33 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
+
+        escucharBroadcasts();
+    }
+
+
+    private void escucharBroadcasts(){
+        //Escucho por mensajes que vienen a mi.....
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter("MesasActivity");
+        //filter.addAction(CountService.EXTRA_COUNT_TARGET);
+        broadcastManager.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.i("AlumnoActivity....","encontre el mensaje brodcasteado!");
+                        Bundle bundle = intent.getExtras();
+
+                        //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
+                        Toast.makeText(LoginActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+
+                        //aca elimino la notificacion
+                        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                    }
+                },
+                filter
+        );
     }
 
 

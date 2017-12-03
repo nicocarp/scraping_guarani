@@ -76,7 +76,7 @@ public class AlumnoActivity extends AppCompatActivity {
     private void escucharBroadcasts(){
         //Escucho por mensajes que vienen a mi.....
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter filter = new IntentFilter("AlumnoActivity");
+        IntentFilter filter = new IntentFilter("MesasActivity");
         //filter.addAction(CountService.EXTRA_COUNT_TARGET);
         broadcastManager.registerReceiver(
                 new BroadcastReceiver() {

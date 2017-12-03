@@ -1,13 +1,19 @@
 package com.example.nicoc.scraping_guarani.Mesa.Listado;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -67,7 +73,10 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
          ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
          Log.i("Mesas.cantidad: ", "" + mesas.size());*/
 
+        escucharBroadcasts();
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_m, menu);
@@ -88,6 +97,35 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private void escucharBroadcasts(){
+        //Escucho por mensajes que vienen a mi.....
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter("MesasActivity");
+        //filter.addAction(CountService.EXTRA_COUNT_TARGET);
+        broadcastManager.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.i("AlumnoActivity....","encontre el mensaje brodcasteado!");
+                        Bundle bundle = intent.getExtras();
+
+                        //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
+                        Toast.makeText(MesaActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+
+                        //aca elimino la notificacion
+                        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                    }
+                },
+                filter
+        );
+    }
+
+
+
+
 
     private void cerrarSesion() {
         Intent intent = new Intent(MesaActivity.this, LoginActivity.class);
