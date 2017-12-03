@@ -51,7 +51,7 @@ public class ListadoAdapter extends BaseAdapter  {
 
     @Override
     public long getItemId(int position) {
-        return this.items.get(position).getId();
+        return 1;
     }
 
     @Override
