@@ -88,8 +88,11 @@ public class Alarma extends Thread{
         // If the alarm has been set, cancel it.
         try{
             if (alarmMgr!= null) {
+                //Intent checkIntent = new Intent(contexto, clase_del_servicio);
+                //boolean alarmUp = (PendingIntent.getService(contexto,0,checkIntent,PendingIntent.FLAG_NO_CREATE) != null);
                 alarmMgr.cancel(alarmIntent);
                 Log.i("Alarma: ","ha sido cancelada");
+
             }
         }catch(Exception e){
             Log.i("Alarma: ","ha ocurrido un error al intentar cancelar la alarma, \n, " +
