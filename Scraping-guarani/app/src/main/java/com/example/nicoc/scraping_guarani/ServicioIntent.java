@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -49,9 +50,12 @@ public class ServicioIntent extends IntentService {
         Log.i("Intent Service: ","Estoy funcionado!!!!!");
 
         //1. consultar la BD para traer user y pass
-        String usuario = "27042881";
-        String password = "valenti2";
+        SharedPreferences loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        String usuario = loginPreferences.getString("username", "");
+        String password = loginPreferences.getString("password", "");
 
+        if (usuario.isEmpty() || password.isEmpty())
+            return; //
         //2.Verifico si ese usuario esta logueado
         Guarani guarani = ManagerGuarani.getInstance(usuario, password);
         if (guarani == null){//usuario no logueado

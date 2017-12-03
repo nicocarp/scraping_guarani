@@ -491,7 +491,7 @@ public class Guarani {
 
     public Boolean estaLogueado() throws IOException {
         Document document = this.connection.url(URL).get();
-        String url = document_base.select("[src*=barra]").first().attr("abs:src");
+        String url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
 
         // click sobre boton iniciar Sesion
