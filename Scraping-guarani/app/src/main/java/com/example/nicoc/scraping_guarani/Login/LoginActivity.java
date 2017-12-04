@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
+    private static final String KEY_1 = "btnLogin";
+    private static final String KEY_2 = "progressBar";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +64,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
-            String estadoBoton = savedInstanceState.getString("btnLogin");
-            String estadoProgressBar = savedInstanceState.getString("progressBar");
+            String estadoBoton = savedInstanceState.getString(KEY_1);
+            String estadoProgressBar = savedInstanceState.getString(KEY_2);
             if(estadoBoton.equals("True")){
                 botonHabilitar();
             }
@@ -243,17 +245,17 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         if (btnLogin.isEnabled()){
-            outState.putString("btnLogin", "True");
+            outState.putString(KEY_1, "True");
         }
         else{
-            outState.putString("btnLogin", "False");
+            outState.putString(KEY_1, "False");
         }
 
         if(progressBar.getVisibility()==View.VISIBLE){
-            outState.putString("progressBar", "Visible");
+            outState.putString(KEY_2, "Visible");
         }
         else{
-            outState.putString("progressBar", "Invisible");
+            outState.putString(KEY_2, "Invisible");
         }
 
     }
