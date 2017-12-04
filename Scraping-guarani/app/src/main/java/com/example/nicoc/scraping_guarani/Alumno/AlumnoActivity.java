@@ -24,6 +24,7 @@ import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
+import com.example.nicoc.scraping_guarani.ServicioIntent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,6 +104,7 @@ public class AlumnoActivity extends AppCompatActivity {
         startActivity(intent);
 
         Alarma.cancelarAlarma();
+        //stopService(new Intent(AlumnoActivity.this, ServicioIntent.class));
         //al servicio no lo puedo parar mientras se esta ejecutando, porque puede dejar incosistente la bd
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.

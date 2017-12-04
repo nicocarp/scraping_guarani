@@ -93,6 +93,8 @@ public class Alarma extends Thread{
                 alarmMgr.cancel(alarmIntent);
                 Log.i("Alarma: ","ha sido cancelada");
 
+
+
             }
         }catch(Exception e){
             Log.i("Alarma: ","ha ocurrido un error al intentar cancelar la alarma, \n, " +
