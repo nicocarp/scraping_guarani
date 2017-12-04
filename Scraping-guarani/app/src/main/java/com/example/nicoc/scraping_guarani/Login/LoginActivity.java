@@ -182,8 +182,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
         String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
-        Toast.makeText(LoginActivity.this, "Iniciando Sesion ...", Toast.LENGTH_SHORT).show();
-
     }
 
     public void botonDeshabilitar(){
