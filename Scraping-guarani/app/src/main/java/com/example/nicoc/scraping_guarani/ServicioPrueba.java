@@ -109,7 +109,7 @@ public class ServicioPrueba extends Service {
                     e.printStackTrace();
                     Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
                     //5.¿Como prosigo?
-                    //alarma.reiniciar(); hago un for o algo.
+                    //alarma.reiniciarAlarma(); hago un for o algo.
                 }
 
 
