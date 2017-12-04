@@ -1,6 +1,7 @@
 package com.example.nicoc.scraping_guarani.Login;
 
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
+    private ProgressDialog progressDialog;
+
     private static final String KEY_1 = "btnLogin";
     private static final String KEY_2 = "progressBar";
 
@@ -61,6 +64,12 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
+
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Iniciando Sesión...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
 
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
@@ -79,15 +88,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
             else{
                 ocultarProgressBar();
             }
-
         }
-
         //botonHabilitar();
         //ocultarProgressBar();
         escucharBroadcasts();
-
     }
-
 
     private void escucharBroadcasts(){
         //Escucho por mensajes que vienen a mi.....
@@ -112,7 +117,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
                 filter
         );
     }
-
 
     private void iniciarViews(){
         if ((loginPreferences.getBoolean("saveLogin", false)) == true) {
@@ -197,17 +201,17 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     private void mostrarProgressBar(){
         //ponerleColorAlProgressBar();
         try{
-            progressBar.setVisibility(View.VISIBLE);
+            progressDialog.show();
+           // progressBar.setVisibility(View.VISIBLE);
         }catch(Exception e){
-
         }
     }
 
     private void ocultarProgressBar(){
         try{
-            progressBar.setVisibility(View.INVISIBLE);
+            progressDialog.dismiss();
+            //progressDialog.setVisibility(View.INVISIBLE);
         }catch(Exception e){
-
         }
     }
 
@@ -223,7 +227,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         }
     }
 
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -236,10 +239,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         super.onDestroy();
         botonHabilitar();
         ocultarProgressBar();
-
     }
-
-
 
     @Override
     protected void onSaveInstanceState (Bundle outState) {
@@ -250,14 +250,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         else{
             outState.putString(KEY_1, "False");
         }
-
         if(progressBar.getVisibility()==View.VISIBLE){
             outState.putString(KEY_2, "Visible");
         }
         else{
             outState.putString(KEY_2, "Invisible");
         }
-
     }
-
 }
