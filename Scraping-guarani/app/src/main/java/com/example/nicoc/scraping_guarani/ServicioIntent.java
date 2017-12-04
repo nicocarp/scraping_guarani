@@ -33,6 +33,8 @@ import java.util.Calendar;
 public class ServicioIntent extends IntentService {
 
     NotificationCompat.Builder mBuilder;
+    private boolean bandera = true;
+    private int contador = 0;
 
     public ServicioIntent() {
         super(" Intent Servicio Scraping");
@@ -67,59 +69,71 @@ public class ServicioIntent extends IntentService {
         }
         else{
             //4a.Consulto al modulo de scraping: carrera, alumno, mesas.
-            try
-            {
-                ArrayList<Carrera> carreras = guarani.getPlanDeEstudios();
-                Alumno alumno = guarani.getDatosAlumno(carreras);
-                ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carreras.get(1));
-                Log.i("Guarani...: ","Estoy Vivo");
-                if (mesas.size()>0){//si hay mesas
-                    //4.b Pasar las mesas
-                    //4.b.1 No estoy usando la app: armo notificación con pendingIntent
-                    //4.b.2 Estoy en activity_login: consulto la bd.
-                    //4.b.3 Estoy en activity_alumno: consulto la bd.
-                    //4.b.4 Estoy en activty_mesa: recibo un broadcast y refresco pantalla.
+            while(bandera==true && contador<=Alarma.MAXIMA_REPETICION){
+                try
+                {
+                    ArrayList<Carrera> carreras = guarani.getPlanDeEstudios();
+                    Alumno alumno = guarani.getDatosAlumno(carreras);
+                    ArrayList<Mesa> mesas = guarani.getMesasDeExamen(carreras.get(1));
+                    Log.i("Guarani...: ","Estoy Vivo");
+                    bandera = false;
+                    if (mesas.size()>0){//si hay mesas
+                        //4.b Pasar las mesas
+                        //4.b.1 No estoy usando la app: armo notificación con pendingIntent
+                        //4.b.2 Estoy en activity_login: consulto la bd.
+                        //4.b.3 Estoy en activity_alumno: consulto la bd.
+                        //4.b.4 Estoy en activty_mesa: recibo un broadcast y refresco pantalla.
 
-                    //Nota: por ahora mando notificacion
-                    //Log.i("Guarani...: ","Hay Mesas");
-                    //crearNotificacionMesasDisponibles(mesas);
-
-                    try{
+                        //Nota: por ahora mando notificacion
                         Log.i("Guarani...: ","Hay Mesas");
-                        Log.i("Guarani...: ", mesas.get(0).getFecha());
-                        Log.i("Guarani...: ", mesas.get(0).getSede());
-                        Log.i("Guarani...: ","" + mesas.get(0).getTipoMesa());
-                        Log.i("Guarani...: ", "" + mesas.get(0).getProfesores());
-                        Log.i("Guarani...: ", mesas.get(0).getCarrera()+"");
-                        Log.i("Guarani...: ", mesas.get(0).getMateria()+"");
-                        Log.i("Guarani...: ", mesas.get(0).getMaterias_necesarias()+"");
-                        Log.i("Guarani...: ", mesas.get(0).getTurno());
                         //crearNotificacionMesasDisponibles(mesas);
-                    }catch(Exception e){
-                        Log.i("Guarani...ERROR: ", e.getMessage());
+
+                        try{
+                            Log.i("Guarani...: ","Hay Mesas");
+                            Log.i("Guarani...: ", mesas.get(0).getFecha());
+                            Log.i("Guarani...: ", mesas.get(0).getSede());
+                            Log.i("Guarani...: ","" + mesas.get(0).getTipoMesa());
+                            Log.i("Guarani...: ", "" + mesas.get(0).getProfesores());
+                            Log.i("Guarani...: ", mesas.get(0).getCarrera()+"");
+                            Log.i("Guarani...: ", mesas.get(0).getMateria()+"");
+                            Log.i("Guarani...: ", mesas.get(0).getMaterias_necesarias()+"");
+                            Log.i("Guarani...: ", mesas.get(0).getTurno());
+                            //crearNotificacionMesasDisponibles(mesas);
+                        }catch(Exception e){
+                            Log.i("Guarani...ERROR: ", e.getMessage());
+                        }
+
+                        crearNotificacionMesasDisponibles(mesas);//solucion 4.b.1
+                        sendBroadcast();//solucion 4.b.2, 4.b.3 y 4.b.4
+                    }
+                    else{
+                        Log.i("Intent Service: ", "No hay mesas disponibles.");
                     }
 
-                    crearNotificacionMesasDisponibles(mesas);//solucion 4.b.1
-                    sendBroadcast();//solucion 4.b.2, 4.b.3 y 4.b.4
+
+
+
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                    Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
+                    Log.i("N° de Intento: ",""+contador);
+                    //5.¿Como prosigo?
+                    //https://stackoverflow.com/questions/21550204/how-to-automatically-restart-a-service-even-if-user-force-close-it
+                    bandera = true;
+                    contador++;
+                    try {
+                        wait(1000 * 15);//espero 15 segundos.
+                    } catch (InterruptedException e1) {
+                        Log.i("Error en el Servicio Intent, problema en wait(): ", "" + e.getMessage());
+                    }
                 }
-                else{
-                    Log.i("Intent Service: ", "No hay mesas disponibles.");
-                }
+            }//while
 
 
 
 
-
-            }catch(Exception e){
-                e.printStackTrace();
-                Log.i("Error al consultar carrera, alumno, mesas: ",e.getMessage());
-                //5.¿Como prosigo?
-
-            }
-
-
-
-        }
+        }//else
 
 
         //Me mato !!!!!!! waaaaa

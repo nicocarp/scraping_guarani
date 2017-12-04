@@ -28,7 +28,7 @@ public class Alarma extends Thread{
     private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 1 hs
     private int hora;
 
-    private static final int MAXIMA_REPETICION = 3;
+    public static final int MAXIMA_REPETICION = 3;
     private static int REPETICION_ACTUAL = 0;
 
 
