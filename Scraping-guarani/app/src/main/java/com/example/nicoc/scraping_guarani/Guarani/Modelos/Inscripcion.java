@@ -5,22 +5,28 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
  */
 
 public class Inscripcion {
-    private Mesa mesa;
 
-    private Materia materia;
+    private String carrera;
 
-    public Materia getMateria() {
+    private String  fecha;
+    private String tipo;
+    private String materia;
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
+    }
+
+    public String getMateria() {
         return materia;
     }
 
-    public void setMateria(Materia materia) {
+    public void setMateria(String materia) {
         this.materia = materia;
     }
-
-    private Alumno alumno;
-    private String  fecha;
-
-    private String tipo;
 
     public String getTipo() {
         return tipo;
@@ -30,21 +36,6 @@ public class Inscripcion {
         this.tipo = tipo;
     }
 
-    public Mesa getMesa() {
-        return mesa;
-    }
-
-    public void setMesa(Mesa mesa) {
-        this.mesa = mesa;
-    }
-
-    public Alumno getAlumno() {
-        return alumno;
-    }
-
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
-    }
 
     public String getFecha() {
         return fecha;

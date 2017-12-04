@@ -97,7 +97,7 @@ public class Guarani {
         url = document.select("a:contains("+mesa.getCarrera().getNombre()+")").first().attr("abs:href");
         document = this.connection.url(url).get();
 
-        Element link_mesa = document.select("a:contains("+mesa.getMateria().getCodigo()+")").first();
+        Element link_mesa = document.select("a:contains("+mesa.getMateria()+")").first();
 
         System.out.println(link_mesa.attr("abs:href"));
         url = link_mesa.attr("abs:href");
@@ -109,12 +109,12 @@ public class Guarani {
         Map<String, String> m = new HashMap<String, String>();
         m.put("operacion", "exa00006");
         m.put("carrera", mesa.getCarrera().getCodigo());
-        m.put("legajo", alumno.getLegajo());
-        m.put("materia", mesa.getMateria().getCodigo());
+        m.put("legajo", mesa.getCarrera().getLegajo());
+        m.put("materia", mesa.getMateria());
         m.put("generica", "");
         m.put("anio_academico", "2017");
         m.put("turno_examen", mesa.getTurno());
-        m.put("mesa_examen", mesa.getMateria().getCodigo()+"-"+tipo);
+        m.put("mesa_examen", mesa.getMateria()+"-"+tipo);
         m.put("llamado", "1");
         m.put("tipo inscripcion", tipo.substring(0,1)); // este cambia a L si es libre
         m.put("tipo_incripcion0", "L");
@@ -136,11 +136,11 @@ public class Guarani {
         return false;
     }
 
-    public ArrayList<HashMap<String, String>> getMesasAnotadas() throws IOException {
+    public ArrayList<Inscripcion> getMesasAnotadas() throws IOException {
         Document document = this.document_base;
         String url;
-        HashMap<String, String> inscripciones = new HashMap<String, String>();
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+
+        ArrayList<Inscripcion> inscripciones = new ArrayList<Inscripcion>();
         url = document.select("[src*=operaciones]").first().attr("abs:src");
         document = this.connection.url(url).get();
 
@@ -156,15 +156,15 @@ public class Guarani {
 
             Elements links_mesas = table_mesas.get(i).select("[href*=desinscribirseExamen]");
             for (int z = 0; z < links_mesas.size(); z++){
-                HashMap<String, String> inscripcion = new HashMap<String, String>();
+                Inscripcion inscripcion = new Inscripcion();
                 String cod_materia = getMatch(links_mesas.get(z).text(), "\\(([A-Z0-9]+)\\)");
-                inscripcion.put("cod_carrera", cod_carrera);
-                inscripcion.put("cod_materia", cod_materia);
-                inscripcion.put("tipo", table_mesas.get(i).select("tr").get(1).children().get(5).text().toLowerCase());
-                resultado.add(inscripcion);
+                inscripcion.setCarrera(cod_carrera);
+                inscripcion.setMateria(cod_materia);
+                inscripcion.setTipo(table_mesas.get(i).select("tr").get(1).children().get(5).text().toLowerCase());
+                inscripciones.add(inscripcion);
             }
         }
-        return resultado;
+        return inscripciones;
     }
 
     public Boolean desinscribirseDeMesa(String id_carrera, String id_materia) throws IOException {
@@ -261,6 +261,7 @@ public class Guarani {
         if (div_errores != null){
             alumno.setRegular(false);
         }else{
+            alumno.setRegular(true);
             url = document.select("a:contains(Alumno Regular)").first().attr("abs:href");
             document = this.connection.url(url).get();
             String legajo_alumno = "";
@@ -270,7 +271,7 @@ public class Guarani {
                 div_errores = document.select("div.mensaje_ua_contenido").first();
                 if (div_errores == null){
                     if (legajo_alumno == "")
-                        alumno.setLegajo(document.select("input[name=legajo]").first().attr("value"));
+                        carrera.setLegajo(document.select("input[name=legajo]").first().attr("value"));
                     carrera.setActivo(true);
                 }
                 else
@@ -337,7 +338,7 @@ public class Guarani {
             cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
             nombre = getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
 
-            mesa.setMateria(carrera.getMateriaById(cod));
+            mesa.setMateria(cod);
 
             url = elem.attr("abs:href");
             document = this.connection.url(url).get();
@@ -368,7 +369,7 @@ public class Guarani {
             }
             else{
                 for (String _cod_materia :  getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
-                    mesa.addMateriaNecesariaById(carrera.getMateriaById(_cod_materia));
+                    mesa.addMateriaNecesariaById(_cod_materia);
                 }
             }
             // vuelvo a navegar hacia el listado e mesas.
@@ -420,7 +421,7 @@ public class Guarani {
 
                     cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
 
-                    mesa.setMateria(carrera.getMateriaById(cod));
+                    mesa.setMateria(cod);
 
                     url = elem.attr("abs:href");
                     document = this.connection.url(url).get();
@@ -441,7 +442,7 @@ public class Guarani {
                     }
                     else{
                         for (String _cod_materia :  getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
-                            mesa.addMateriaNecesariaById(carrera.getMateriaById(_cod_materia));
+                            mesa.addMateriaNecesariaById(_cod_materia);
                         }
                     }
                     mesas.add(mesa);
@@ -668,26 +669,6 @@ public class Guarani {
         }
         return carreras;
     }
-
-    private ArrayList<Inscripcion> hasMapToInscripciones(ArrayList<HashMap<String, String>> inscripciones_map, ArrayList<Mesa> mesas){
-        ArrayList<Inscripcion> inscripciones = new ArrayList<Inscripcion>();
-        for (HashMap<String, String> insc : inscripciones_map){
-            Inscripcion inscripcion = new Inscripcion();
-            for (Mesa mesa : mesas ){
-                if (mesa.getCarrera().getCodigo().equals(insc.get("cod_carrera")) &&
-                        mesa.getMateria().getCodigo().equals(insc.get("cod_materia")))
-                {
-                    inscripcion.setMesa(mesa);
-                    inscripcion.setTipo(insc.get("tipo"));
-                    break;
-                }
-            }
-            inscripciones.add(inscripcion);
-        }
-        return inscripciones;
-
-    }
-
     /**
      * Borramos las cookies.
      * @throws IOException
@@ -704,29 +685,17 @@ public class Guarani {
             ArrayList<Carrera> carreras = getPlanDeEstudios();
             Alumno alumno = getDatosAlumno(carreras);
             //ArrayList<Mesa_> mesas = _getMesasDeExamen(carreras);
-            ArrayList<HashMap<String, String>> inscripciones_map = getMesasAnotadas();
-
-            for (HashMap<String, String> inscripcion_map : inscripciones_map){
-                alumno.createInscripcion(inscripcion_map);
-            }
+            alumno.setInscripciones(getMesasAnotadas());
             return alumno;
         }
         return null;
     }
 
     public Alumno getAlumno() throws IOException {
-
         ArrayList<Carrera> carreras = getPlanDeEstudios();
         Alumno alumno = getDatosAlumno(carreras);
-        //ArrayList<Mesa_> mesas = _getMesasDeExamen(carreras);
-        ArrayList<HashMap<String, String>> inscripciones_map = getMesasAnotadas();
-
-        for (HashMap<String, String> inscripcion_map : inscripciones_map){
-            alumno.createInscripcion(inscripcion_map);
-        }
+        alumno.setInscripciones(getMesasAnotadas());
         return alumno;
-
-
     }
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
@@ -737,7 +706,7 @@ public class Guarani {
         if (g.login("38147310", "q1w2e3r4")){
             ArrayList<Carrera> carreras = g.getPlanDeEstudios();
             Alumno alumno = g.getDatosAlumno(carreras);
-            System.out.println("-- Alumno " +alumno.getLegajo() +" "+alumno.getNombre());
+            System.out.println("-- Alumno " + alumno.getNombre());
             System.out.println("-- Carreras" );
 
             for (Carrera c : carreras){
@@ -746,7 +715,7 @@ public class Guarani {
             ArrayList<Mesa> mesas = g._getMesasDeExamen(carreras);
             System.out.println("-- MESAS DE EXAMEN" + mesas.size());
             for (Mesa mesa : mesas){
-                System.out.println(mesa.getCarrera().getNombre() +" "+mesa.getMateria().getNombre());
+                System.out.println(mesa.getCarrera().getNombre() +" "+mesa.getMateria());
             }
 
             /*
@@ -763,12 +732,14 @@ public class Guarani {
 
             */
             System.out.println("-- Mesas a las que esta anotado");
-            ArrayList<HashMap<String, String>> inscripciones_map = g.getMesasAnotadas();
-            ArrayList<Inscripcion> inscripciones = g.hasMapToInscripciones(inscripciones_map, mesas);
-            alumno.setInscripciones(inscripciones);
+
+
+            alumno.setInscripciones(g.getMesasAnotadas());
+
+            System.out.println(alumno.getInscripciones());
 
             Gson gson = new Gson();
-            String s = gson.toJson(alumno.toJson());
+            String s = gson.toJson(alumno);
             System.out.println(s);
         }
         else{

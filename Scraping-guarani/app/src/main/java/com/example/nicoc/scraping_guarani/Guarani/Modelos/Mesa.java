@@ -8,19 +8,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Mesa implements Parcelable {
+
+    private Long id;
     private String fecha;
     private String sede;
     private TipoMesa tipoMesa; // libre o regular
     private ArrayList<Profesor> profesores;
 
     private Carrera carrera;
-    private Materia materia;
-    private ArrayList<Materia> materias_necesarias;
+    private String materia;
+    private ArrayList<String> materias_necesarias;
     private String turno; // esto es necesario para lanzar post de inscripcion
 
-
     public Mesa(){
-        this.materias_necesarias = new ArrayList<Materia>();
+        this.materias_necesarias = new ArrayList<String>();
     }
 
 
@@ -68,27 +69,27 @@ public class Mesa implements Parcelable {
         this.turno = turno;
     }
 
-    public void addMateriaNecesariaById(Materia materia){
+    public void addMateriaNecesariaById(String materia){
         this.materias_necesarias.add(materia);
     }
     /**
      * Materias que el alumno necesita aprobar para inscribirse a una mesa de la Materia
      * @return Listado de materias.
      */
-    public ArrayList<Materia> getMaterias_necesarias() {
+    public ArrayList<String> getMaterias_necesarias() {
         return materias_necesarias;
     }
 
-    public void setMaterias_necesarias(ArrayList<Materia> materias_necesarias) {
+    public void setMaterias_necesarias(ArrayList<String> materias_necesarias) {
         this.materias_necesarias = materias_necesarias;
     }
 
 
-    public Materia getMateria() {
+    public String getMateria() {
         return materia;
     }
 
-    public void setMateria(Materia materia) {
+    public void setMateria(String materia) {
         this.materia = materia;
     }
 
@@ -139,7 +140,6 @@ public class Mesa implements Parcelable {
         parcel.writeSerializable(tipoMesa);
         parcel.writeList(profesores);
         parcel.writeParcelable(carrera,i);
-        parcel.writeParcelable(materia,i);
         parcel.writeList(materias_necesarias);
         parcel.writeString(turno);
     }

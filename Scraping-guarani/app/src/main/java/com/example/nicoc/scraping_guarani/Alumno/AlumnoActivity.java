@@ -122,7 +122,7 @@ public class AlumnoActivity extends AppCompatActivity {
     }
     private void setDatosAlumno(){
         lblAlumno.setText(this.alumno.getNombre());
-        lblLegajo.setText(this.alumno.getLegajo());
+        lblLegajo.setText("sin legajo");
     }
 
     @OnClick(R.id.buttonMesas)

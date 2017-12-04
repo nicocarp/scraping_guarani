@@ -170,9 +170,6 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     @OnItemClick(R.id.listMesas) void itemClick(int position){
         Alumno alumno = ManagerGuarani.alumno;
         final Mesa mesa = (Mesa)listaMesas.getAdapter().getItem(position);
-        if (alumno.estaInscripto(mesa.getMateria()))
-            mostrarError("Desea desinscribirse?");
-
         final EditText txtNuevoStock = new EditText(this);
         txtNuevoStock.setInputType(InputType.TYPE_CLASS_TEXT);
         txtNuevoStock.setText("regular");
@@ -180,7 +177,8 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
         new AlertDialog.Builder(this)
                 .setTitle("Detalle de la mesa")
-                .setMessage(mesa.getMateria().getNombre() +" "+ mesa.getMateria().getCarrera().getCodigo())
+                .setMessage(mesa.getMateria()+" "+ mesa.getCarrera())
+                //.setMessage(mesa.getMateria().getNombre() +" "+ mesa.getMateria().getCarrera().getCodigo())
                 .setView(txtNuevoStock)
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

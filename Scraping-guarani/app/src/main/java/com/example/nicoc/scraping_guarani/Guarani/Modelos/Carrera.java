@@ -12,15 +12,26 @@ public class Carrera implements Parcelable {
     private String codigo;
     private String nombre;
     private String plan;
-    private ArrayList<Materia> materias;
+
+    public String getLegajo() {
+        return legajo;
+    }
+
+    public void setLegajo(String legajo) {
+        this.legajo = legajo;
+    }
+
+    private String legajo;
+
     private ArrayList<Correlatividad> correlatividades;
+    private Boolean activo;
 
     public Carrera()
     {
         this.codigo = "";
         this.nombre = "";
         this.plan = "";
-        this.materias = new ArrayList<Materia>();
+
         this.correlatividades = new ArrayList<Correlatividad>();
     }
 
@@ -29,7 +40,7 @@ public class Carrera implements Parcelable {
         nombre = in.readString();
         plan = in.readString();
         //materias = in.readArrayList(null);
-        materias = in.readArrayList(Materia.class.getClassLoader());
+
         //correlatividades = in.readArrayList(null);
         correlatividades = in.readArrayList(Correlatividad.class.getClassLoader());
 
@@ -56,7 +67,6 @@ public class Carrera implements Parcelable {
         this.activo = activo;
     }
 
-    private Boolean activo;
 
     public String getCodigo() {
         return codigo;
@@ -82,26 +92,13 @@ public class Carrera implements Parcelable {
         this.plan = plan;
     }
 
-    public ArrayList<Materia> getMaterias() {
-        return materias;
-    }
 
-    public Materia getMateriaById(String id_materia){
-        Materia result = null;
-        for (Materia m : this.materias){
-            if (m.getCodigo().equals(id_materia)){
-                result = m;
-                break;
-            }
-        }
-        return result;
 
-    }
+
     public void setMaterias(ArrayList<Materia> materias) {
         for (Materia materia : materias){
             materia.setCarrera(this);
         }
-        this.materias = materias;
     }
 
     public ArrayList<Correlatividad> getCorrelatividades() {
@@ -122,13 +119,7 @@ public class Carrera implements Parcelable {
         parcel.writeString(codigo);
         parcel.writeString(nombre);
         parcel.writeString(plan);
-        parcel.writeList(materias);
         parcel.writeList(correlatividades);
 
-    }
-
-    public String toJson() {
-        String result = "{\"codigo\":\" "+getCodigo()+"\", \"nombre\": \" "+getNombre()+"\", \"plan\":\""+getPlan()+"\"}";
-        return result;
     }
 }

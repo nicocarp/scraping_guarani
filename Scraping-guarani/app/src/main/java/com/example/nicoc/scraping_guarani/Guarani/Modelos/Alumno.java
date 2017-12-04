@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Alumno{
 
     private String nombre;
-    private String legajo;
+
     private ArrayList<Carrera> carreras;
     private boolean regular;
     private ArrayList<Inscripcion> inscripciones;
@@ -24,14 +24,6 @@ public class Alumno{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getLegajo() {
-        return legajo;
-    }
-
-    public void setLegajo(String legajo) {
-        this.legajo = legajo;
     }
 
     public ArrayList<Carrera> getCarreras() {
@@ -56,7 +48,6 @@ public class Alumno{
     }
 
     public void addInscripcion(Inscripcion inscripcion){
-        inscripcion.setAlumno(this);
         this.inscripciones.add(inscripcion);
     }
     public void addCarrera(Carrera carrera) {
@@ -68,34 +59,14 @@ public class Alumno{
     }
 
     /**
-     * Seteamos a cada inscripcion el alumno con this
+     * Guardamos listado de inscripciones como atributo del alumno.
      * @param inscripciones
      */
     public void setInscripciones(ArrayList<Inscripcion> inscripciones) {
-        for (Inscripcion inscripcion : inscripciones){
-            inscripcion.setAlumno(this);
-        }
         this.inscripciones = inscripciones;
     }
-    public Carrera getCarreraById(String id){
-        Carrera result = null;
-        for (Carrera carrera : this.getCarreras()){
-            if (carrera.getCodigo().equals(id)){
-                result = carrera;
-                break;
-            }
-        }
-        return result;
-    }
-    public void createInscripcion(HashMap<String, String> insc_map){
-        Carrera carrera = this.getCarreraById(insc_map.get("cod_carrera"));
-        Materia materia = carrera.getMateriaById(insc_map.get("cod_materia"));
 
-        Inscripcion inscripcion = new Inscripcion();
-        inscripcion.setMateria(materia);
-        inscripcion.setTipo(insc_map.get("tipo"));
-        addInscripcion(inscripcion);
-    }
+
     public Boolean estaInscripto(Materia materia){
         Boolean result = false;
         for (Inscripcion inscripcion : this.getInscripciones()){
@@ -105,17 +76,6 @@ public class Alumno{
             }
         }
         return result;
-    }
-    public String toJson(){
-
-        ArrayList<String> carreras= new ArrayList<String>();
-
-        for (Carrera carrera : this.carreras){
-            carreras.add(carrera.toJson());
-        }
-        String result = "{\"nombre\":\""+getNombre()+"\", \"carreras\":"+carreras+"}";
-        return result;
-
     }
 
 }

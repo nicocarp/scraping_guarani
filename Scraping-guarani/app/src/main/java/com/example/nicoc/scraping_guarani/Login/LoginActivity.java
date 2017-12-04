@@ -33,6 +33,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.R;
 import com.example.nicoc.scraping_guarani.ServicioIntent;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +41,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView{
 
-    public static String URL_BASE = "http://www.dit.ing.unp.edu.ar/v2070/www/";
     private AwesomeValidation validator;
     @BindView(R.id.txtUsername) EditText txtUsername;
     @BindView(R.id.txtPassword) EditText txtPassword;
@@ -65,12 +65,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
 
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setMessage("Iniciando Sesión...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
-
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estadoBoton = savedInstanceState.getString(KEY_1);
@@ -89,8 +83,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
                 ocultarProgressBar();
             }
         }
-        //botonHabilitar();
-        //ocultarProgressBar();
+
         escucharBroadcasts();
     }
 
@@ -124,6 +117,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
             txtPassword.setText(loginPreferences.getString("password", ""));
             checkBoxRememberMe.setChecked(true);
         }
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Iniciando Sesión...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
 
         validator.addValidation(txtUsername, RegexTemplate.NOT_EMPTY, "Ingrese usuario");
         validator.addValidation(txtPassword, RegexTemplate.NOT_EMPTY, "Ingrese contraseña");
@@ -135,22 +133,31 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
      */
     @Override
     public void logueado(Alumno alumno) {
-        //opcion 1
-        //Alarma alarma = new Alarma(this,Servicio.class);
-        //alarma.start();
-
-        //opcion 2
-        //Alarma alarma2 = new Alarma(this,ServicioPrueba.class);
-        //alarma2.start();
-
         //opcion 3
+
         Log.i("Antes: ","ha comenzado la alarma");
         Alarma alarma3 = new Alarma(this,ServicioIntent.class);
         alarma3.start();
         Log.i("Despues: ","ha comenzado la alarma");
 
+        String alumno_json = storeAlumno(alumno);
         Intent intent = new Intent(this, AlumnoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("alumno_json",alumno_json);
+        intent.putExtras(bundle);
         startActivity(intent);
+    }
+    private String storeAlumno(Alumno alumno){
+
+        String obj = new Gson().toJson(alumno);
+        loginPrefsEditor = loginPreferences.edit();
+        loginPrefsEditor.putBoolean("saveLogin", (checkBoxRememberMe.isChecked()));
+        loginPrefsEditor.putString("username", txtUsername.getText().toString());
+        loginPrefsEditor.putString("password", txtPassword.getText().toString());
+        loginPrefsEditor.putString("alumno", obj);
+        loginPrefsEditor.commit();
+        return obj;
+
     }
 
     @Override
@@ -170,14 +177,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
-
-        // esta logica deberia ir en logueado.
-        loginPrefsEditor = loginPreferences.edit();
-        loginPrefsEditor.putBoolean("saveLogin", (checkBoxRememberMe.isChecked()));
-        loginPrefsEditor.putString("username", username);
-        loginPrefsEditor.putString("password", password);
-        loginPrefsEditor.commit();
-
 
 
         String[] parametros = { username, password};

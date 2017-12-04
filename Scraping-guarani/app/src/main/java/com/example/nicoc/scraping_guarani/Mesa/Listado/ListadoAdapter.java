@@ -65,9 +65,10 @@ public class ListadoAdapter extends BaseAdapter  {
         TextView txtCodigo = (TextView) v.findViewById(R.id.txtFecha);
 
         Mesa mesa = this.items.get(position);
-        if (alumno.estaInscripto(mesa.getMateria()))
-            v.setBackgroundColor(Color.GREEN);
-        txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
+        //if (alumno.estaInscripto(mesa.getMateria()))
+         //   v.setBackgroundColor(Color.GREEN);
+        //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
+        txtNombre.setText(mesa.getMateria()+" "+mesa.getCarrera().getCodigo());
         txtCodigo.setText(mesa.getFecha());
         return v;
     }
@@ -110,7 +111,4 @@ public class ListadoAdapter extends BaseAdapter  {
         }
         this.refreshData(filtrado);
     }
-
-
-
 }
