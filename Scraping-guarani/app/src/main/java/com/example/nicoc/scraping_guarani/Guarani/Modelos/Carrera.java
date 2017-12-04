@@ -126,4 +126,9 @@ public class Carrera implements Parcelable {
         parcel.writeList(correlatividades);
 
     }
+
+    public String toJson() {
+        String result = "{\"codigo\":\" "+getCodigo()+"\", \"nombre\": \" "+getNombre()+"\", \"plan\":\""+getPlan()+"\"}";
+        return result;
+    }
 }

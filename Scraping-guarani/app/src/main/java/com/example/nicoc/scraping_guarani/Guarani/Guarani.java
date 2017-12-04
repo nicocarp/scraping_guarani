@@ -5,6 +5,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+import com.google.gson.Gson;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -729,45 +730,53 @@ public class Guarani {
     }
 
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
-        Guarani g = new Guarani();
         // franco = 31636564 gabriel1
         // gaston = 27042881 valenti2
         // maxi =  37860301  ym7k
-        if (g.login("37860322301", "ym7k")){
+        Guarani g = new Guarani();
+        if (g.login("38147310", "q1w2e3r4")){
             ArrayList<Carrera> carreras = g.getPlanDeEstudios();
             Alumno alumno = g.getDatosAlumno(carreras);
-            /*System.out.println("-- Alumno " +alumno.getLegajo() +" "+alumno.getNombre());
+            System.out.println("-- Alumno " +alumno.getLegajo() +" "+alumno.getNombre());
             System.out.println("-- Carreras" );
+
             for (Carrera c : carreras){
                 System.out.println(c.getCodigo() +" "+ c.getNombre() +" "+ c.getActivo());
-            }*/
+            }
             ArrayList<Mesa> mesas = g._getMesasDeExamen(carreras);
             System.out.println("-- MESAS DE EXAMEN" + mesas.size());
             for (Mesa mesa : mesas){
                 System.out.println(mesa.getCarrera().getNombre() +" "+mesa.getMateria().getNombre());
             }
 
-
-           /* if (g.desinscribirseDeMesa("38", "MA048"))
+            /*
+            if (g.desinscribirseDeMesa("38", "MA048"))
                 System.out.println(g.getMensaje());
             else
                 System.out.println(g.getError());
-*/
 
-          /*  if (g.inscribirseMesaById(alumno, mesas.get(mesas.size()-1), "regular"))
+
+            if (g.inscribirseMesaById(alumno, mesas.get(mesas.size()-1), "regular"))
                 System.out.println(g.getMensaje());
             else
                 System.out.println("Error: "+g.getError());
-*/
 
+            */
             System.out.println("-- Mesas a las que esta anotado");
             ArrayList<HashMap<String, String>> inscripciones_map = g.getMesasAnotadas();
             ArrayList<Inscripcion> inscripciones = g.hasMapToInscripciones(inscripciones_map, mesas);
             alumno.setInscripciones(inscripciones);
+
+            Gson gson = new Gson();
+            String s = gson.toJson(alumno.toJson());
+            System.out.println(s);
         }
         else{
             System.out.println(g.getError());
         }
+
+
+
      }
 
 }

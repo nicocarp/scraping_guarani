@@ -1,5 +1,7 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -102,6 +104,16 @@ public class Alumno{
                 break;
             }
         }
+        return result;
+    }
+    public String toJson(){
+
+        ArrayList<String> carreras= new ArrayList<String>();
+
+        for (Carrera carrera : this.carreras){
+            carreras.add(carrera.toJson());
+        }
+        String result = "{\"nombre\":\""+getNombre()+"\", \"carreras\":"+carreras+"}";
         return result;
 
     }
