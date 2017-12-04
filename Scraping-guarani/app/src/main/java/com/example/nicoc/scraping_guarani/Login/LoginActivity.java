@@ -7,14 +7,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @BindView(R.id.txtPassword) EditText txtPassword;
     @BindView(R.id.checkBoxRememberMe) CheckBox checkBoxRememberMe;
     @BindView(R.id.btnLogin) Button btnLogin;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -55,8 +59,31 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         this.iniciarViews();
-        botonHabilitar();
+
+        //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
+        if (savedInstanceState != null) {
+            String estadoBoton = savedInstanceState.getString("btnLogin");
+            String estadoProgressBar = savedInstanceState.getString("progressBar");
+            if(estadoBoton.equals("True")){
+                botonHabilitar();
+            }
+            else{
+                botonDeshabilitar();
+            }
+
+            if(estadoProgressBar.equals("Visible")){
+                mostrarProgressBar();
+            }
+            else{
+                ocultarProgressBar();
+            }
+
+        }
+
+        //botonHabilitar();
+        //ocultarProgressBar();
         escucharBroadcasts();
+
     }
 
 
@@ -127,8 +154,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
 
     @OnClick(R.id.btnLogin)
     public void login(){
+        mostrarProgressBar();
         botonDeshabilitar();
-        btnLogin.setBackgroundColor(Color.GRAY);
+
+        //btnLogin.setBackgroundColor(Color.GRAY);
         this.validator.clear();
         if (!this.validator.validate())
             return;
@@ -142,6 +171,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         loginPrefsEditor.putString("username", username);
         loginPrefsEditor.putString("password", password);
         loginPrefsEditor.commit();
+
+
 
         String[] parametros = { username, password};
         AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
@@ -161,20 +192,70 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         btnLogin.setBackgroundColor(getResources().getColor(color));
     }
 
+    private void mostrarProgressBar(){
+        //ponerleColorAlProgressBar();
+        try{
+            progressBar.setVisibility(View.VISIBLE);
+        }catch(Exception e){
+
+        }
+    }
+
+    private void ocultarProgressBar(){
+        try{
+            progressBar.setVisibility(View.INVISIBLE);
+        }catch(Exception e){
+
+        }
+    }
+
+    private void ponerleColorAlProgressBar(){
+        int color = R.color.colorPrimary;
+        //progressBar.setBackgroundColor(getResources().getColor(color));
+        //progressBar.setDrawingCacheBackgroundColor(getResources().getColor(color));
+        try{
+            //progressBar.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+            Log.i("ProgressBar: ","todo ok.");
+        }catch(Exception e){
+            Log.i("ProgressBar: ",""+e.getMessage());
+        }
+    }
+
+
     @Override
     protected void onStop() {
         super.onStop();
         botonHabilitar();
+        ocultarProgressBar();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         botonHabilitar();
+        ocultarProgressBar();
 
     }
 
 
 
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (btnLogin.isEnabled()){
+            outState.putString("btnLogin", "True");
+        }
+        else{
+            outState.putString("btnLogin", "False");
+        }
+
+        if(progressBar.getVisibility()==View.VISIBLE){
+            outState.putString("progressBar", "Visible");
+        }
+        else{
+            outState.putString("progressBar", "Invisible");
+        }
+
+    }
 
 }

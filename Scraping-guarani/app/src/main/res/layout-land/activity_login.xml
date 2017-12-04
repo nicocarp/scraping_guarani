@@ -132,5 +132,19 @@
             android:layout_alignLeft="@+id/btnLogin"
             android:layout_alignStart="@+id/btnLogin" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:indeterminateOnly="true"
+            android:indeterminateBehavior="cycle"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/checkBoxRememberMe"
+            android:layout_alignRight="@+id/imageLabel"
+            android:layout_alignEnd="@+id/imageLabel"
+            android:layout_marginRight="91dp"
+            android:layout_marginEnd="91dp" />
+
     </RelativeLayout>
 </ScrollView>
