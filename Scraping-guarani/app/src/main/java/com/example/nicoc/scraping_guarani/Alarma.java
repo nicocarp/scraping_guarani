@@ -158,4 +158,11 @@ public class Alarma extends Thread{
     }
 
 
+    public void reiniciarAlarma()
+    {
+        this.contexto.stopService(new Intent(contexto,clase_del_servicio));
+        this.contexto.startService(new Intent(contexto,clase_del_servicio));
+    }
+
+
 }
