@@ -141,12 +141,12 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     @Override
     public void setItems(List<Mesa> items) {
         listaMesas.setAdapter(new ListadoAdapter(this, items, ManagerGuarani.alumno));
-        if (items.size() == 0)
+        if (items.size() == 0) {
             mostrarError("Sin mesas de examen");
-        else
+        } else {
             filtroMesas(); // esto cambiar, hacer un combo para q seleccione carrera
+        }
     }
-
     // capturar evento on Change select carrera
     private void filtroMesas(){
         ListadoAdapter adapter = (ListadoAdapter)this.listaMesas.getAdapter();

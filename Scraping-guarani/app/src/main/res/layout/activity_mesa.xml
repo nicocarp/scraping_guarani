@@ -50,7 +50,8 @@
             android:orientation="horizontal"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/linearLayout7">
+            android:layout_below="@+id/linearLayout7"
+            android:id="@+id/linearLayout4">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_carrera"
@@ -76,7 +77,8 @@
         <ListView
             android:id="@+id/listMesas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/linearLayout4" />
 
         <include
             android:id="@+id/include"
