@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -25,6 +26,7 @@ import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
 import com.example.nicoc.scraping_guarani.ServicioIntent;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +41,9 @@ public class AlumnoActivity extends AppCompatActivity {
    // @BindView(R.id.lblFecha)    TextView lblFecha;
    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
    // @BindView(R.id.listaMaterias)    ListView listaMatrias;
+   private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,12 +64,19 @@ public class AlumnoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getSupportActionBar().setTitle("Alumno");
         Drawable myIcon = getResources().getDrawable(R.drawable.ic_action_name );
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
 
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        String obj_json = loginPreferences.getString("alumno_json", "");
+        Alumno obj = new Gson().fromJson(obj_json, Alumno.class);
+
+
+        //Toast.makeText(AlumnoActivity.this, "ALumno obk"+obj.getCarreras().get(0).getNombre(), Toast.LENGTH_SHORT).show();
         this.alumno= ManagerGuarani.alumno;
 
         Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();

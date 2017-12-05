@@ -140,11 +140,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         alarma3.start();
         Log.i("Despues: ","ha comenzado la alarma");
 
-        String alumno_json = storeAlumno(alumno);
+        storeAlumno(alumno);
         Intent intent = new Intent(this, AlumnoActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("alumno_json",alumno_json);
-        intent.putExtras(bundle);
         startActivity(intent);
     }
     private String storeAlumno(Alumno alumno){
@@ -154,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         loginPrefsEditor.putBoolean("saveLogin", (checkBoxRememberMe.isChecked()));
         loginPrefsEditor.putString("username", txtUsername.getText().toString());
         loginPrefsEditor.putString("password", txtPassword.getText().toString());
-        loginPrefsEditor.putString("alumno", obj);
+        loginPrefsEditor.putString("alumno_json", obj);
         loginPrefsEditor.commit();
         return obj;
 
