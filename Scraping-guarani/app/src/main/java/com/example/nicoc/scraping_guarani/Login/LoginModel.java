@@ -36,9 +36,4 @@ class LoginModel implements ILogin.Model, AsyncLogin.IView {
         this.presenter.onAlumno(alumno);
     }
 
-    @Override
-    public void botonHabilitar() {
-
-
-    }
 }

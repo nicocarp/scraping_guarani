@@ -18,35 +18,34 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
     public interface IView{
         public void mostrarError(String s);
         public void logueado(Alumno alumno);
-        public void botonHabilitar();
     }
     private IView listener;
+    private String error;
 
     public AsyncLogin(IView activity) {
         this.listener= activity;
     }
 
     /**
-     * Precondicion: recibe parametros (url, user, password)
+     * Retorna el alumno correspondiente con los parametros (String username, String password)
      * @param parametros
-     * @return
+     * @return Alumno.
      */
     @Override
     protected Alumno doInBackground(String... parametros) {
         String username = parametros[0];
         String password = parametros[1];
 
-        ManagerGuarani.setAuth(new Auth(username,password));
-        Guarani guarani = ManagerGuarani.getInstance();
-
-        if (guarani == null){
-            return null;
-        }
         try {
+            Guarani guarani = Guarani.getInstance(new Auth(username, password));
             Alumno alumno = guarani.getAlumno();
             return alumno;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            this.error = e.getMessage().toString();
         } catch (IOException e) {
             e.printStackTrace();
+            this.error = "Error en la conexion";
         }
         return null;
     }
@@ -57,9 +56,7 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         if ( alumno != null)
             this.listener.logueado(alumno);
         else{
-            String error = ManagerGuarani.getError();
-            this.listener.mostrarError(error);
-            //this.activity.botonHabilitar();
+            this.listener.mostrarError(this.error);
         }
     }
 }
