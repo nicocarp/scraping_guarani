@@ -3,6 +3,7 @@
     package="com.example.nicoc.scraping_guarani">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -40,6 +41,14 @@
             android:name=".ServicioIntent"
             android:exported="false" />
 
+        <receiver
+            android:name=".RestartServiceReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="YouWillNeverKillMe" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

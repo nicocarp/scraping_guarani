@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import java.util.Calendar;
 
+import static android.os.Looper.getMainLooper;
 
 
 /**
@@ -21,16 +24,17 @@ public class Alarma extends Thread{
 
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
+    public static  AlarmaTimer alarmaTimer = null;
 
-    private Context contexto;
+    public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 1 hs
+    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
     private int hora;
 
-    public static final int MAXIMA_REPETICION = 3;
-    private static int REPETICION_ACTUAL = 0;
-
+    public static final int MAXIMA_REPETICION = 1;
+    public static int REPETICION_ACTUAL = 1;
+    private static MyCountDownTimer myCountDownTimer;
 
     public Alarma (Context contexto, Class clase_del_servicio){
         this.contexto = contexto;
@@ -110,33 +114,34 @@ public class Alarma extends Thread{
 
     public void run(){
 
-        Log.i("Alarma: ","ha comenzado la alarma");
-
-        //https://developer.android.com/training/scheduling/alarms.html
-        alarmMgr = (AlarmManager)contexto.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(contexto, clase_del_servicio);
-        alarmIntent = PendingIntent.getService(contexto, 0, intent, 0);
+        try {
+            Log.i("Alarma: ", "ha comenzado la alarma");
 
 
-
-        // Set the alarm to start at 14:51 p.m.
-        calendar = Calendar.getInstance();
-        hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
-        if (hora == -1)hora = 23;
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hora);//8
-        calendar.set(Calendar.MINUTE, 1);//30
+            //https://developer.android.com/training/scheduling/alarms.html
+            alarmMgr = (AlarmManager) contexto.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(contexto, clase_del_servicio);
+            alarmIntent = PendingIntent.getService(contexto, 0, intent, 0);
 
 
+            // Set the alarm to start at 14:51 p.m.
+            calendar = Calendar.getInstance();
+            hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
+            if (hora == -1) hora = 23;
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, hora);//8
+            calendar.set(Calendar.MINUTE, 1);//30
 
 
-        // setRepeating() lets you specify a precise custom interval--in this case,
-        // 20 minutes.
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                tiempo_repeticion, alarmIntent);//60 segundos
-        //tiempo_repeticion = 1000 * 60 = 1 minuto
+            // setRepeating() lets you specify a precise custom interval--in this case,
+            // 20 minutes.
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    tiempo_repeticion, alarmIntent);//60 segundos
+            //tiempo_repeticion = 1000 * 60 = 1 minuto
 
-
+        }catch(Exception e){
+            Log.i("Alarma RUNTIME ERRROR: ","" + e.getMessage());
+        }
     }
 
 
@@ -164,6 +169,66 @@ public class Alarma extends Thread{
     {
         this.contexto.stopService(new Intent(contexto,clase_del_servicio));
         this.contexto.startService(new Intent(contexto,clase_del_servicio));
+    }
+
+    public static void reestablerRepeticionActual(){
+        CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
+            @Override
+            public void onTick(long l) {
+                Log.i("COUNT_DOWN_TIMER: ", "" + l / 1000 + " segundos.");
+            }
+
+            @Override
+            public void onFinish() {
+                Alarma.REPETICION_ACTUAL = 1;
+                Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
+            }
+        }.start();
+    }
+
+
+    public static class MyCountDownTimer extends CountDownTimer {
+
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            int progress = (int) (millisUntilFinished/1000);
+            Log.i("COUNT_DOWN_TIMER: ", "" + progress + " segundos.");
+
+        }
+
+        @Override
+        public void onFinish() {
+            Alarma.REPETICION_ACTUAL = 1;
+            Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
+        }
+    }
+
+    public static void vamosCampeon(){
+        //crear un nuevo intent service
+        Handler mHandler = new Handler(getMainLooper());
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("vamosCampeon: ", "Entre");
+                myCountDownTimer = new MyCountDownTimer(1000 * 60, 1000);
+                myCountDownTimer.start();
+                Log.i("vamosCampeon: ", "Termine");
+            }
+        });
+
+
+    }
+
+
+    public static void iniciarTimer(){
+        //contexto.startService(new Intent(contexto.getApplicationContext(), ServicioIntentTimer.class));
+        AlarmaTimer alarma = new AlarmaTimer();
+        alarma.start();
     }
 
 

@@ -7,7 +7,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -50,6 +53,55 @@ public class ServicioIntent extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        //Verifico si hay internet....
+
+        /*try {
+            Thread.sleep(1000 * 25);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+
+        //sendBroadcast(new Intent("YouWillNeverKillMe"));
+        if (!isNetworkAvailable()){
+            //intento 3 veces en el dia sino chau...
+
+
+            Log.i("Internet...: ","No hay conexión a Internet");
+
+            //sendBroadcast(new Intent("YouWillNeverKillMe"));
+            if (Alarma.alarmaTimer.ACTIVO==false){
+                Alarma.alarmaTimer = new AlarmaTimer();
+                Alarma.alarmaTimer.contexto = this;
+                Alarma.alarmaTimer.start();
+                Alarma.alarmaTimer.ACTIVO=true;
+                Log.i("BROADCASTRECEIRVER...: ","Creeeee la alarmatimeeeeerrrrrr!!!..");
+            }
+            else if (Alarma.alarmaTimer.REPETICION_ACTUAL<=Alarma.alarmaTimer.MAXIMA_REPETICION){
+                Alarma.alarmaTimer.REPETICION_ACTUAL++;
+                Log.i("BROADCASTRECEIRVER...: ","Aumente.");
+            }
+            else{
+
+                if(Alarma.alarmaTimer!=null)Alarma.alarmaTimer.morir();
+                Log.i("BROADCASTRECEIRVER...: ","Mate a la alarmatimerrrrr.");
+            }
+
+            stopSelf();
+            return;
+
+        }
+        else{
+            Alarma.alarmaTimer.morir();
+            Log.i("Internet...: ","Hay conexión a Internet");
+
+        }
+
+
+        Log.i("Intent Service: ","Estoy funcionado!!!!!");
+        stopSelf();
+
+
         Log.i("Intent Service: ","Estoy funcionado!!!!!");
 
         //1. consultar la BD para traer user y pass
@@ -62,7 +114,6 @@ public class ServicioIntent extends IntentService {
         //2.Verifico si ese usuario esta logueado
         ManagerGuarani.setAuth(new Auth(usuario, password));
         Guarani guarani = ManagerGuarani.getInstance();
-        
         if (guarani == null){//usuario no logueado
             //3.a Hago una notificacion mostrando el error.
             //3.b Si estoy en cualquiera de las 2 activitys, muestro mje y vuelvo a activity_login: broadcastear en ambas.
@@ -126,9 +177,9 @@ public class ServicioIntent extends IntentService {
                     bandera = true;
                     contador++;
                     try {
-                        wait(1000 * 15);//espero 15 segundos.
-                    } catch (InterruptedException e1) {
-                        Log.i("Error en el Servicio Intent, problema en wait(): ", "" + e.getMessage());
+                        Thread.sleep(1000 * 15);//espero 15 segundos.
+                    } catch (Exception e1) {
+                        Log.i("Error en el Servicio Intent, problema en sleep(): ", "" + e1.getMessage());
                     }
                 }
             }//while
@@ -196,7 +247,13 @@ public class ServicioIntent extends IntentService {
     }
 
 
-
+    //Metodo devuelve si hay conexion a Internet o no.
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 
 
@@ -213,5 +270,21 @@ public class ServicioIntent extends IntentService {
         i.startService(intent);
         System.out.println("Hijo de puta");
     }*/
+
+
+    private void timer(){
+        CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
+            @Override
+            public void onTick(long l) {
+                Log.i("COUNT_DOWN_TIMER: ", "" + l / 1000 + " segundos.");
+            }
+
+            @Override
+            public void onFinish() {
+                Alarma.REPETICION_ACTUAL = 1;
+                Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
+            }
+        }.start();
+    }
 
 }
