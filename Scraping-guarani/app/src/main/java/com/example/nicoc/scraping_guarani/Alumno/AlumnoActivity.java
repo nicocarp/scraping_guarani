@@ -76,10 +76,10 @@ public class AlumnoActivity extends AppCompatActivity {
         Alumno obj = new Gson().fromJson(obj_json, Alumno.class);
 
 
-        //Toast.makeText(AlumnoActivity.this, "ALumno obk"+obj.getCarreras().get(0).getNombre(), Toast.LENGTH_SHORT).show();
-        this.alumno= ManagerGuarani.alumno;
+        Toast.makeText(AlumnoActivity.this, "ALumno obk"+obj.getCarreras().get(0).getNombre(), Toast.LENGTH_SHORT).show();
+        this.alumno= obj;
 
-        Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
         verificar_login();
         //start_service();
         //consultar_bd_mesas();
@@ -112,8 +112,6 @@ public class AlumnoActivity extends AppCompatActivity {
     }
 
     private void cerrarSesion() {
-        Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
-        startActivity(intent);
 
         Alarma.cancelarAlarma();
         //stopService(new Intent(AlumnoActivity.this, ServicioIntent.class));
@@ -121,7 +119,13 @@ public class AlumnoActivity extends AppCompatActivity {
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
 
+        loginPrefsEditor = loginPreferences.edit();
+        loginPrefsEditor.putString("alumno_json", "");
+        loginPrefsEditor.commit();
+
         finish();
+        Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
     private void verificar_login(){

@@ -7,6 +7,11 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 public class Auth {
     private String username;
 
+    public Auth(String username, String password) {
+        this.username = username;
+        this.password=password;
+    }
+
     public String getUsername() {
         return username;
     }

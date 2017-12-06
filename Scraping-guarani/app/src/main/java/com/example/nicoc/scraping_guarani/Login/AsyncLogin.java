@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 
 import java.io.IOException;
 
@@ -19,10 +20,10 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         public void logueado(Alumno alumno);
         public void botonHabilitar();
     }
-    private IView activity;
+    private IView listener;
 
     public AsyncLogin(IView activity) {
-        this.activity = activity;
+        this.listener= activity;
     }
 
     /**
@@ -35,13 +36,14 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         String username = parametros[0];
         String password = parametros[1];
 
-        Guarani guarani = ManagerGuarani.getInstance(username, password);
+        ManagerGuarani.setAuth(new Auth(username,password));
+        Guarani guarani = ManagerGuarani.getInstance();
+
         if (guarani == null){
             return null;
         }
         try {
             Alumno alumno = guarani.getAlumno();
-            ManagerGuarani.alumno = alumno;
             return alumno;
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,13 +54,12 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
     @Override
     protected void onPostExecute(Alumno alumno) {
         super.onPostExecute(alumno);
-        if (alumno != null){
-            this.activity.logueado(alumno);
-        }
+        if ( alumno != null)
+            this.listener.logueado(alumno);
         else{
             String error = ManagerGuarani.getError();
-            this.activity.mostrarError(error);
-            this.activity.botonHabilitar();
+            this.listener.mostrarError(error);
+            //this.activity.botonHabilitar();
         }
     }
 }

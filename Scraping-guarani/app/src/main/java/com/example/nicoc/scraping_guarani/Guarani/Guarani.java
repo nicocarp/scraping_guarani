@@ -34,6 +34,7 @@ public class Guarani {
     private String last_cookies;
     private String error;
     private String username;
+    private String password;
 
     public String getMensaje() {
         String m = this.mensaje;
@@ -50,6 +51,7 @@ public class Guarani {
     public Guarani() throws IOException {
         this.url_base = URL;
         this.username = "";
+        this.password= "";
         this.startConnection();
     }
 
@@ -94,7 +96,7 @@ public class Guarani {
         document = this.connection.url(url).get();
 
         //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
-        url = document.select("a:contains("+mesa.getCarrera().getNombre()+")").first().attr("abs:href");
+        url = document.select("a:contains("+mesa.getCarrera()+")").first().attr("abs:href");
         document = this.connection.url(url).get();
 
         Element link_mesa = document.select("a:contains("+mesa.getMateria()+")").first();
@@ -108,8 +110,8 @@ public class Guarani {
 
         Map<String, String> m = new HashMap<String, String>();
         m.put("operacion", "exa00006");
-        m.put("carrera", mesa.getCarrera().getCodigo());
-        m.put("legajo", mesa.getCarrera().getLegajo());
+        m.put("carrera", mesa.getCarrera());
+        m.put("legajo", alumno.getCarreraById(mesa.getCarrera()).getLegajo());
         m.put("materia", mesa.getMateria());
         m.put("generica", "");
         m.put("anio_academico", "2017");
@@ -390,7 +392,7 @@ public class Guarani {
         return mesas;
     }
 
-    public ArrayList<Mesa> _getMesasDeExamen(ArrayList<Carrera> carreras) throws IOException {
+    public ArrayList<Mesa> _getMesasDeExamen() throws IOException {
 
         Document document = this.document_base;
         String url;
@@ -402,11 +404,12 @@ public class Guarani {
         String url_inscripcion = document.select("a:contains(examen)").first().attr("abs:href");
         document = this.connection.url(url_inscripcion).get();
 
-        for (Carrera carrera : carreras){
-
-            url = document.select("a:contains("+carrera.getNombre()+")").first().attr("abs:href");
-            document = this.connection.url(url).get();
-
+        Elements links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
+        for (int indice = 0; indice<links_carreras.size(); indice++){
+            Element link_carrera = links_carreras.get(indice);
+            String codigo_carrera = getMatch(link_carrera.text(), "([0-9]+)");
+            document = this.connection.url(link_carrera.attr("abs:href")).get();
+            /* Codigo general */
             Element div_errores = document.select("div.mensaje_ua_contenido").first();
             Elements link_mesas;
             if (div_errores == null){
@@ -416,7 +419,7 @@ public class Guarani {
 
                 for (int i = 0;  i < link_mesas.size(); i++ ){
                     Mesa mesa = new Mesa();
-                    mesa.setCarrera(carrera);
+                    mesa.setCarrera(codigo_carrera);
                     elem = link_mesas.get(i);
 
                     cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
@@ -448,12 +451,15 @@ public class Guarani {
                     mesas.add(mesa);
                     // vuelvo a navegar hacia el listado e mesas.
                     document = this.connection.url(url_inscripcion).get();
-                    url = document.select("a:contains("+carrera.getNombre()+")").first().attr("abs:href");
+                    url = document.select("a:contains("+codigo_carrera+")").first().attr("abs:href");
                     document = this.connection.url(url).get();
                     link_mesas = document.select("[href*=elegirMesaInscExamen]");
                 }
             }
+
+            /* Refecargamosla pagina*/
             document = this.connection.url(url_inscripcion).get();
+            links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         }
 
         return mesas;
@@ -511,11 +517,12 @@ public class Guarani {
     public boolean login(String username, String password) throws IOException {
         if (this.connection == null)
             this.startConnection();
-        if (this.username.equals(username) && estaLogueado()){
+
+        if (this.username.equals(username) && !this.password.equals(password) && estaLogueado())
             return true;
-        }
         if (!this.username.equals(username))
             desloguearse();
+
 
         Document document;
         String url;
@@ -545,6 +552,7 @@ public class Guarani {
             return false;
         }
         this.username = username;
+        this.password = password;
         return true;
     }
 
@@ -676,6 +684,7 @@ public class Guarani {
     public void desloguearse() throws IOException {
         this.connection.cookies(new HashMap<String,String>());
         this.username = "";
+        this.password = "";
         this.startConnection();
     }
 
@@ -712,10 +721,10 @@ public class Guarani {
             for (Carrera c : carreras){
                 System.out.println(c.getCodigo() +" "+ c.getNombre() +" "+ c.getActivo());
             }
-            ArrayList<Mesa> mesas = g._getMesasDeExamen(carreras);
+            ArrayList<Mesa> mesas = g._getMesasDeExamen();
             System.out.println("-- MESAS DE EXAMEN" + mesas.size());
             for (Mesa mesa : mesas){
-                System.out.println(mesa.getCarrera().getNombre() +" "+mesa.getMateria());
+                System.out.println(mesa.getCarrera() +" "+mesa.getMateria());
             }
 
             /*

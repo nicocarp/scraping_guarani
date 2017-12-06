@@ -78,4 +78,14 @@ public class Alumno{
         return result;
     }
 
+    public Carrera getCarreraById(String cod_carrera) {
+        Carrera result = null;
+        for (Carrera carrera : this.carreras){
+            if (carrera.getCodigo().equals(cod_carrera)){
+                result = carrera;
+                break;
+            }
+        }
+        return result;
+    }
 }

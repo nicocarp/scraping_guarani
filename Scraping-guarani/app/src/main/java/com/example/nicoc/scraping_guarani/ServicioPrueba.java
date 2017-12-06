@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
@@ -52,7 +53,9 @@ public class ServicioPrueba extends Service {
             if (usuario.isEmpty() || password.isEmpty())
                 return; //
             //2.Verifico si ese usuario esta logueado
-            Guarani guarani = ManagerGuarani.getInstance(usuario, password);
+            //Guarani guarani = ManagerGuarani.getInstance(usuario, password);
+            ManagerGuarani.setAuth(new Auth(usuario, password));
+            Guarani guarani = ManagerGuarani.getInstance();
             if (guarani == null){//usuario no logueado
                 //3.a Hago una notificacion mostrando el error.
                 //3.b Si estoy en cualquiera de las 2 activitys, muestro mje y vuelvo a activity_login: broadcastear en ambas.

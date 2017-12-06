@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView{
+public class LoginActivity extends AppCompatActivity implements ILogin.View {
 
     private AwesomeValidation validator;
     @BindView(R.id.txtUsername) EditText txtUsername;
@@ -49,8 +49,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
     private SharedPreferences loginPreferences;
-    private SharedPreferences.Editor loginPrefsEditor;
 
+    private ILogin.Presenter presenter;
     private ProgressDialog progressDialog;
 
     private static final String KEY_1 = "btnLogin";
@@ -60,31 +60,23 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        this.presenter = new LoginPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
+
         ButterKnife.bind(this);
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        this.iniciarViews();
-
+        iniciarViews();
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
-            String estadoBoton = savedInstanceState.getString(KEY_1);
             String estadoProgressBar = savedInstanceState.getString(KEY_2);
-            if(estadoBoton.equals("True")){
-                botonHabilitar();
-            }
-            else{
-                botonDeshabilitar();
-            }
-
-            if(estadoProgressBar.equals("Visible")){
+            if(estadoProgressBar.equals("Visible"))
                 mostrarProgressBar();
-            }
-            else{
+            else
                 ocultarProgressBar();
-            }
         }
 
         escucharBroadcasts();
+        getAlumno();
     }
 
     private void escucharBroadcasts(){
@@ -111,17 +103,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
         );
     }
 
-    private void iniciarViews(){
-        if ((loginPreferences.getBoolean("saveLogin", false)) == true) {
-            txtUsername.setText(loginPreferences.getString("username", ""));
-            txtPassword.setText(loginPreferences.getString("password", ""));
-            checkBoxRememberMe.setChecked(true);
-        }
+    public void iniciarViews(){
+
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("Iniciando Sesión...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
 
         validator.addValidation(txtUsername, RegexTemplate.NOT_EMPTY, "Ingrese usuario");
         validator.addValidation(txtPassword, RegexTemplate.NOT_EMPTY, "Ingrese contraseña");
@@ -133,122 +121,73 @@ public class LoginActivity extends AppCompatActivity implements AsyncLogin.IView
      */
     @Override
     public void logueado(Alumno alumno) {
-        //opcion 3
 
-        Log.i("Antes: ","ha comenzado la alarma");
         Alarma alarma3 = new Alarma(this,ServicioIntent.class);
         alarma3.start();
-        Log.i("Despues: ","ha comenzado la alarma");
 
-        storeAlumno(alumno);
         Intent intent = new Intent(this, AlumnoActivity.class);
         startActivity(intent);
     }
-    private String storeAlumno(Alumno alumno){
 
-        String obj = new Gson().toJson(alumno);
-        loginPrefsEditor = loginPreferences.edit();
-        loginPrefsEditor.putBoolean("saveLogin", (checkBoxRememberMe.isChecked()));
-        loginPrefsEditor.putString("username", txtUsername.getText().toString());
-        loginPrefsEditor.putString("password", txtPassword.getText().toString());
-        loginPrefsEditor.putString("alumno_json", obj);
-        loginPrefsEditor.commit();
-        return obj;
-
+    /**
+     * Soliciamos el alumno necesario para el login.
+     */
+    @Override
+    public void getAlumno() {
+        this.presenter.getAlumno();
     }
 
     @Override
     public void mostrarError(String s){
+        ocultarProgressBar();
         Toast.makeText(LoginActivity.this, s, Toast.LENGTH_LONG).show();
     }
 
     @OnClick(R.id.btnLogin)
     public void login(){
-        mostrarProgressBar();
-        botonDeshabilitar();
-
-        //btnLogin.setBackgroundColor(Color.GRAY);
         this.validator.clear();
         if (!this.validator.validate())
             return;
-
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
-
-
-        String[] parametros = { username, password};
-        AsyncTask<String, Void, Alumno> myAsyncTask = new AsyncLogin(this).execute(parametros);
-    }
-
-    public void botonDeshabilitar(){
-        btnLogin.setEnabled(false);
-        int color = R.color.colorGris;
-        btnLogin.setBackgroundColor(getResources().getColor(color));
-    }
-
-    public void botonHabilitar(){
-        btnLogin.setEnabled(true);
-        int color = R.color.colorPrimary;
-        btnLogin.setBackgroundColor(getResources().getColor(color));
+        mostrarProgressBar();
+        this.presenter.login(txtUsername.getText().toString(), txtPassword.getText().toString());
     }
 
     private void mostrarProgressBar(){
-        //ponerleColorAlProgressBar();
         try{
             progressDialog.show();
-           // progressBar.setVisibility(View.VISIBLE);
-        }catch(Exception e){
+        }catch (Exception e){
         }
+        btnLogin.setEnabled(false);
+        btnLogin.setBackgroundColor(getResources().getColor(R.color.colorGris));
     }
 
     private void ocultarProgressBar(){
         try{
             progressDialog.dismiss();
-            //progressDialog.setVisibility(View.INVISIBLE);
-        }catch(Exception e){
+         }catch (Exception e){
         }
+        btnLogin.setEnabled(true);
+        btnLogin.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 
-    private void ponerleColorAlProgressBar(){
-        int color = R.color.colorPrimary;
-        //progressBar.setBackgroundColor(getResources().getColor(color));
-        //progressBar.setDrawingCacheBackgroundColor(getResources().getColor(color));
-        try{
-            //progressBar.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
-            Log.i("ProgressBar: ","todo ok.");
-        }catch(Exception e){
-            Log.i("ProgressBar: ",""+e.getMessage());
-        }
-    }
-
-    @Override
+/*    @Override
     protected void onStop() {
         super.onStop();
-        botonHabilitar();
-        ocultarProgressBar();
+        //ocultarProgressBar();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        botonHabilitar();
-        ocultarProgressBar();
+        //ocultarProgressBar();
     }
-
+*/
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (btnLogin.isEnabled()){
-            outState.putString(KEY_1, "True");
-        }
-        else{
-            outState.putString(KEY_1, "False");
-        }
-        if(progressBar.getVisibility()==View.VISIBLE){
+        if(progressBar.getVisibility()==View.VISIBLE)
             outState.putString(KEY_2, "Visible");
-        }
-        else{
+        else
             outState.putString(KEY_2, "Invisible");
-        }
     }
 }

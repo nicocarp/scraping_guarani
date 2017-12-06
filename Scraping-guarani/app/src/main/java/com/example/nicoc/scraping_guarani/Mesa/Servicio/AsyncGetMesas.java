@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.io.IOException;
@@ -29,11 +30,11 @@ public class AsyncGetMesas extends AsyncTask<Void, Void, ArrayList<Mesa>> {
     @Override
     protected ArrayList<Mesa> doInBackground(Void... voids) {
         Guarani guarani = ManagerGuarani._getInstance();
-        Alumno alumno = ManagerGuarani.alumno;
+        //Alumno alumno = ManagerGuarani.alumno;
         ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         if (guarani != null){
             try {
-                mesas = guarani._getMesasDeExamen(alumno.getCarreras());
+                mesas = guarani._getMesasDeExamen();
             } catch (IOException e) {
                 e.printStackTrace();
             }

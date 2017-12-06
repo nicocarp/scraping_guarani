@@ -15,7 +15,7 @@ public class Mesa implements Parcelable {
     private TipoMesa tipoMesa; // libre o regular
     private ArrayList<Profesor> profesores;
 
-    private Carrera carrera;
+    private String carrera;
     private String materia;
     private ArrayList<String> materias_necesarias;
     private String turno; // esto es necesario para lanzar post de inscripcion
@@ -54,11 +54,11 @@ public class Mesa implements Parcelable {
         }
     };//hasta aca
 
-    public Carrera getCarrera() {
+    public String getCarrera() {
         return carrera;
     }
 
-    public void setCarrera(Carrera carrera) {
+    public void setCarrera(String carrera) {
         this.carrera = carrera;
     }
     public String getTurno() {
@@ -139,7 +139,6 @@ public class Mesa implements Parcelable {
         parcel.writeString(sede);
         parcel.writeSerializable(tipoMesa);
         parcel.writeList(profesores);
-        parcel.writeParcelable(carrera,i);
         parcel.writeList(materias_necesarias);
         parcel.writeString(turno);
     }

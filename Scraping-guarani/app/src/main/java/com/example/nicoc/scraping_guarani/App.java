@@ -22,7 +22,7 @@ public class App extends Application {
         try {
             // inicio base de datos.
             ManagerDB manager_db = new ManagerDB(this, "guarani-db");
-            ManagerGuarani manager_guarani = new ManagerGuarani();
+
             // this.deleteDatabase("notes-db");
         } catch (Exception e){
             // SIN BD SE ROMPE LA APP. sacar trucatch despues

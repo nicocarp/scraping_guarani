@@ -30,13 +30,13 @@ public class ListadoAdapter extends BaseAdapter  {
     private Activity context;
     private  List<Mesa> items = Collections.emptyList();
     private  List<Mesa> items_all = Collections.emptyList();
-    private Alumno alumno;
+    //private Alumno alumno;
 
-    public ListadoAdapter(Activity activity, List<Mesa> items, Alumno alumno){
+    public ListadoAdapter(Activity activity, List<Mesa> items){
         this.context = activity;
         this.items_all = items;
         this.items = items;
-        this.alumno = alumno;
+        //this.alumno = alumno;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ListadoAdapter extends BaseAdapter  {
         //if (alumno.estaInscripto(mesa.getMateria()))
          //   v.setBackgroundColor(Color.GREEN);
         //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
-        txtNombre.setText(mesa.getMateria()+" "+mesa.getCarrera().getCodigo());
+        txtNombre.setText(mesa.getMateria()+" "+mesa.getCarrera());
         txtCodigo.setText(mesa.getFecha());
         return v;
     }
@@ -106,7 +106,7 @@ public class ListadoAdapter extends BaseAdapter  {
 
         Log.i("FILTRANDO POR", filtro_codigo);
         for (Mesa mesa : this.items_all){
-            if (mesa.getCarrera().getCodigo().equals(codigo_carrera))
+            if (mesa.getCarrera().equals(codigo_carrera))
                 filtrado.add(mesa);
         }
         this.refreshData(filtrado);

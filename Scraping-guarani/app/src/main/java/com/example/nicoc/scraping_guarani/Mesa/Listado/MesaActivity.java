@@ -56,23 +56,6 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         this.presenter = new ListadoPresenter(this);
         this.getItems();
 
-
-        //Paso 1: Obtener las mesas del intent que me pasa el servicio a traves de la notificacion.
-        // Para que esto ande todos los modelos tienen que implementar Parcelable
-        //y redefinir los metodos writeToParcel()
-        //Problema: el codigo lanza parcelable stackoverflow.
-
-        /* Esto pincha  por Parselable
-        Log.i("Datos de las Mesas. ","...");
-        Bundle bundle_mesas = this.getIntent().getExtras();
-        ArrayList<Mesa> mesas = bundle_mesas.getParcelableArrayList("Mesas");
-        Log.i("Mesas.cantidad: ", "" + mesas.size()); */
-
-
-         /*Log.i("Datos de las Mesas. ","...");
-         ArrayList<Mesa> mesas = this.getIntent().getParcelableArrayListExtra("Mesas");
-         Log.i("Mesas.cantidad: ", "" + mesas.size());*/
-
         escucharBroadcasts();
 
     }
@@ -123,10 +106,6 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         );
     }
 
-
-
-
-
     private void cerrarSesion() {
         Intent intent = new Intent(MesaActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -140,7 +119,7 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
     @Override
     public void setItems(List<Mesa> items) {
-        listaMesas.setAdapter(new ListadoAdapter(this, items, ManagerGuarani.alumno));
+        listaMesas.setAdapter(new ListadoAdapter(this, items));
         if (items.size() == 0) {
             mostrarError("Sin mesas de examen");
         } else {
@@ -163,12 +142,12 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
     }
     public void inscribirse(Mesa mesa, String tipo){
-        Alumno alumno = ManagerGuarani.alumno;
-        this.presenter.inscribirse(mesa, alumno, tipo);
+        //Alumno alumno = ManagerGuarani.alumno;
+        //this.presenter.inscribirse(mesa, alumno, tipo);
     }
 
     @OnItemClick(R.id.listMesas) void itemClick(int position){
-        Alumno alumno = ManagerGuarani.alumno;
+        //Alumno alumno = ManagerGuarani.alumno;
         final Mesa mesa = (Mesa)listaMesas.getAdapter().getItem(position);
         final EditText txtNuevoStock = new EditText(this);
         txtNuevoStock.setInputType(InputType.TYPE_CLASS_TEXT);

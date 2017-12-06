@@ -11,7 +11,10 @@ import java.io.IOException;
 
 public class ManagerGuarani {
     private static Guarani instance = null;
-    private Guarani guarani;
+    private static Auth auth;
+
+    private static String error="";
+
     public static Auth getAuth() {
         return auth;
     }
@@ -20,19 +23,8 @@ public class ManagerGuarani {
         ManagerGuarani.auth = auth;
     }
 
-    private static Auth auth;
+    private ManagerGuarani(){
 
-    private static String error="";
-    public static Alumno alumno;
-    /* Nuevo */
-    private static ManagerGuarani manager;
-
-    public ManagerGuarani(Auth _auth){
-        auth = _auth;
-        manager = this;
-    }
-    public ManagerGuarani(){
-        manager = this;
     }
 
 
@@ -40,20 +32,12 @@ public class ManagerGuarani {
         error = err;
     }
 
-    private static void setAlumno(Alumno a){
-        alumno = a;
-    }
-
-
     public static String getError(){
-        return error;
+        String e = error;
+        error = "";
+        return e;
     }
 
-    public static ManagerGuarani getInstanceManager (){
-        if (manager == null)
-            throw new RuntimeException("Error al iniciar Guarani");
-        return manager;
-    }
 
     public static Guarani _getInstance(){
         if (instance == null){
@@ -67,41 +51,30 @@ public class ManagerGuarani {
         return instance;
     }
 
-    public static Guarani getInstance(String username, String password){
+    public static Guarani getInstance(){
 
-        try {
-            if (instance == null){
-                Guarani g =  new Guarani();
-                instance = g;
-            }
-            if (!instance.login(username, password))
-                setError(instance.getError());
+        if (startSession())
             return instance;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            setError("Error en la conexion");
-        }
         return null;
     }
 
-    private Guarani getInstanceGuarani() throws IOException {
-        if (this.guarani == null){
-            return new Guarani();
+    private static Guarani getInstanceGuarani() throws IOException {
+        if (instance == null){
+            instance = new Guarani();
         }
-        return this.guarani;
+        return instance;
     }
 
-    public boolean startSession() {
+    public static boolean startSession() {
         try {
-            Guarani g = this.getInstanceGuarani();
-            if (g.login(this.auth.getUsername(), this.auth.getPassword()))
+            Guarani g = getInstanceGuarani();
+            if (g.login(auth.getUsername(), auth.getPassword()))
                 return true;
             else
-                this.setError(g.getError());
+                setError(g.getError());
         } catch (IOException e) {
             e.printStackTrace();
-            this.setError("Error de conexion");
+            setError("Error de conexion");
         }
         return false;
     }
