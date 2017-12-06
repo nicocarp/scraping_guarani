@@ -30,4 +30,12 @@ public class Auth {
 
     private String password;
 
+    @Override
+    public boolean equals(Object obj){
+        if (obj.getClass() == this.getClass()) {
+            Auth a = (Auth) obj;
+            return (a.getPassword().equals(this.password) && a.getUsername().equals(this.username));
+        }
+        return false;
+    }
 }

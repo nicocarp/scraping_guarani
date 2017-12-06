@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +33,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AlumnoActivity extends AppCompatActivity {
+public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
     @BindView(R.id.lblAlumno)    TextView lblAlumno;
     @BindView(R.id.lblLegajo)    TextView lblLegajo;
     Alumno alumno;
+    private IAlumno.Presenter presenter;
     @BindView(R.id.buttonMesas) Button buttonMesas;
    // @BindView(R.id.lblFecha)    TextView lblFecha;
    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
@@ -70,8 +72,8 @@ public class AlumnoActivity extends AppCompatActivity {
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
-
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        this.presenter = new AlumnoPresenter(this, loginPreferences);
         String obj_json = loginPreferences.getString("alumno_json", "");
         Alumno obj = new Gson().fromJson(obj_json, Alumno.class);
 
@@ -122,7 +124,7 @@ public class AlumnoActivity extends AppCompatActivity {
         loginPrefsEditor = loginPreferences.edit();
         loginPrefsEditor.putString("alumno_json", "");
         loginPrefsEditor.commit();
-
+        this.presenter.desloguearse();
         finish();
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -153,5 +155,10 @@ public class AlumnoActivity extends AppCompatActivity {
     public void onBackPressed() {
         //no hago nada
         return;
+    }
+
+    @Override
+    public void mostrarError(String error) {
+        Toast.makeText(AlumnoActivity.this, error, Toast.LENGTH_LONG).show();
     }
 }

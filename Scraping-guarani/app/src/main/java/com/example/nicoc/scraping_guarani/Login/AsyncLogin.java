@@ -37,7 +37,8 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
         String password = parametros[1];
 
         try {
-            Guarani guarani = Guarani.getInstance(new Auth(username, password));
+            Guarani.setAuth(new Auth(username, password));
+            Guarani guarani = Guarani.getInstance();
             Alumno alumno = guarani.getAlumno();
             return alumno;
         } catch (IllegalArgumentException e) {

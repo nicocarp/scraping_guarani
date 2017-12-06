@@ -1,5 +1,7 @@
 package com.example.nicoc.scraping_guarani.Guarani;
 
+import android.util.Log;
+
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
@@ -32,28 +34,28 @@ public class Guarani {
     private Document document_base;
     private Connection connection;
     private String url_base;
-    private String last_cookies;
     private String error;
-    private String username;
-    private String password;
     private String mensaje;
     private static Guarani _instance = null;
+    private Utils utils;
 
     private static Auth _auth = null;
 
     private Guarani() throws IOException {
         this.url_base = URL;
-        this.username = "";
-        this.password= "";
+        this.utils = new Utils();
         this.startConnection();
     }
 
-
-
-    public static Guarani getInstance(Auth auth) throws IOException, IllegalArgumentException {
-        if (auth == null && auth.getUsername().isEmpty() || auth.getPassword().isEmpty())
+    public static void setAuth(Auth auth){
+        if (auth == null || auth.getUsername().isEmpty() || auth.getPassword().isEmpty())
             throw new IllegalArgumentException("Debe inicializar guarani con una cuenta valida.");
         _auth = auth;
+    }
+
+    public static Guarani getInstance() throws IOException, IllegalArgumentException {
+        if (_auth == null)
+            throw new IllegalArgumentException("Debe inicializar guarani con una cuenta valida.");
         if (_instance == null)
             _instance = new Guarani();
         return _instance;
@@ -168,12 +170,12 @@ public class Guarani {
 
         //if (divs_detalle.size() == table_mesas.size()){}
         for (int i = 0; i < divs_detalle.size(); i++){
-            String cod_carrera = getMatch(divs_detalle.get(i).select("span").get(1).text(), "\\(([0-9]+)\\)");
+            String cod_carrera = this.utils.getMatch(divs_detalle.get(i).select("span").get(1).text(), "\\(([0-9]+)\\)");
 
             Elements links_mesas = table_mesas.get(i).select("[href*=desinscribirseExamen]");
             for (int z = 0; z < links_mesas.size(); z++){
                 Inscripcion inscripcion = new Inscripcion();
-                String cod_materia = getMatch(links_mesas.get(z).text(), "\\(([A-Z0-9]+)\\)");
+                String cod_materia = this.utils.getMatch(links_mesas.get(z).text(), "\\(([A-Z0-9]+)\\)");
                 inscripcion.setCarrera(cod_carrera);
                 inscripcion.setMateria(cod_materia);
                 inscripcion.setTipo(table_mesas.get(i).select("tr").get(1).children().get(5).text().toLowerCase());
@@ -228,23 +230,7 @@ public class Guarani {
         return false;
     }
 
-    private Map<String, String> getPostInscripcionMesa(String codigo_materia, String legajo){
-        Map<String, String> m = new HashMap<String, String>();
-        m.put("operacion", "exa00006");
-        m.put("carrera", "38");
-        m.put("legajo", legajo);
-        m.put("materia", codigo_materia);
-        m.put("generica", "");
-        m.put("anio_academico", "2017");
-        m.put("turno_examen", "NOVIEMBRE%202017%20%282%29");
-        m.put("mesa_examen", codigo_materia+"-REG");
-        m.put("llamado", "1");
-        m.put("tipo inscripcion", "R"); // este cambia a L si es libre
-        m.put("tipo_incripcion0", "L");
-        m.put("mesa", "on");
-        m.put("tipo_inscripcion1", "R");
-        return m;
-    }
+
 
     /**
      * Crea instancia alumnmo seteandole sus datos: nombre y carreras.
@@ -263,8 +249,8 @@ public class Guarani {
         // nombre y apellido del Alumno
         url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
-        String nombre_alumno = getMatch(document.html(), "NombreUsuario   = \"([A-Z | \\s]+)\";");
-        String apellido_alumno = getMatch(document.html(), "ApellidoUsuario = \"([A-Z | \\s]+)\";");
+        String nombre_alumno = this.utils.getMatch(document.html(), "NombreUsuario   = \"([A-Z | \\s]+)\";");
+        String apellido_alumno = this.utils.getMatch(document.html(), "ApellidoUsuario = \"([A-Z | \\s]+)\";");
         alumno.setNombre(nombre_alumno + " "+apellido_alumno);
         // Es regular en la universidad ?
         document = this.document_base;
@@ -351,8 +337,8 @@ public class Guarani {
             Mesa mesa = new Mesa();
             elem = link_materias.get(i);
 
-            cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
-            nombre = getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
+            cod = this.utils.getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
+            nombre = this.utils.getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
 
             mesa.setMateria(cod);
 
@@ -368,7 +354,7 @@ public class Guarani {
                 fecha = document.select("td:matches(^[0-9]{2}/[0-9]{2}/[0-9]{4})").first().text();
                 hora  = document.select("td:matches(^[0-9]{2}:[0-9]{2})").first().text();
                 System.out.println("TURNOOO");
-                turno = getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");
+                turno = this.utils.getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");
 
                 mesa_json = mesa_json.replace("[[fecha]]", fecha);
                 mesa_json = mesa_json.replace("[[hora]]", hora);
@@ -384,7 +370,7 @@ public class Guarani {
 
             }
             else{
-                for (String _cod_materia :  getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
+                for (String _cod_materia :  this.utils.getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
                     mesa.addMateriaNecesariaById(_cod_materia);
                 }
             }
@@ -421,7 +407,7 @@ public class Guarani {
         Elements links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         for (int indice = 0; indice<links_carreras.size(); indice++){
             Element link_carrera = links_carreras.get(indice);
-            String codigo_carrera = getMatch(link_carrera.text(), "([0-9]+)");
+            String codigo_carrera = this.utils.getMatch(link_carrera.text(), "([0-9]+)");
             document = this.connection.url(link_carrera.attr("abs:href")).get();
             /* Codigo general */
             Element div_errores = document.select("div.mensaje_ua_contenido").first();
@@ -436,7 +422,7 @@ public class Guarani {
                     mesa.setCarrera(codigo_carrera);
                     elem = link_mesas.get(i);
 
-                    cod = getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
+                    cod = this.utils.getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
 
                     mesa.setMateria(cod);
 
@@ -447,7 +433,7 @@ public class Guarani {
                     if (div_errores == null){
                         fecha = document.select("td:matches(^[0-9]{2}/[0-9]{2}/[0-9]{4})").first().text();
                         hora  = document.select("td:matches(^[0-9]{2}:[0-9]{2})").first().text();
-                        turno = getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");
+                        turno = this.utils.getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");
 
                         mesa.setFecha(fecha+" "+hora);
                         mesa.setTurno(turno);
@@ -458,7 +444,7 @@ public class Guarani {
                         profesores = document.select("span.detalle_resaltado").first().html();
                     }
                     else{
-                        for (String _cod_materia :  getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
+                        for (String _cod_materia :  this.utils.getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
                             mesa.addMateriaNecesariaById(_cod_materia);
                         }
                     }
@@ -479,37 +465,7 @@ public class Guarani {
         return mesas;
     }
 
-    /**
-     * Devuelve listado de todos los matches
-     * @param cadena donde buscar
-     * @param regex expresion regular del patron.
-     * @return ArrayList<String> de todos los match
-     */
-    private ArrayList<String> getMatches(String cadena, String regex){
-        Pattern patron_codigo = Pattern.compile(regex);
-        Matcher matcher = patron_codigo.matcher(cadena);
-        String codigo_masteria="";
-        ArrayList<String> result = new ArrayList();
-        while (matcher.find())
-            result.add(matcher.group(1));
-        return result;
-    }
 
-    /**
-     * Recibe una cadena y un patron, devuelve el ultimo match
-     * @param cadena donde buscar
-     * @param regex expresion regular del patron que se desea buscar.
-     * @return String del ultimo match
-     */
-    private String getMatch(String cadena, String regex){
-        Pattern patron = Pattern.compile(regex);
-        Matcher matcher = patron.matcher(cadena);
-        String result = "";
-        while (matcher.find()){
-            result = matcher.group(1);
-        }
-        return result;
-    }
 
     public Boolean estaLogueado() throws IOException {
         Document document = this.connection.url(URL).get();
@@ -527,16 +483,10 @@ public class Guarani {
      * @throws IOException
      */
     public boolean login() throws IOException, IllegalArgumentException {
+        if (estaLogueado())
+            desloguearse();
         String username = _auth.getUsername();
         String password = _auth.getPassword();
-        if (this.connection == null)
-            this.startConnection();
-
-        if (username.equals(username) && !password.equals(password) && estaLogueado())
-            return true;
-        if (!username.equals(username))
-            desloguearse();
-
 
         Document document;
         String url;
@@ -553,10 +503,10 @@ public class Guarani {
         url = document.select("[name*=form1]").first().attr("abs:action");
 
         // obtenemos la encriptacion de la clave que se manda al servidor.
-        String encrypted_password = this.getEncryptedPassword(this.getHash(document.html()), password);
+        String encrypted_password = this.utils.getEncryptedPassword(this.utils.getHash(document.html()), password);
 
         document = this.connection
-                .data(getPost(username, encrypted_password))
+                .data(this.utils.getPostLogin(username, encrypted_password))
                 .url(url)
                 .post();
 
@@ -571,63 +521,9 @@ public class Guarani {
         return true;
     }
 
-    /**
-     * Creamos el paquete con datos para relizar el post para LOGIN.
-     * @param username nombre de usuario plano a loguearse.
-     * @param password hash de la contrasenia del usuario.
-     * @return Los datos del post.
-     */
-    private Map<String, String> getPost(String username, String password){
-        Map<String, String> m = new HashMap<String, String>();
-        m.put("calc_diff", "");
-        m.put("campo_set", "fUsuario");
-        m.put("fUsuario", username);
-        m.put("bClave", "");
-        m.put("fClave", password);
-        m.put("Aceptar", "aceptar");
-        return m;
-    }
 
-    /**
-     * Busca en texto html+js el valor de hashSesion.
-     * @param buscar String que representa una pagina web (html + js).
-     * @return el valor de la variable "var hashSesion = [/w]"
-     */
-    private String getHash(String buscar){
 
-        Pattern patron = Pattern.compile("hashSesion = \"([a-z0-9]+)\";");
-        Matcher matcher = patron.matcher(buscar);
-        String hash="";
-        while (matcher.find())
-            hash = matcher.group(1);
-        return hash;
-    }
-    /**
-     * Utiliza el algoritmo MD5 para encriptar hash y password
-     * @param hash debe ser obtenido de la pagina web.
-     * @param password es el valor de la clave real que se desea loguear.
-     * @return La clave encriptada junto con el hash.
-     */
-    private String getEncryptedPassword(String hash, String password){
 
-        String md5 = MD5(password);
-        md5 = MD5(md5+ hash);
-        return md5;
-    }
-
-    private String MD5(String md5) {
-        try {
-            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-            byte[] array = md.digest(md5.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-            }
-            return sb.toString();
-        } catch (java.security.NoSuchAlgorithmException e) {
-        }
-        return null;
-    }
 
     /**
      * Recorremos el plan de estudios de cada una de las materias del alumno.
@@ -650,8 +546,8 @@ public class Guarani {
         for (int i = 0; i< a_carreras.size() ; i++){
             Element a_carrera = a_carreras.get(i);
 
-            String nombre_carrera = getMatch(a_carrera.text(), "([A-Z][[A-Z]+ | [,\\(\\)\\s]{1}]+)");
-            String codigo_carrera = getMatch(a_carrera.text(), "([0-9]+)");
+            String nombre_carrera = this.utils.getMatch(a_carrera.text(), "([A-Z][[A-Z]+ | [,\\(\\)\\s]{1}]+)");
+            String codigo_carrera = this.utils.getMatch(a_carrera.text(), "([0-9]+)");
 
             url = document.select("a:contains("+nombre_carrera+")").first().attr("abs:href");
             document = this.connection.url(url).get();
@@ -697,10 +593,15 @@ public class Guarani {
      * @throws IOException
      */
     public void desloguearse() throws IOException {
-        this.connection.cookies(new HashMap<String,String>());
-        this.username = "";
-        this.password = "";
-        this.startConnection();
+
+        Document document = this.connection.url(URL).get();
+        String url = document.select("[src*=barra]").first().attr("abs:src");
+        document = this.connection.url(url).get();
+        url = document.select("a[href*=finalizarSesion]").first().attr("abs:href");
+        this.connection.url(url).get();
+        _auth = null;
+        //this.startConnection();
+        Log.i("DESLOGUENADO", "me desloguie");
     }
 
     public Alumno getAlumno() throws IOException {
@@ -716,7 +617,8 @@ public class Guarani {
         // franco = 31636564 gabriel1
         // gaston = 27042881 valenti2
         // maxi =  37860301  ym7k
-        Guarani g = getInstance(new Auth("37860301", "ym7k"));
+        Guarani.setAuth(new Auth("37860301", "ym7k"));
+        Guarani g = getInstance();
 
         if (g.login()){
             ArrayList<Carrera> carreras = g.getPlanDeEstudios();
