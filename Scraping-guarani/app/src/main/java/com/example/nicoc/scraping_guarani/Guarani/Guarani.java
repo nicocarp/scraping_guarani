@@ -1,6 +1,7 @@
 package com.example.nicoc.scraping_guarani.Guarani;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
@@ -35,6 +36,28 @@ public class Guarani {
     private String error;
     private String username;
     private String password;
+    private String mensaje;
+    private static Guarani _instance = null;
+
+    private static Auth _auth = null;
+
+    private Guarani() throws IOException {
+        this.url_base = URL;
+        this.username = "";
+        this.password= "";
+        this.startConnection();
+    }
+
+
+
+    public static Guarani getInstance(Auth auth) throws IOException, IllegalArgumentException {
+        if (auth == null && auth.getUsername().isEmpty() || auth.getPassword().isEmpty())
+            throw new IllegalArgumentException("Debe inicializar guarani con una cuenta valida.");
+        _auth = auth;
+        if (_instance == null)
+            _instance = new Guarani();
+        return _instance;
+    }
 
     public String getMensaje() {
         String m = this.mensaje;
@@ -42,17 +65,8 @@ public class Guarani {
         return m;
     }
 
-    public void setMensaje(String mensaje) {
+    private void setMensaje(String mensaje) {
         this.mensaje = mensaje;
-    }
-
-    private String mensaje;
-
-    public Guarani() throws IOException {
-        this.url_base = URL;
-        this.username = "";
-        this.password= "";
-        this.startConnection();
     }
 
     public String getError() {
@@ -233,7 +247,8 @@ public class Guarani {
     }
 
     /**
-     * Crea instancia alumnmo seteandole sus datos: nombre, legajo y carreras. Por cada carrera setea si es regular o no.
+     * Crea instancia alumnmo seteandole sus datos: nombre y carreras.
+     * Por cada carrera setea si es regular o no, y su correspondiente legajo.
      * @param carreras del plan de estudio del alumno.
      * @return Alumno instancia.
      * @throws IOException
@@ -243,14 +258,15 @@ public class Guarani {
         String url;
 
         Alumno alumno = new Alumno();
+        alumno.setCarreras(carreras);
 
-        // DATOS DEL ALUMNO
+        // nombre y apellido del Alumno
         url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
         String nombre_alumno = getMatch(document.html(), "NombreUsuario   = \"([A-Z | \\s]+)\";");
         String apellido_alumno = getMatch(document.html(), "ApellidoUsuario = \"([A-Z | \\s]+)\";");
         alumno.setNombre(nombre_alumno + " "+apellido_alumno);
-        // LEGAJO DEL ALUMNO
+        // Es regular en la universidad ?
         document = this.document_base;
         url = document.select("[src*=operaciones]").first().attr("abs:src");
         document = this.connection.url(url).get();
@@ -259,21 +275,19 @@ public class Guarani {
         document = this.connection.url(url).get();
         Element div_errores = document.select("div.mensaje_ua_contenido").first();
 
-        alumno.setCarreras(carreras);
         if (div_errores != null){
             alumno.setRegular(false);
         }else{
             alumno.setRegular(true);
+            /* Para cada carrera del alumno, obtenemos su legajo y si es regular o no. */
             url = document.select("a:contains(Alumno Regular)").first().attr("abs:href");
             document = this.connection.url(url).get();
-            String legajo_alumno = "";
             for (Carrera carrera : alumno.getCarreras()){
                 url = document.select("a:contains("+carrera.getNombre()+")").first().attr("abs:href");
                 document = this.connection.url(url).get();
                 div_errores = document.select("div.mensaje_ua_contenido").first();
                 if (div_errores == null){
-                    if (legajo_alumno == "")
-                        carrera.setLegajo(document.select("input[name=legajo]").first().attr("value"));
+                    carrera.setLegajo(document.select("input[name=legajo]").first().attr("value"));
                     carrera.setActivo(true);
                 }
                 else
@@ -509,18 +523,18 @@ public class Guarani {
     }
     /**
      * Intentamos hacer un login al servidor. Si hubo error, retrorno false y seteo mensaje de error.
-     * @param username nombre de usuario plano.
-     * @param password contraseña plana.
      * @return boolean si se pudo loguear.
      * @throws IOException
      */
-    public boolean login(String username, String password) throws IOException {
+    public boolean login() throws IOException, IllegalArgumentException {
+        String username = _auth.getUsername();
+        String password = _auth.getPassword();
         if (this.connection == null)
             this.startConnection();
 
-        if (this.username.equals(username) && !this.password.equals(password) && estaLogueado())
+        if (username.equals(username) && !password.equals(password) && estaLogueado())
             return true;
-        if (!this.username.equals(username))
+        if (!username.equals(username))
             desloguearse();
 
 
@@ -548,11 +562,12 @@ public class Guarani {
 
         Elements div_mensajes_errores = document.select("div.mensaje_ua_contenido");
         if (!div_mensajes_errores .isEmpty()){
-            this.setError(div_mensajes_errores.first().text());
-            return false;
+            throw new IllegalArgumentException(div_mensajes_errores.first().text());
+            //this.setError(div_mensajes_errores.first().text());
+            //return false;
         }
-        this.username = username;
-        this.password = password;
+        //this.username = username;
+        //this.password = password;
         return true;
     }
 
@@ -688,19 +703,9 @@ public class Guarani {
         this.startConnection();
     }
 
-    public Alumno _getDatosAlumno(String username, String password) throws IOException {
-        if(login(username, password)){
-
-            ArrayList<Carrera> carreras = getPlanDeEstudios();
-            Alumno alumno = getDatosAlumno(carreras);
-            //ArrayList<Mesa_> mesas = _getMesasDeExamen(carreras);
-            alumno.setInscripciones(getMesasAnotadas());
-            return alumno;
-        }
-        return null;
-    }
-
     public Alumno getAlumno() throws IOException {
+        if (!estaLogueado())
+            login();
         ArrayList<Carrera> carreras = getPlanDeEstudios();
         Alumno alumno = getDatosAlumno(carreras);
         alumno.setInscripciones(getMesasAnotadas());
@@ -711,8 +716,9 @@ public class Guarani {
         // franco = 31636564 gabriel1
         // gaston = 27042881 valenti2
         // maxi =  37860301  ym7k
-        Guarani g = new Guarani();
-        if (g.login("38147310", "q1w2e3r4")){
+        Guarani g = getInstance(new Auth("37860301", "ym7k"));
+
+        if (g.login()){
             ArrayList<Carrera> carreras = g.getPlanDeEstudios();
             Alumno alumno = g.getDatosAlumno(carreras);
             System.out.println("-- Alumno " + alumno.getNombre());

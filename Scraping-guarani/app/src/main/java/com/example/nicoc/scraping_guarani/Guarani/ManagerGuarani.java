@@ -40,42 +40,16 @@ public class ManagerGuarani {
 
 
     public static Guarani _getInstance(){
-        if (instance == null){
-            try {
-                instance = new Guarani();
-            } catch (IOException e) {
-                e.printStackTrace();
-                setError("Error en la conexion"); // mejorar este mensaje y leerlo de strings
-            }
-        }
-        return instance;
+
+        return null;
     }
 
     public static Guarani getInstance(){
 
-        if (startSession())
-            return instance;
+
         return null;
     }
 
-    private static Guarani getInstanceGuarani() throws IOException {
-        if (instance == null){
-            instance = new Guarani();
-        }
-        return instance;
-    }
 
-    public static boolean startSession() {
-        try {
-            Guarani g = getInstanceGuarani();
-            if (g.login(auth.getUsername(), auth.getPassword()))
-                return true;
-            else
-                setError(g.getError());
-        } catch (IOException e) {
-            e.printStackTrace();
-            setError("Error de conexion");
-        }
-        return false;
-    }
+
 }
