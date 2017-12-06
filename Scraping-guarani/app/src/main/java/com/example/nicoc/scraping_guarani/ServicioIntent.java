@@ -99,7 +99,7 @@ public class ServicioIntent extends IntentService {
 
 
         Log.i("Intent Service: ","Estoy funcionado!!!!!");
-        stopSelf();
+
 
 
         Log.i("Intent Service: ","Estoy funcionado!!!!!");
