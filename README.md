@@ -9,7 +9,7 @@ Aplicacion movil desarrollada con Android para realizar Scraping sobre [siu-guar
 
 Alumnos
   - Calfuquir, Jorge Nicolas
-  - Parra, Ivan
+  - Parra, Iván Javier
   - Santos, Carla
 
 ## Requisitos ##
