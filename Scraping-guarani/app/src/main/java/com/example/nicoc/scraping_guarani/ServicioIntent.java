@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,9 +36,9 @@ public class ServicioIntent extends IntentService{
     NotificationCompat.Builder mBuilder;
     SharedPreferences preferences;
 
-
     private boolean bandera = true;
     private int contador = 0;
+    private ConectividadBroadcastReceiver receiver;
 
     public ServicioIntent() {
         super(" Intent Servicio Scraping");
@@ -51,21 +52,26 @@ public class ServicioIntent extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
+        Log.i("SERVICIO NICO....","EJECUTANDO.");
+        SharedPreferences.Editor edit = preferences.edit();
         if (!isNetworkAvailable()){
+            edit.putBoolean("aviso", true);
+            edit.commit();
         }
         else{
+            edit.putBoolean("aviso", false);
+            edit.commit();
+
             String usuario = preferences.getString("username", "");
             String password = preferences.getString("password", "");
 
             if (usuario.isEmpty() || password.isEmpty())
                 return; // debemos mandar notificar esto es un error.
             Guarani.setAuth(new Auth(usuario, password));
-
             try {
                 ArrayList<Mesa> mesas = Guarani.getInstance()._getMesasDeExamen();
                 crearNotificacionMesasDisponibles(mesas);
-            } catch (IOException e) {
+            } catch (IOException e) { // es este el tipo de error que requiere nueva peticion.
                 e.printStackTrace();
             }
             catch (IllegalArgumentException e) {
@@ -75,6 +81,7 @@ public class ServicioIntent extends IntentService{
         stopSelf();
     }
 
+
     private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas){
 
         SharedPreferences.Editor edit = preferences.edit();
@@ -82,6 +89,8 @@ public class ServicioIntent extends IntentService{
         if (mesas.size() == 0){
             return;
         }
+        sendBroadcast();
+
         String mesas_json = new Gson().toJson(mesas);
         edit.putString("mesas", mesas_json);
         edit.commit();

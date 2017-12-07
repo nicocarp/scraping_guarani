@@ -126,6 +126,9 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         alarma3.start();
 
         Intent intent = new Intent(this, AlumnoActivity.class);
+
+        //startService(new Intent(this, ServicioIntent.class));
+
         startActivity(intent);
     }
 

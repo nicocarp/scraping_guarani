@@ -138,6 +138,8 @@ public class Alarma extends Thread{
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     tiempo_repeticion, alarmIntent);//60 segundos
             //tiempo_repeticion = 1000 * 60 = 1 minuto
+            // setearle horas predefinidas: por ejemplo a las 12 y a las 12, y correr el servicio YA,
+            contexto.startService(intent);
 
         }catch(Exception e){
             Log.i("Alarma RUNTIME ERRROR: ","" + e.getMessage());
