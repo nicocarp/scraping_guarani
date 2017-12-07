@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
-import com.example.nicoc.scraping_guarani.Guarani.Guarani;
-import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
-import com.example.nicoc.scraping_guarani.ServicioIntent;
-import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,21 +67,21 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        this.presenter = new AlumnoPresenter(this, loginPreferences);
-        String obj_json = loginPreferences.getString("alumno_json", "");
-        Alumno obj = new Gson().fromJson(obj_json, Alumno.class);
+        this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
 
-
-        Toast.makeText(AlumnoActivity.this, "ALumno obk"+obj.getCarreras().get(0).getNombre(), Toast.LENGTH_SHORT).show();
-        this.alumno= obj;
-
-        //Toast.makeText(AlumnoActivity.this, "Alumno "+this.alumno.getNombre(), Toast.LENGTH_SHORT).show();
+        getAlumno();
         verificar_login();
         //start_service();
         //consultar_bd_mesas();
         escucharBroadcasts();
 
+    }
+
+    public void getAlumno(){
+        this.presenter.getAlumno();
+    }
+    public void setAlumno(Alumno alumno){
+        this.alumno = alumno;
     }
 
     private void escucharBroadcasts(){
@@ -120,10 +115,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         //al servicio no lo puedo parar mientras se esta ejecutando, porque puede dejar incosistente la bd
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-
-        loginPrefsEditor = loginPreferences.edit();
-        loginPrefsEditor.putString("alumno_json", "");
-        loginPrefsEditor.commit();
         this.presenter.desloguearse();
         finish();
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
@@ -147,13 +138,10 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
     public void cargarMaterias(){
         Intent intent = new Intent(this, MesaActivity.class);
         startActivity(intent);
-        Toast.makeText(AlumnoActivity.this, "EN CARGAR MATERIAS", Toast.LENGTH_SHORT).show();
-        // lanzar la otra activity, necesaria para chupar datos de materias.
     }
 
     @Override
     public void onBackPressed() {
-        //no hago nada
         return;
     }
 

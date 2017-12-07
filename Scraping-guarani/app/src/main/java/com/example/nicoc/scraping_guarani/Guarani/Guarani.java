@@ -394,7 +394,9 @@ public class Guarani {
 
     public ArrayList<Mesa> _getMesasDeExamen() throws IOException {
 
-        Document document = this.document_base;
+        if (!estaLogueado())
+            login();
+        Document document = this.connection.url(URL).get();
         String url;
         ArrayList<Mesa> mesas = new ArrayList<Mesa>();
 
@@ -461,11 +463,20 @@ public class Guarani {
             document = this.connection.url(url_inscripcion).get();
             links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         }
+        /* Probando tirar datos*/
+        if (mesas.isEmpty()){
+            for (int i =0; i<4; i++){
+                Mesa m = new Mesa();
+                m.setCarrera("cod_carrera "+i);
+                m.setMateria("cod_materia "+i);
+                m.setFecha("una_Fecha "+i);
+                m.setTurno("un-turno "+i);
+                mesas.add(m);
+            }
+        }
 
         return mesas;
     }
-
-
 
     public Boolean estaLogueado() throws IOException {
         Document document = this.connection.url(URL).get();

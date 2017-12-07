@@ -53,7 +53,7 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         setContentView(R.layout.activity_mesa);
         ButterKnife.bind(this);
 
-        this.presenter = new ListadoPresenter(this);
+        this.presenter = new ListadoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
         this.getItems();
 
         escucharBroadcasts();
@@ -129,7 +129,7 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     // capturar evento on Change select carrera
     private void filtroMesas(){
         ListadoAdapter adapter = (ListadoAdapter)this.listaMesas.getAdapter();
-        adapter.filtrado("38");
+        //adapter.filtrado("38");
     }
 
     @Override

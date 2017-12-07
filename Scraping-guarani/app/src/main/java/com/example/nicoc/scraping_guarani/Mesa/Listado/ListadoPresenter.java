@@ -1,5 +1,7 @@
 package com.example.nicoc.scraping_guarani.Mesa.Listado;
 
+import android.content.SharedPreferences;
+
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
@@ -13,9 +15,9 @@ public class ListadoPresenter implements IListado.Presenter{
     private IListado.View view;
     private IListado.Model model;
 
-    public ListadoPresenter(IListado.View view) {
+    public ListadoPresenter(IListado.View view, SharedPreferences loginPrefs) {
         this.view = view;
-        this.model = new ListadoModel(this);
+        this.model = new ListadoModel(this, loginPrefs);
     }
 
     @Override

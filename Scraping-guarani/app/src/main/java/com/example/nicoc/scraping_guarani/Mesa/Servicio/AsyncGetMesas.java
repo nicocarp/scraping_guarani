@@ -22,33 +22,41 @@ public class AsyncGetMesas extends AsyncTask<Void, Void, ArrayList<Mesa>> {
         public void onMesas(ArrayList<Mesa> mesas);
     }
     private IGetMesas listener;
+    private String error;
 
     public AsyncGetMesas(IGetMesas listener) {
+
         this.listener= listener;
+        this.error = "";
     }
 
+    /**
+     * Retornamos las mesas de examenes habilitadas para inscripcion.
+     * @param voids
+     * @return ArrayList<Mesa>
+     */
     @Override
     protected ArrayList<Mesa> doInBackground(Void... voids) {
-        Guarani guarani = ManagerGuarani._getInstance();
-        //Alumno alumno = ManagerGuarani.alumno;
         ArrayList<Mesa> mesas = new ArrayList<Mesa>();
-        if (guarani != null){
-            try {
-                mesas = guarani._getMesasDeExamen();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return mesas;
+        try {
+            Guarani guarani = Guarani.getInstance();
+            mesas = guarani._getMesasDeExamen();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.error = "Error en la conexion";
+        }catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            this.error = e.getMessage();
         }
-        return null;
+        return mesas;
     }
 
     @Override
     protected void onPostExecute(ArrayList<Mesa> mesas) {
         super.onPostExecute(mesas);
-        if (mesas != null)
+        if (error.isEmpty())
             this.listener.onMesas(mesas);
         else
-            this.listener.onError(ManagerGuarani.getError());
+            this.listener.onError(this.error);
     }
 }
