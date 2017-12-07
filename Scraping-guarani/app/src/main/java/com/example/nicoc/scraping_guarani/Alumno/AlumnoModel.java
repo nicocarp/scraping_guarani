@@ -35,6 +35,9 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
         new AsyncDesloguear(this).execute(); // no me anda el postExecute, ejecute onSuccess a mano...
         SharedPreferences.Editor edit = preferences.edit();
         edit.putString("alumno_json", "");
+        edit.putString("mesas", "");
+        edit.putString("username", "");
+        edit.putString("password", "");
         edit.commit();
         onSuccess();
     }

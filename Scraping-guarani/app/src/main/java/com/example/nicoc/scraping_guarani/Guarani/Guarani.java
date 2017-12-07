@@ -605,6 +605,8 @@ public class Guarani {
      */
     public void desloguearse() throws IOException {
 
+        if (!this.estaLogueado())
+            return;
         Document document = this.connection.url(URL).get();
         String url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
@@ -612,7 +614,6 @@ public class Guarani {
         this.connection.url(url).get();
         _auth = null;
         //this.startConnection();
-        Log.i("DESLOGUENADO", "me desloguie");
     }
 
     public Alumno getAlumno() throws IOException {
