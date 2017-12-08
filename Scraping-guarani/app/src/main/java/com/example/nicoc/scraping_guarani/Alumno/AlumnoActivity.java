@@ -44,7 +44,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_a, menu);
         return true;
     }
@@ -71,10 +70,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
         getAlumno();
         verificar_login();
-        //start_service();
-        //consultar_bd_mesas();
-        escucharBroadcasts();
-
+        //escucharBroadcasts();
     }
 
     public void getAlumno(){
@@ -111,8 +107,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
     private void cerrarSesion() {
 
         Alarma.cancelarAlarma();
-        //stopService(new Intent(AlumnoActivity.this, ServicioIntent.class));
-        //al servicio no lo puedo parar mientras se esta ejecutando, porque puede dejar incosistente la bd
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
         this.presenter.desloguearse();

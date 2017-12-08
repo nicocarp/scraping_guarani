@@ -2,7 +2,6 @@ package com.example.nicoc.scraping_guarani.Mesa.Listado;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.BaseAdapter;
 
 import android.widget.TextView;
 ;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
@@ -26,27 +24,28 @@ import java.util.List;
 
 public class ListadoAdapter extends BaseAdapter  {
 
-    private Context activity;
     private Activity context;
-    private  List<Mesa> items = Collections.emptyList();
-    private  List<Mesa> items_all = Collections.emptyList();
+    private  List<Mesa> mesas = Collections.emptyList();
+    private  List<Mesa> mesas_all = Collections.emptyList();
+    private ArrayList<Inscripcion> inscripciones;
     //private Alumno alumno;
 
-    public ListadoAdapter(Activity activity, List<Mesa> items){
+    public ListadoAdapter(Activity activity, List<Mesa> items, ArrayList<Inscripcion> inscripciones){
         this.context = activity;
-        this.items_all = items;
-        this.items = items;
+        this.mesas_all = items;
+        this.mesas = items;
+        this.inscripciones = inscripciones;
         //this.alumno = alumno;
     }
 
     @Override
     public int getCount() {
-        return this.items.size();
+        return this.mesas.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this.items.get(position);
+        return this.mesas.get(position);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class ListadoAdapter extends BaseAdapter  {
         TextView txtNombre = (TextView) v.findViewById(R.id.txtInfoMesa);
         TextView txtCodigo = (TextView) v.findViewById(R.id.txtFecha);
 
-        Mesa mesa = this.items.get(position);
+        Mesa mesa = this.mesas.get(position);
         //if (alumno.estaInscripto(mesa.getMateria()))
          //   v.setBackgroundColor(Color.GREEN);
         //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
@@ -74,24 +73,24 @@ public class ListadoAdapter extends BaseAdapter  {
     }
 
     /**
-     * Setea los items que se muestran y los items_all del adaptador
+     * Setea los mesas que se muestran y los mesas_all del adaptador
      * @param items Listado de objetos Producto
      */
     public void setData(List<Mesa> items){
-        this.items.clear();
-        this.items_all.clear();
+        this.mesas.clear();
+        this.mesas_all.clear();
 
-        this.items_all = items;
-        this.items = items;
+        this.mesas_all = items;
+        this.mesas = items;
         notifyDataSetChanged();
     }
 
     /**
-     * Setea un nuevo listado de items que se muestran, items_all permanece igual. Usado despues de filtros.
+     * Setea un nuevo listado de mesas que se muestran, mesas_all permanece igual. Usado despues de filtros.
      * @param items Listados de objetos Producto
      */
     private void refreshData(List<Mesa> items) {
-        this.items = items;
+        this.mesas = items;
         notifyDataSetChanged();
     }
 
@@ -105,7 +104,7 @@ public class ListadoAdapter extends BaseAdapter  {
         List<Mesa> filtrado = new ArrayList<Mesa>();
 
         Log.i("FILTRANDO POR", filtro_codigo);
-        for (Mesa mesa : this.items_all){
+        for (Mesa mesa : this.mesas_all){
             if (mesa.getCarrera().equals(codigo_carrera))
                 filtrado.add(mesa);
         }

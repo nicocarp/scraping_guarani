@@ -3,8 +3,10 @@ package com.example.nicoc.scraping_guarani.Mesa.Listado;
 import android.content.SharedPreferences;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +33,11 @@ public class ListadoPresenter implements IListado.Presenter{
     }
 
     @Override
-    public void setItems(List<Mesa> items) {
-        this.view.setItems(items);
+    public void setItems(List<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+        this.view.setItems(mesas, inscripciones);
     }
+
+
 
     @Override
     public void inscribirse(Mesa mesa, Alumno alumno, String tipo) {

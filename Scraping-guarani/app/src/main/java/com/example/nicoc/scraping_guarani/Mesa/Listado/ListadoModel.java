@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.AsyncLogin;
 import com.example.nicoc.scraping_guarani.Mesa.Servicio.AsyncGetMesas;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by nicoc on 26/09/17.
  */
 
-public class ListadoModel implements IListado.Model, AsyncGetMesas.IGetMesas, AsyncInscribirse.IInscribirse {
+public class ListadoModel implements IListado.Model, AsyncInscribirse.IInscribirse {
 
     private IListado.Presenter presenter;
     private ManagerGuarani manager;
@@ -33,14 +34,23 @@ public class ListadoModel implements IListado.Model, AsyncGetMesas.IGetMesas, As
 
     @Override
     public void getMesas() {
-        //new AsyncGetMesas(this).execute();
-        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
+        ArrayList<Mesa> mesas= new  ArrayList<Mesa>();
+        ArrayList<Inscripcion> inscripciones= new  ArrayList<Inscripcion>();
+
         String mesas_string = preferences.getString("mesas", "");
-        if (!mesas_string.isEmpty()) {
-            Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
+        String inscripciones_json = preferences.getString("inscripciones", "");
+
+        Type collectionType;
+        if (!mesas_string.isEmpty()){
+            collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
             mesas= new  Gson().fromJson(mesas_string, collectionType);
         }
-        this.presenter.setItems(mesas);
+
+        if (!inscripciones_json.isEmpty()){
+            collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
+            inscripciones = new  Gson().fromJson(inscripciones_json, collectionType);
+        }
+        this.presenter.setItems(mesas, inscripciones);
     }
 
     @Override
@@ -59,8 +69,5 @@ public class ListadoModel implements IListado.Model, AsyncGetMesas.IGetMesas, As
         this.presenter.mostrarError("Inscripto correctamente");
     }
 
-    @Override
-    public void onMesas(ArrayList<Mesa> mesas) {
-        this.presenter.setItems(mesas);
-    }
+
 }

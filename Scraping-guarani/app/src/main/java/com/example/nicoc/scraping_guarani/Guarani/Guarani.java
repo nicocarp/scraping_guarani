@@ -8,6 +8,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import org.jsoup.Connection;
@@ -17,6 +18,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -179,6 +181,16 @@ public class Guarani {
                 inscripcion.setCarrera(cod_carrera);
                 inscripcion.setMateria(cod_materia);
                 inscripcion.setTipo(table_mesas.get(i).select("tr").get(1).children().get(5).text().toLowerCase());
+                inscripciones.add(inscripcion);
+            }
+        }
+        if (inscripciones.size() == 0){
+            for (int i=0; i<2; i++){
+                Inscripcion inscripcion = new Inscripcion();
+                inscripcion.setTipo("regular"+i);
+                inscripcion.setMateria("un_cod_materia"+i);
+                inscripcion.setCarrera("un_cod_carrera"+i);
+                inscripcion.setFecha("una_fecha"+i);
                 inscripciones.add(inscripcion);
             }
         }
@@ -629,10 +641,12 @@ public class Guarani {
         // franco = 31636564 gabriel1
         // gaston = 27042881 valenti2
         // maxi =  37860301  ym7k
-        Guarani.setAuth(new Auth("37860301", "ym7k"));
+
+        /*Guarani.setAuth(new Auth("37860301", "ym7k"));
         Guarani g = getInstance();
 
         if (g.login()){
+
             ArrayList<Carrera> carreras = g.getPlanDeEstudios();
             Alumno alumno = g.getDatosAlumno(carreras);
             System.out.println("-- Alumno " + alumno.getNombre());
@@ -647,7 +661,7 @@ public class Guarani {
                 System.out.println(mesa.getCarrera() +" "+mesa.getMateria());
             }
 
-            /*
+
             if (g.desinscribirseDeMesa("38", "MA048"))
                 System.out.println(g.getMensaje());
             else
@@ -659,23 +673,27 @@ public class Guarani {
             else
                 System.out.println("Error: "+g.getError());
 
-            */
+
             System.out.println("-- Mesas a las que esta anotado");
 
 
-            alumno.setInscripciones(g.getMesasAnotadas());
+            //alumno.setInscripciones(g.getMesasAnotadas());
 
-            System.out.println(alumno.getInscripciones());
+            //System.out.println(alumno.getInscripciones());
 
-            Gson gson = new Gson();
-            String s = gson.toJson(alumno);
-            System.out.println(s);
+
         }
         else{
             System.out.println(g.getError());
         }
+*/
+        Gson gson = new Gson();
 
-
+        String s = gson.toJson(new ArrayList<Mesa>());
+        System.out.println(s);
+        Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
+        ArrayList<Mesa> result = new Gson().fromJson(s, collectionType);
+        System.out.println(result.size());
 
      }
 

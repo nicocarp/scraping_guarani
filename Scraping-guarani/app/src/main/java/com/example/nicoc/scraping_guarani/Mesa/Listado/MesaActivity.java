@@ -23,10 +23,12 @@ import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,13 +120,14 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     }
 
     @Override
-    public void setItems(List<Mesa> items) {
-        listaMesas.setAdapter(new ListadoAdapter(this, items));
-        if (items.size() == 0) {
+    public void setItems(List<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+        listaMesas.setAdapter(new ListadoAdapter(this, mesas, inscripciones));
+        if (mesas.size() == 0)
             mostrarError("Sin mesas de examen");
-        } else {
-            filtroMesas(); // esto cambiar, hacer un combo para q seleccione carrera
-        }
+
+        // Leer combo y aplicar filtro
+        //filtroMesas();
+
     }
     // capturar evento on Change select carrera
     private void filtroMesas(){

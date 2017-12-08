@@ -17,11 +17,15 @@ import android.util.Log;
 
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -52,7 +56,6 @@ public class ServicioIntent extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("SERVICIO NICO....","EJECUTANDO.");
         SharedPreferences.Editor edit = preferences.edit();
         if (!isNetworkAvailable()){
             edit.putBoolean("aviso", true);
@@ -70,7 +73,9 @@ public class ServicioIntent extends IntentService{
             Guarani.setAuth(new Auth(usuario, password));
             try {
                 ArrayList<Mesa> mesas = Guarani.getInstance()._getMesasDeExamen();
-                crearNotificacionMesasDisponibles(mesas);
+                ArrayList<Inscripcion> inscripciones = Guarani.getInstance().getMesasAnotadas();
+
+                crearNotificacionMesasDisponibles(mesas, inscripciones);
             } catch (IOException e) { // es este el tipo de error que requiere nueva peticion.
                 e.printStackTrace();
             }
@@ -82,19 +87,40 @@ public class ServicioIntent extends IntentService{
     }
 
 
-    private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas){
+    /**
+     * Seteamos en Preferencias las mesas e inscripciones activas. Notificamos si hay mesas nuevas.
+     * Prec: mesas e inscripciones no deben ser null, sino []
+     * @param mesas
+     * @param inscripciones
+     */
+    private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones){
+
 
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putString("mesas", "");
-        if (mesas.size() == 0){
-            return;
+
+        Gson gson = new Gson();
+
+        String mesas_json = gson.toJson(mesas);
+        String inscripciones_json = gson.toJson(inscripciones);
+
+        String mesas_json_guardadas = preferences.getString("mesas", "");
+
+        if (!mesas_json_guardadas.isEmpty()){
+            Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
+            ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
+            Boolean notificar = (mesas_guardadas.size() == 0) && (mesas.size() > 0);
         }
+
+
         sendBroadcast();
 
-        String mesas_json = new Gson().toJson(mesas);
         edit.putString("mesas", mesas_json);
+        edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
+        /* Descomentar el siguiente if!: solo notificar si hay nuevas mesas.*/
+        //if (!notificar)
+         //   return;
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
         int icono = R.mipmap.ic_launcher;
