@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.nicoc.scraping_guarani.Alarma;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
@@ -109,6 +110,9 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     }
 
     private void cerrarSesion() {
+        Alarma.cancelarAlarma();
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
         Intent intent = new Intent(MesaActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
