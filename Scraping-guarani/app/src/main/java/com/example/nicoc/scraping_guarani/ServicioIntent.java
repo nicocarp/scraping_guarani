@@ -40,8 +40,9 @@ public class ServicioIntent extends IntentService{
     NotificationCompat.Builder mBuilder;
     SharedPreferences preferences;
 
+    private static final int MAXIMA_REPETICION = 2;
     private boolean bandera = true;
-    private int contador = 0;
+    private int contador = 1;
     private ConectividadBroadcastReceiver receiver;
 
     public ServicioIntent() {
@@ -51,6 +52,7 @@ public class ServicioIntent extends IntentService{
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i("Intent Service","Me crearon.");
         preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
     }
 
@@ -60,10 +62,12 @@ public class ServicioIntent extends IntentService{
         if (!isNetworkAvailable()){
             edit.putBoolean("aviso", true);
             edit.commit();
+            Log.i("Intent Service"," No hay conexion.");
         }
         else{
             edit.putBoolean("aviso", false);
             edit.commit();
+            Log.i("Intent Service"," Hay conexion.");
 
             String usuario = preferences.getString("username", "");
             String password = preferences.getString("password", "");
@@ -71,19 +75,36 @@ public class ServicioIntent extends IntentService{
             if (usuario.isEmpty() || password.isEmpty())
                 return; // debemos mandar notificar esto es un error.
             Guarani.setAuth(new Auth(usuario, password));
-            try {
-                ArrayList<Mesa> mesas = Guarani.getInstance()._getMesasDeExamen();
-                ArrayList<Inscripcion> inscripciones = Guarani.getInstance().getMesasAnotadas();
 
-                crearNotificacionMesasDisponibles(mesas, inscripciones);
-            } catch (IOException e) { // es este el tipo de error que requiere nueva peticion.
-                e.printStackTrace();
+            while(bandera==true && contador<=MAXIMA_REPETICION){
+                try {
+                    ArrayList<Mesa> mesas = Guarani.getInstance()._getMesasDeExamen();
+                    ArrayList<Inscripcion> inscripciones = Guarani.getInstance().getMesasAnotadas();
+                    crearNotificacionMesasDisponibles(mesas, inscripciones);
+                    bandera = false;
+                } catch (IOException e) { // es este el tipo de error que requiere nueva peticion.
+                    e.printStackTrace();
+                    esperar();
+                }
+                catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                    esperar();
+                }
             }
-            catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
+
         }
         stopSelf();
+    }
+
+
+    private void esperar() {
+        bandera = true;
+        contador++;
+        try {
+            Thread.sleep(1000 * 15);//espero 15 segundos.
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -104,23 +125,30 @@ public class ServicioIntent extends IntentService{
         String inscripciones_json = gson.toJson(inscripciones);
 
         String mesas_json_guardadas = preferences.getString("mesas", "");
+        Boolean notificar = false;
 
         if (!mesas_json_guardadas.isEmpty()){
             Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
             ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
-            Boolean notificar = (mesas_guardadas.size() == 0) && (mesas.size() > 0);
+            notificar = (mesas_guardadas.size() == 0) && (mesas.size() > 0);
         }
 
 
-        sendBroadcast();
+
 
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
         /* Descomentar el siguiente if!: solo notificar si hay nuevas mesas.*/
-        //if (!notificar)
-         //   return;
+        if (!notificar)
+            return;
+        notificar();
+        enviarBroadcast();
+    }
+
+
+    private void notificar(){
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
         int icono = R.mipmap.ic_launcher;
@@ -133,13 +161,10 @@ public class ServicioIntent extends IntentService{
                 .setContentText("Hay mesas de examenes disponibles.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
-        mNotifyMgr.notify(1, mBuilder.build());//
+        mNotifyMgr.notify(1, mBuilder.build());
     }
 
-
-
-
-    private void sendBroadcast()
+    private void enviarBroadcast()
     {
         Log.i("MyService....","estoy en sendBroadcast.");
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(ServicioIntent.this);
@@ -147,7 +172,7 @@ public class ServicioIntent extends IntentService{
         Intent resultIntent = new Intent("MesasActivity");//le pongo un nombre al intent asi se como atraparlo despues.
         //resultIntent.putExtra("TNT", "Hay mesas de examenes");
         Bundle bundle = new Bundle();
-        bundle.putString("Nombre","Nuevas mesas disponibles!.");
+        bundle.putString("Nombre","Hay mesas de examenes disponibles.");
         resultIntent.putExtras(bundle);
         broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
 
@@ -167,31 +192,9 @@ public class ServicioIntent extends IntentService{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("Intent Service:  ","Me moriii!!");
+        Log.i("Intent Service"," Me mataron.");
     }
 
-    /* public static void main(String [] args)
-    {
-        ServicioIntent i = new ServicioIntent();
-        Intent intent = new Intent();
-        i.startService(intent);
-        System.out.println("Hijo de puta");
-    }*/
 
-
-    private void timer(){
-        CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
-            @Override
-            public void onTick(long l) {
-                Log.i("COUNT_DOWN_TIMER: ", "" + l / 1000 + " segundos.");
-            }
-
-            @Override
-            public void onFinish() {
-                Alarma.REPETICION_ACTUAL = 1;
-                Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
-            }
-        }.start();
-    }
 
 }

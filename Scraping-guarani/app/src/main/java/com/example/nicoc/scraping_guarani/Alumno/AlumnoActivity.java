@@ -70,7 +70,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
         getAlumno();
         verificar_login();
-        //escucharBroadcasts();
+        escucharBroadcasts();
     }
 
     public void getAlumno(){

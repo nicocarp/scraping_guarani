@@ -122,8 +122,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
     @Override
     public void logueado(Alumno alumno) {
 
-        Alarma alarma3 = new Alarma(this,ServicioIntent.class);
-        alarma3.start();
+        Alarma alarma = new Alarma(this,ServicioIntent.class);
+        alarma.start();
 
         Intent intent = new Intent(this, AlumnoActivity.class);
 

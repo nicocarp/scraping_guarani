@@ -34,7 +34,6 @@ public class Alarma extends Thread{
 
     public static final int MAXIMA_REPETICION = 1;
     public static int REPETICION_ACTUAL = 1;
-    private static MyCountDownTimer myCountDownTimer;
 
     public Alarma (Context contexto, Class clase_del_servicio){
         this.contexto = contexto;
@@ -126,11 +125,12 @@ public class Alarma extends Thread{
 
             // Set the alarm to start at 14:51 p.m.
             calendar = Calendar.getInstance();
-            hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
-            if (hora == -1) hora = 23;
+            //hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
+            //if (hora == -1) hora = 23;
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, hora);//8
-            calendar.set(Calendar.MINUTE, 1);//30
+            calendar.set(Calendar.HOUR_OF_DAY, 12); //Se disparará la alarma a las 12:00 pm
+            calendar.set(Calendar.MINUTE, 00);//30
+            calendar.set(Calendar.SECOND, 00);
 
 
             // setRepeating() lets you specify a precise custom interval--in this case,
@@ -171,66 +171,6 @@ public class Alarma extends Thread{
     {
         this.contexto.stopService(new Intent(contexto,clase_del_servicio));
         this.contexto.startService(new Intent(contexto,clase_del_servicio));
-    }
-
-    public static void reestablerRepeticionActual(){
-        CountDownTimer timer = new CountDownTimer(1000 * 60, 1000) {
-            @Override
-            public void onTick(long l) {
-                Log.i("COUNT_DOWN_TIMER: ", "" + l / 1000 + " segundos.");
-            }
-
-            @Override
-            public void onFinish() {
-                Alarma.REPETICION_ACTUAL = 1;
-                Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
-            }
-        }.start();
-    }
-
-
-    public static class MyCountDownTimer extends CountDownTimer {
-
-        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-            int progress = (int) (millisUntilFinished/1000);
-            Log.i("COUNT_DOWN_TIMER: ", "" + progress + " segundos.");
-
-        }
-
-        @Override
-        public void onFinish() {
-            Alarma.REPETICION_ACTUAL = 1;
-            Log.i("COUNT_DOWN_TIMER: ", "" + Alarma.REPETICION_ACTUAL);
-        }
-    }
-
-    public static void vamosCampeon(){
-        //crear un nuevo intent service
-        Handler mHandler = new Handler(getMainLooper());
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("vamosCampeon: ", "Entre");
-                myCountDownTimer = new MyCountDownTimer(1000 * 60, 1000);
-                myCountDownTimer.start();
-                Log.i("vamosCampeon: ", "Termine");
-            }
-        });
-
-
-    }
-
-
-    public static void iniciarTimer(){
-        //contexto.startService(new Intent(contexto.getApplicationContext(), ServicioIntentTimer.class));
-        AlarmaTimer alarma = new AlarmaTimer();
-        alarma.start();
     }
 
 
