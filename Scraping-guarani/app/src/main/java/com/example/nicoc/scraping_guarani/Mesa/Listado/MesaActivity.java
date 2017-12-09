@@ -44,6 +44,8 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     @BindView(R.id.listMesas) ListView listaMesas;
 
     private IListado.Presenter presenter;
+    private android.app.AlertDialog alertDialog;
+    private static final String KEY_1 = "alertDialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,13 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
         this.presenter = new ListadoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
         this.getItems();
+
+        //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
+        if (savedInstanceState != null) {
+            String estado_dialog = savedInstanceState.getString(KEY_1);
+            if(estado_dialog.equals("Visible"))
+                mostrarDialog();
+        }
 
         escucharBroadcasts();
 
@@ -129,11 +138,21 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
             }
         });
         dialogBuilder.setCancelable(false);
-        android.app.AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog = dialogBuilder.create();
         alertDialog.show();
+
 
     }
 
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(alertDialog.isShowing())
+            outState.putString(KEY_1, "Visible");
+        else
+            outState.putString(KEY_1, "Invisible");
+    }
 
     private void cerrarSesion() {
         Alarma.cancelarAlarma();

@@ -47,7 +47,8 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
     // @BindView(R.id.listaMaterias)    ListView listaMatrias;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
-
+    private android.app.AlertDialog alertDialog;
+    private static final String KEY_1 = "alertDialog";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,6 +80,12 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
         getAlumno();
         verificar_login();
+        //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
+        if (savedInstanceState != null) {
+            String estado_dialog = savedInstanceState.getString(KEY_1);
+            if(estado_dialog.equals("Visible"))
+                mostrarDialog();
+        }
         escucharBroadcasts();
     }
 
@@ -136,6 +143,15 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
     }
 
 
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(alertDialog.isShowing())
+            outState.putString(KEY_1, "Visible");
+        else
+            outState.putString(KEY_1, "Invisible");
+    }
+    
 
     private void cerrarSesion() {
 
