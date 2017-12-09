@@ -149,10 +149,13 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         try{
-            if(alertDialog.isShowing())
-                outState.putString(KEY_1, "Visible");
-            else
-                outState.putString(KEY_1, "Invisible");
+            if(alertDialog!=null){
+                if(alertDialog.isShowing())
+                    outState.putString(KEY_1, "Visible");
+                else
+                    outState.putString(KEY_1, "Invisible");
+            }
+
         }catch(NullPointerException npe){
             npe.printStackTrace();
         }catch(Exception e){
