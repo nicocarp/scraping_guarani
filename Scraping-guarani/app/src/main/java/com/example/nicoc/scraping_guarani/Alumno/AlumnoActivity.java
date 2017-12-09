@@ -1,8 +1,10 @@
 package com.example.nicoc.scraping_guarani.Alumno;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -12,8 +14,10 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,15 +34,18 @@ import butterknife.OnClick;
 
 public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
-    @BindView(R.id.lblAlumno)    TextView lblAlumno;
-    @BindView(R.id.lblLegajo)    TextView lblLegajo;
+    @BindView(R.id.lblAlumno)
+    TextView lblAlumno;
+    @BindView(R.id.lblLegajo)
+    TextView lblLegajo;
     Alumno alumno;
     private IAlumno.Presenter presenter;
-    @BindView(R.id.buttonMesas) Button buttonMesas;
-   // @BindView(R.id.lblFecha)    TextView lblFecha;
-   // @BindView(R.id.lblMaterias)    TextView lblMaterias;
-   // @BindView(R.id.listaMaterias)    ListView listaMatrias;
-   private SharedPreferences loginPreferences;
+    @BindView(R.id.buttonMesas)
+    Button buttonMesas;
+    // @BindView(R.id.lblFecha)    TextView lblFecha;
+    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
+    // @BindView(R.id.listaMaterias)    ListView listaMatrias;
+    private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
 
 
@@ -47,6 +54,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         getMenuInflater().inflate(R.menu.menu_main_a, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -57,12 +65,13 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setTitle("Alumno");
-        Drawable myIcon = getResources().getDrawable(R.drawable.ic_action_name );
+        Drawable myIcon = getResources().getDrawable(R.drawable.ic_action_name);
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
@@ -73,14 +82,15 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         escucharBroadcasts();
     }
 
-    public void getAlumno(){
+    public void getAlumno() {
         this.presenter.getAlumno();
     }
-    public void setAlumno(Alumno alumno){
+
+    public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
     }
 
-    private void escucharBroadcasts(){
+    private void escucharBroadcasts() {
         //Escucho por mensajes que vienen a mi.....
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter("MesasActivity");
@@ -89,20 +99,43 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        Log.i("AlumnoActivity....","encontre el mensaje brodcasteado!");
+                        Log.i("AlumnoActivity....", "encontre el mensaje brodcasteado!");
                         Bundle bundle = intent.getExtras();
 
                         //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
-                        Toast.makeText(AlumnoActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
+                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
 
                         //aca elimino la notificacion
-                        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+
+                        mostrarDialog();
                     }
                 },
                 filter
         );
     }
+
+    private void mostrarDialog(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_mesas,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+
 
     private void cerrarSesion() {
 
@@ -114,6 +147,8 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
         startActivity(intent);
     }
+
+
 
     private void verificar_login(){
         if (this.alumno!=null)

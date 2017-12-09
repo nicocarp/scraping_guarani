@@ -14,8 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -103,11 +105,35 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+
+                        mostrarDialog();
+
                     }
                 },
                 filter
         );
     }
+
+
+    private void mostrarDialog(){
+
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_mesas,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        android.app.AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
+
 
     private void cerrarSesion() {
         Alarma.cancelarAlarma();
