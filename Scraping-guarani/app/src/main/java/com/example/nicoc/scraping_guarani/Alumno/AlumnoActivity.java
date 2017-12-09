@@ -151,7 +151,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         else
             outState.putString(KEY_1, "Invisible");
     }
-    
+
 
     private void cerrarSesion() {
 

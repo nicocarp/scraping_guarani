@@ -69,10 +69,13 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estadoProgressBar = savedInstanceState.getString(KEY_2);
-            if(estadoProgressBar.equals("Visible"))
+            if(estadoProgressBar.equals("Visible")){
+                iniciarViews();
                 mostrarProgressBar();
-            else
+            }
+            else{
                 ocultarProgressBar();
+            }
         }
 
         escucharBroadcasts();
