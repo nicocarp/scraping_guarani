@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
@@ -45,6 +46,7 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
     private IListado.Presenter presenter;
     private android.app.AlertDialog alertDialog;
+    private android.app.AlertDialog alertDialogInscrpcion;
     private static final String KEY_1 = "alertDialog";
 
     @Override
@@ -214,8 +216,9 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         txtNuevoStock.setInputType(InputType.TYPE_CLASS_TEXT);
         txtNuevoStock.setText("regular");
 
+        mostrarDialogInscripcion(mesa);
 
-        new AlertDialog.Builder(this)
+        /*new AlertDialog.Builder(this)
                 .setTitle("Detalle de la mesa")
                 .setMessage(mesa.getMateria()+" "+ mesa.getCarrera())
                 //.setMessage(mesa.getMateria().getNombre() +" "+ mesa.getMateria().getCarrera().getCodigo())
@@ -230,6 +233,42 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
                     public void onClick(DialogInterface dialog, int whichButton) {
                         dialog.dismiss();
                     }
-                }).show();
+                }).show();*/
     }
+
+    private void mostrarDialogInscripcion(final Mesa mesa){
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(MesaActivity.this);
+        LayoutInflater inflater = MesaActivity.this.getLayoutInflater();
+
+        final View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
+        //final TextView et = (TextView) dialogView.findViewById(R.id.lblCarrera);
+        //et.setText("He modificado el mensaje");
+        //et.setText("He modificado el mensaje");
+        //dialogView.
+        dialogBuilder.setView(dialogView);
+        //dialogBuilder.setTitle("Detalle de la mesa");
+        //dialogBuilder.setIcon(R.drawable.logo);
+        //dialogBuilder.setMessage("Soy un mensaje");
+        dialogBuilder.setPositiveButton("Inscribir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                /*
+                final TextView et = (TextView) dialogView.findViewById(R.id.lblTipo);
+                String tipo = et.getText().toString();
+                inscribirse(mesa, tipo);
+                */
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        alertDialogInscrpcion = dialogBuilder.create();
+        alertDialogInscrpcion.show();
+
+    }
+
 }
