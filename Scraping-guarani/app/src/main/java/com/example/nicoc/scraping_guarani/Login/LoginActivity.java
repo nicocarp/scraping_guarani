@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
     private ProgressDialog progressDialog;
 
     private static final String KEY_1 = "btnLogin";
-    private static final String KEY_2 = "progressBar";
+    private static final String KEY_2 = "progressDialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,9 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         iniciarViews();
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
-            String estadoProgressBar = savedInstanceState.getString(KEY_2);
-            if(estadoProgressBar.equals("Visible")){
-                iniciarViews();
+            String estadoProgressDialog = savedInstanceState.getString(KEY_2);
+            if(estadoProgressDialog.equals("Visible")){
+                //iniciarViews();
                 mostrarProgressBar();
             }
             else{
@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(progressBar.getVisibility()==View.VISIBLE)
+        if(progressDialog.isShowing())
             outState.putString(KEY_2, "Visible");
         else
             outState.putString(KEY_2, "Invisible");
