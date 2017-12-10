@@ -7,7 +7,6 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 public class Inscripcion {
 
     private String carrera;
-
     private String  fecha;
     private String tipo;
     private String materia;
@@ -35,7 +34,6 @@ public class Inscripcion {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
 
     public String getFecha() {
         return fecha;

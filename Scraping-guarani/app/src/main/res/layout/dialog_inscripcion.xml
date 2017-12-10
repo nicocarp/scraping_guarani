@@ -101,7 +101,6 @@
             android:layout_above="@+id/materia"
             android:layout_alignLeft="@+id/titulo"
             android:layout_alignStart="@+id/titulo"
-            android:text="Carrera"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
@@ -114,7 +113,7 @@
             android:layout_alignBottom="@+id/materia"
             android:layout_alignLeft="@+id/lblTipo"
             android:layout_alignStart="@+id/lblTipo"
-            android:text="MATERIA"
+
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
@@ -127,7 +126,7 @@
             android:layout_alignBottom="@+id/tipo"
             android:layout_alignLeft="@+id/lblCarrera"
             android:layout_alignStart="@+id/lblCarrera"
-            android:text="TIPO"
+
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"

@@ -33,7 +33,7 @@ public class ListadoPresenter implements IListado.Presenter{
     }
 
     @Override
-    public void setItems(List<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+    public void setItems(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
         this.view.setItems(mesas, inscripciones);
     }
 

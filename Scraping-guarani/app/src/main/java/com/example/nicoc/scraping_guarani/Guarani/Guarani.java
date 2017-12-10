@@ -185,14 +185,12 @@ public class Guarani {
             }
         }
         if (inscripciones.size() == 0){
-            for (int i=0; i<2; i++){
                 Inscripcion inscripcion = new Inscripcion();
-                inscripcion.setTipo("regular"+i);
-                inscripcion.setMateria("un_cod_materia"+i);
-                inscripcion.setCarrera("un_cod_carrera"+i);
-                inscripcion.setFecha("una_fecha"+i);
+                inscripcion.setTipo("regular");
+                inscripcion.setMateria("IF005");
+                inscripcion.setCarrera("38");
+                inscripcion.setFecha(" 23/02/2017");
                 inscripciones.add(inscripcion);
-            }
         }
         return inscripciones;
     }
@@ -477,16 +475,25 @@ public class Guarani {
         }
         /* Probando tirar datos*/
         if (mesas.isEmpty()){
-            for (int i =0; i<4; i++){
                 Mesa m = new Mesa();
-                m.setCarrera("cod_carrera "+i);
-                m.setMateria("cod_materia "+i);
-                m.setFecha("una_Fecha "+i);
-                m.setTurno("un-turno "+i);
+                m.setCarrera("38");
+                m.setMateria("IF003");
+                m.setFecha("11/12/2013");
+                m.setTurno("un-turno");
                 mesas.add(m);
-            }
+                Mesa m1 = new Mesa();
+                m1.setCarrera("38");
+                m1.setMateria("MA008");
+                m1.setFecha("11/12/2013");
+                m1.setTurno("un-turno");
+                mesas.add(m1);
+                Mesa m2 = new Mesa();
+                m2.setCarrera("38");
+                m2.setMateria("IF005");
+                m2.setFecha("11/12/2013");
+                m2.setTurno("un-turno");
+                mesas.add(m2);
         }
-
         return mesas;
     }
 

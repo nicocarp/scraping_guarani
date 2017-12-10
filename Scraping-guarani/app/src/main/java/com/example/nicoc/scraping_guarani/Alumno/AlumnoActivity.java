@@ -184,6 +184,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         }
     }
     private void setDatosAlumno(){
+
         lblAlumno.setText(this.alumno.getNombre());
         lblLegajo.setText("sin legajo");
     }

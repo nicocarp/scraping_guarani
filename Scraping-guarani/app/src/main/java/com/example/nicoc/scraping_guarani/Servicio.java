@@ -119,7 +119,7 @@ public class Servicio extends Service {
             int icono = R.mipmap.ic_launcher;
             Intent intent = new Intent(Servicio.this, MesaActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("Mesas",mesas);
+            //bundle.putParcelableArrayList("Mesas",mesas);
             intent.putExtras(bundle);
             PendingIntent pendingIntent = PendingIntent.getActivity(Servicio.this, 0, intent, 0);
             //aca iria toda la informacion que recibimos del scraping dentro del intent

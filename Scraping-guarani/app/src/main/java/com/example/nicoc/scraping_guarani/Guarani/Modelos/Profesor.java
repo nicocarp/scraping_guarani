@@ -1,8 +1,7 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
-import java.io.Serializable;
+public class Profesor{
 
-public class Profesor implements Serializable{
     private String nombre;
 
     public Profesor(String s) {

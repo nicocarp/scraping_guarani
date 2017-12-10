@@ -31,6 +31,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.R;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     private android.app.AlertDialog alertDialog;
     private android.app.AlertDialog alertDialogInscrpcion;
     private static final String KEY_1 = "alertDialog";
+    private Alumno alumno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
 
         setContentView(R.layout.activity_mesa);
         ButterKnife.bind(this);
+
+        String obj_json = getSharedPreferences("loginPrefs", MODE_PRIVATE).getString("alumno_json", "");
+        if (!obj_json.isEmpty())
+            alumno = new Gson().fromJson(obj_json, Alumno.class);
 
         this.presenter = new ListadoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
         this.getItems();
@@ -180,8 +186,11 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
     }
 
     @Override
-    public void setItems(List<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
-        listaMesas.setAdapter(new ListadoAdapter(this, mesas, inscripciones));
+    public void setItems(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+        alumno.loadMesas(mesas);
+        alumno.loadInscripciones(inscripciones);
+        listaMesas.setAdapter(new ListadoAdapter(this, alumno));
+
         if (mesas.size() == 0)
             mostrarError("Sin mesas de examen");
 
@@ -241,9 +250,10 @@ public class MesaActivity extends AppCompatActivity implements IListado.View{
         LayoutInflater inflater = MesaActivity.this.getLayoutInflater();
 
         final View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
-        //final TextView et = (TextView) dialogView.findViewById(R.id.lblCarrera);
-        //et.setText("He modificado el mensaje");
-        //et.setText("He modificado el mensaje");
+
+        final TextView lblCarrera = (TextView) dialogView.findViewById(R.id.lblCarrera);
+        lblCarrera.setText(alumno.getCarreraById(mesa.getCarrera()).getNombre());
+
         //dialogView.
         dialogBuilder.setView(dialogView);
         //dialogBuilder.setTitle("Detalle de la mesa");

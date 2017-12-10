@@ -1,59 +1,29 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class Mesa implements Parcelable {
-
-    private Long id;
-    private String fecha;
-    private String sede;
-    private TipoMesa tipoMesa; // libre o regular
-    private ArrayList<Profesor> profesores;
+public class Mesa {
 
     private String carrera;
     private String materia;
-    private ArrayList<String> materias_necesarias;
+    private String fecha;
+    private String sede;
+    private TipoMesa tipoMesa; // libre o regular
     private String turno; // esto es necesario para lanzar post de inscripcion
+    private ArrayList<Profesor> profesores;
+    private ArrayList<String> materias_necesarias;
 
     public Mesa(){
         this.materias_necesarias = new ArrayList<String>();
     }
 
-
-    //Desde aca
-    protected Mesa(Parcel in) {
-        fecha = in.readString();
-        sede = in.readString();
-        tipoMesa = (TipoMesa) in.readSerializable();
-        profesores = in.readArrayList(null);
-        //carrera = (Carrera) in.readSerializable();
-        //materia = (Materia) in.readSerializable();
-        carrera = in.readParcelable(Carrera.class.getClassLoader());
-        materia = in.readParcelable(Materia.class.getClassLoader());
-        materias_necesarias = in.readArrayList(null);
-        turno = in.readString();
-
+    /**
+     * Forma de identificar a una mesa: codigo_carrera+codigo_materia
+     * @return String correspondiente al idetnficiador de la mesa.
+     */
+    public String getId(){
+        return this.carrera + this.materia;
     }
-
-
-
-    public static final Creator<Mesa> CREATOR = new Creator<Mesa>() {
-        @Override
-        public Mesa createFromParcel(Parcel in) {
-            return new Mesa(in);
-        }
-
-        @Override
-        public Mesa[] newArray(int size) {
-            return new Mesa[size];
-        }
-    };//hasta aca
-
     public String getCarrera() {
         return carrera;
     }
@@ -61,6 +31,7 @@ public class Mesa implements Parcelable {
     public void setCarrera(String carrera) {
         this.carrera = carrera;
     }
+
     public String getTurno() {
         return turno;
     }
@@ -72,6 +43,7 @@ public class Mesa implements Parcelable {
     public void addMateriaNecesariaById(String materia){
         this.materias_necesarias.add(materia);
     }
+
     /**
      * Materias que el alumno necesita aprobar para inscribirse a una mesa de la Materia
      * @return Listado de materias.
@@ -84,7 +56,6 @@ public class Mesa implements Parcelable {
         this.materias_necesarias = materias_necesarias;
     }
 
-
     public String getMateria() {
         return materia;
     }
@@ -92,8 +63,6 @@ public class Mesa implements Parcelable {
     public void setMateria(String materia) {
         this.materia = materia;
     }
-
-
 
     public String getFecha() {
         return fecha;
@@ -126,22 +95,5 @@ public class Mesa implements Parcelable {
     public void setProfesores(ArrayList<Profesor> profesores) {
         this.profesores = profesores;
     }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(fecha);
-        parcel.writeString(sede);
-        parcel.writeSerializable(tipoMesa);
-        parcel.writeList(profesores);
-        parcel.writeList(materias_necesarias);
-        parcel.writeString(turno);
-    }
-
 
 }

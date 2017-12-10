@@ -15,14 +15,14 @@ public interface IListado {
 
     interface View {
         public void getItems();
-        public void setItems(List<Mesa> items, ArrayList<Inscripcion> inscripciones);
+        public void setItems(ArrayList<Mesa> items, ArrayList<Inscripcion> inscripciones);
         public void mostrarError(String error);
         public void lanzarDetalleMesa(Mesa mesa);
     }
     interface Presenter{
         public void getItems();
         public void mostrarError(String error);
-        public void setItems(List<Mesa> items, ArrayList<Inscripcion> inscripciones);
+        public void setItems(ArrayList<Mesa> items, ArrayList<Inscripcion> inscripciones);
         public void inscribirse(Mesa mesa, Alumno alumno, String tipo);
         //public void lanzarProductoDetalle(Producto producto);
 

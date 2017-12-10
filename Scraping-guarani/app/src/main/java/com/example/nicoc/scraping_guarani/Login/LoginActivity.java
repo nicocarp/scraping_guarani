@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
 
         Intent intent = new Intent(this, AlumnoActivity.class);
 
-        //startService(new Intent(this, ServicioIntent.class));
+        startService(new Intent(this, ServicioIntent.class));
 
         startActivity(intent);
     }

@@ -2,6 +2,7 @@ package com.example.nicoc.scraping_guarani.Mesa.Listado;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.BaseAdapter;
 
 import android.widget.TextView;
 ;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
 
@@ -27,15 +31,13 @@ public class ListadoAdapter extends BaseAdapter  {
     private Activity context;
     private  List<Mesa> mesas = Collections.emptyList();
     private  List<Mesa> mesas_all = Collections.emptyList();
-    private ArrayList<Inscripcion> inscripciones;
-    //private Alumno alumno;
+    private Alumno alumno;
 
-    public ListadoAdapter(Activity activity, List<Mesa> items, ArrayList<Inscripcion> inscripciones){
+    public ListadoAdapter(Activity activity, Alumno alumno){
         this.context = activity;
-        this.mesas_all = items;
-        this.mesas = items;
-        this.inscripciones = inscripciones;
-        //this.alumno = alumno;
+        this.alumno = alumno;
+        this.mesas_all = this.alumno.getMesas();
+        this.mesas = this.alumno.getMesas();
     }
 
     @Override
@@ -64,11 +66,14 @@ public class ListadoAdapter extends BaseAdapter  {
         TextView txtCodigo = (TextView) v.findViewById(R.id.txtFecha);
 
         Mesa mesa = this.mesas.get(position);
-        //if (alumno.estaInscripto(mesa.getMateria()))
-         //   v.setBackgroundColor(Color.GREEN);
+        if (alumno.estaInscripto(mesa))
+            v.setBackgroundColor(Color.GREEN);
         //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
-        txtNombre.setText(mesa.getMateria()+" "+mesa.getCarrera());
-        txtCodigo.setText(mesa.getFecha());
+        Carrera carrera = alumno.getCarreraById(mesa.getCarrera());
+        Materia materia = carrera.getMateriaById(mesa.getMateria());
+
+        txtNombre.setText(materia.getNombre()+" "+mesa.getFecha());
+        txtCodigo.setText(carrera.getNombre().toLowerCase());
         return v;
     }
 
