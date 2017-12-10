@@ -63,7 +63,7 @@ public class ListadoMesasAdapter extends BaseAdapter  {
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inf.inflate (R.layout.item_mesa_nuevo, null);
         }
-        ImageView view_img_producto = (ImageView) v.findViewById(R.id.imagenProducto);
+        //ImageView view_img_producto = (ImageView) v.findViewById(R.id.imagenProducto);
         TextView view_txt_nombre = (TextView) v.findViewById(R.id.txtNombre);
         TextView view_txt_codigo = (TextView) v.findViewById(R.id.txtCodigo);
 

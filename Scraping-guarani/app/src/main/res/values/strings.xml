@@ -14,7 +14,7 @@
     <string name="anotar_button">Anotarme</string>
 
     <!--> Titulos <-->
-    <string name="seleccioneCarrera_titulo">Seleccione Carrera</string>
+    <string name="seleccioneCarrera_titulo">Carrera</string>
     <string name="materias_titulo">Materias</string>
     <string name="iniciarsesion_titulo">Iniciar Sesion</string>
 

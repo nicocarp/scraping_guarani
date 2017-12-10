@@ -30,128 +30,59 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <LinearLayout
-                android:layout_width="71dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.13"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/alumno_campo"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:typeface="sans" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/lblAlumno"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/alumno_campo"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    android:typeface="sans"
-                    tools:text="@string/alumno_campo" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            android:layout_below="@+id/linearLayout2"
-            android:id="@+id/linearLayout8">
-
-            <LinearLayout
-                android:id="@+id/linearLayout3"
+            <TextView
+                android:id="@+id/lblAlumno"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/linearLayout2"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textLegajo"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/legajo_campo"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:typeface="sans" />
-
-                <TextView
-                    android:id="@+id/lblLegajo"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="3dp"
-                    android:layout_weight="0.56"
-                    android:text="@string/legajo_campo"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    android:typeface="sans"
-                    tools:text="Legajo" />
-
-                <TextView
-                    android:id="@+id/textFecha"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/fecha_campo"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:typeface="sans" />
-
-                <TextView
-                    android:id="@+id/lblFecha"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/linearLayout"
-                    android:layout_weight="0.25"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/fecha_campo"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    android:typeface="sans"
-                    tools:text="Fecha" />
-
-            </LinearLayout>
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:text="@string/alumno_campo"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                android:typeface="sans"
+                tools:text="@string/alumno_campo" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout8"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout4"
+            android:layout_below="@+id/linearLayout2">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_carrera"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:visibility="visible">
+
+                <Spinner
+                    android:id="@+id/cmb_carreras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/linearLayout7"
+                    android:layout_weight="1"
+                    android:popupBackground="#becaf2"
+                    android:textSize="20sp"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="0dp" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_alignLeft="@+id/linearLayout9"
+            android:layout_alignStart="@+id/linearLayout9">
 
             <Button
                 android:id="@+id/buttonMesas"
@@ -167,6 +98,29 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tituloElija"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="cursive"
+                    android:text="@string/seleccioneCarrera_titulo"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -175,7 +129,8 @@
             android:orientation="horizontal"
             android:layout_above="@+id/include"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:id="@+id/linearLayout9">
 
             <fragment
                 android:id="@+id/fragmentListadoProductos"
