@@ -54,8 +54,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
 //    TextView lblLegajo;
     public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
-    @BindView(R.id.buttonMesas)
-    Button buttonMesas;
     // @BindView(R.id.lblFecha)    TextView lblFecha;
     // @BindView(R.id.lblMaterias)    TextView lblMaterias;
     // @BindView(R.id.listaMaterias)    ListView listaMatrias;
@@ -197,11 +195,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
   //      lblLegajo.setText("sin legajo");
     }
 
-    @OnClick(R.id.buttonMesas)
-    public void cargarMaterias(){
-        Intent intent = new Intent(this, MesaActivity.class);
-        startActivity(intent);
-    }
+
 
     @Override
     public void onBackPressed() {

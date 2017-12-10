@@ -84,20 +84,6 @@
             android:layout_alignLeft="@+id/linearLayout9"
             android:layout_alignStart="@+id/linearLayout9">
 
-            <Button
-                android:id="@+id/buttonMesas"
-                android:layout_width="150sp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearLayout8"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:text="Ver mesas"
-                android:textAllCaps="false"
-                android:textColor="@color/colorBlanco"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="sans" />
 
             <LinearLayout
                 android:id="@+id/linearLayout7"
