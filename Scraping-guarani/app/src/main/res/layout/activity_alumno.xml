@@ -194,5 +194,18 @@
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="59dp" />
+
+        <fragment
+            android:id="@+id/fragmentListadoProductos"
+            android:name="com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="50"
+            android:layout_marginTop="59dp"
+            />
+
+
     </RelativeLayout>
 </ScrollView>

@@ -3,6 +3,10 @@ package com.example.nicoc.scraping_guarani.Alumno;
 import android.content.SharedPreferences;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+
+import java.util.ArrayList;
 
 /**
  * Created by nicoc on 06/12/17.
@@ -41,5 +45,15 @@ class AlumnoPresenter implements IAlumno.Presenter {
     @Override
     public void deslogueado() {
         this.view.mostrarError("Deslogueado");
+    }
+
+    @Override
+    public void getMesasEInscripciones() {
+        this.model.getMesasEInscripciones();
+    }
+
+    @Override
+    public void onMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+        this.view.setMesasEInscripciones(mesas, inscripciones);
     }
 }

@@ -4,9 +4,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.AsyncLogin;
 import com.example.nicoc.scraping_guarani.Mesa.Servicio.AsyncDesloguear;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by nicoc on 06/12/17.
@@ -28,6 +34,27 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
             this.presenter.mostrarError("Sin alumno guardado.");
         Alumno alumno = new Gson().fromJson(obj_json, Alumno.class);
         this.presenter.onAlumno(alumno);
+    }
+
+    @Override
+    public void getMesasEInscripciones() {
+        ArrayList<Mesa> mesas= new  ArrayList<Mesa>();
+        ArrayList<Inscripcion> inscripciones= new  ArrayList<Inscripcion>();
+
+        String mesas_string = preferences.getString("mesas", "");
+        String inscripciones_json = preferences.getString("inscripciones", "");
+
+        Type collectionType;
+        if (!mesas_string.isEmpty()){
+            collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
+            mesas= new  Gson().fromJson(mesas_string, collectionType);
+        }
+
+        if (!inscripciones_json.isEmpty()){
+            collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
+            inscripciones = new  Gson().fromJson(inscripciones_json, collectionType);
+        }
+        this.presenter.onMesasEInscripciones(mesas, inscripciones);
     }
 
     @Override

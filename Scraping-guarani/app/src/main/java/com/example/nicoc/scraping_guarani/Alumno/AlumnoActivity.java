@@ -23,22 +23,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
+import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
+public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, ListadoMesasFragment.onMesaSeleccionadsListener {
 
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
     @BindView(R.id.lblLegajo)
     TextView lblLegajo;
-    Alumno alumno;
+    public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
     @BindView(R.id.buttonMesas)
     Button buttonMesas;
@@ -78,8 +83,9 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         ButterKnife.bind(this);
         this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
 
-        getAlumno();
+        this.presenter.getAlumno();
         verificar_login();
+        this.presenter.getMesasEInscripciones();
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estado_dialog = savedInstanceState.getString(KEY_1);
@@ -89,12 +95,14 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         escucharBroadcasts();
     }
 
-    public void getAlumno() {
-        this.presenter.getAlumno();
+    public void setAlumno(Alumno alumno) {
+        _alumno = alumno;
     }
 
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
+    @Override
+    public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+        _alumno.loadInscripciones(inscripciones);
+        _alumno.loadMesas(mesas);
     }
 
     private void escucharBroadcasts() {
@@ -176,7 +184,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
 
 
     private void verificar_login(){
-        if (this.alumno!=null)
+        if (_alumno!=null)
             setDatosAlumno();
         else{
             Intent intent = new Intent(this, LoginActivity.class);
@@ -184,8 +192,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
         }
     }
     private void setDatosAlumno(){
-
-        lblAlumno.setText(this.alumno.getNombre());
+        lblAlumno.setText(_alumno.getNombre());
         lblLegajo.setText("sin legajo");
     }
 
@@ -203,5 +210,10 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View {
     @Override
     public void mostrarError(String error) {
         Toast.makeText(AlumnoActivity.this, error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onMesaSeleccionadaFragment(Mesa mesa) {
+        mostrarError("SELECCIONO");
     }
 }
