@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
-import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment;
+import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment.onMesaSeleccionadaListener;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
@@ -37,7 +37,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, ListadoMesasFragment.onMesaSeleccionadsListener {
+public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, onMesaSeleccionadaListener {
+
+    public interface IUpdateList{
+        public void updateList();
+
+    }
+    private IUpdateList fragment;
 
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
@@ -103,6 +109,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, L
     public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
         _alumno.loadInscripciones(inscripciones);
         _alumno.loadMesas(mesas);
+        this.fragment.updateList();
     }
 
     private void escucharBroadcasts() {
@@ -123,14 +130,17 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, L
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        getItems();
 
-                        mostrarDialog();
+                        //mostrarDialog();
                     }
                 },
                 filter
         );
     }
-
+    public final void getItems(){
+        this.presenter.getMesasEInscripciones();
+    }
     private void mostrarDialog(){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -166,12 +176,10 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, L
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
 
     private void cerrarSesion() {
-
         Alarma.cancelarAlarma();
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
@@ -210,6 +218,10 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, L
     @Override
     public void mostrarError(String error) {
         Toast.makeText(AlumnoActivity.this, error, Toast.LENGTH_LONG).show();
+    }
+
+    public void setFragment(IUpdateList fragment) {
+        this.fragment = fragment;
     }
 
     @Override

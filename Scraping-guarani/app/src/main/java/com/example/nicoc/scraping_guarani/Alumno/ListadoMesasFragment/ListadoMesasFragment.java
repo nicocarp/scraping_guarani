@@ -3,13 +3,13 @@ package com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
+import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity.IUpdateList;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
@@ -30,12 +30,12 @@ public class ListadoMesasFragment extends Fragment implements IListadoMesasFragm
 
     @BindView(R.id.lista) ListView lista;
 
-    public interface onMesaSeleccionadsListener {
+    public interface onMesaSeleccionadaListener {
         void onMesaSeleccionadaFragment(Mesa mesa);
         public void mostrarError(String error);
     }
 
-    private onMesaSeleccionadsListener mListener;
+    private onMesaSeleccionadaListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,15 +56,21 @@ public class ListadoMesasFragment extends Fragment implements IListadoMesasFragm
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onMesaSeleccionadsListener) {
-            mListener = (onMesaSeleccionadsListener) context;
+        if (context instanceof onMesaSeleccionadaListener) {
+            mListener = (onMesaSeleccionadaListener) context;
+            ((AlumnoActivity)getActivity()).setFragment(new IUpdateList(){
+                @Override
+                public void updateList(){
+                    setItemss();
+                }
+            });
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
     @OnItemClick(R.id.lista) void itemClick(int position){
-        Log.i("FRAGMENT","se hizo click");
         Mesa mesa= (Mesa) lista.getAdapter().getItem(position);
         this.mListener.onMesaSeleccionadaFragment(mesa);
     }

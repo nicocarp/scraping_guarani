@@ -116,25 +116,21 @@ public class ServicioIntent extends IntentService{
      */
     private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones){
 
-
         SharedPreferences.Editor edit = preferences.edit();
-
+        Boolean notificar = false;
         Gson gson = new Gson();
 
         String mesas_json = gson.toJson(mesas);
         String inscripciones_json = gson.toJson(inscripciones);
 
         String mesas_json_guardadas = preferences.getString("mesas", "");
-        Boolean notificar = false;
 
         if (!mesas_json_guardadas.isEmpty()){
             Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
             ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
             notificar = (mesas_guardadas.size() == 0) && (mesas.size() > 0);
-        }
-
-
-
+        }else
+            notificar=true;
 
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
