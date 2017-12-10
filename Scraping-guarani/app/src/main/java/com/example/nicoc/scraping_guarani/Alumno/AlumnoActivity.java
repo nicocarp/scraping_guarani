@@ -47,8 +47,8 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
 
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
-    @BindView(R.id.lblLegajo)
-    TextView lblLegajo;
+//    @BindView(R.id.lblLegajo)
+//    TextView lblLegajo;
     public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
     @BindView(R.id.buttonMesas)
@@ -201,7 +201,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
     }
     private void setDatosAlumno(){
         lblAlumno.setText(_alumno.getNombre());
-        lblLegajo.setText("sin legajo");
+  //      lblLegajo.setText("sin legajo");
     }
 
     @OnClick(R.id.buttonMesas)
