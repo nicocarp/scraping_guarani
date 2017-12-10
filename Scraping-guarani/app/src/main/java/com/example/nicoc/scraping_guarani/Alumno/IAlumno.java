@@ -22,12 +22,9 @@ public class IAlumno {
         public void getAlumno();
         public void onAlumno(Alumno alumno);
         void deslogueado();
-        public void getMesasEInscripciones();
-        public void onMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones);
     }
     public interface Model {
         public void getAlumno();
-        public void getMesasEInscripciones();
         public void desloguearse();
     }
 }

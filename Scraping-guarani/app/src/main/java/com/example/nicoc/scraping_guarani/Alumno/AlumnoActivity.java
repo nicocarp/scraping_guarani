@@ -13,40 +13,40 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
-import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment.onMesaSeleccionadaListener;
+import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.IListadoMesasFragment;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
-import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, onMesaSeleccionadaListener {
+public class AlumnoActivity extends AppCompatActivity implements
+        IAlumno.View, IListadoMesasFragment.ViewContainer {
 
-    public interface IUpdateList{
-        public void updateList();
-
+    @Override
+    public void onItemSelectedInFragment(Mesa mesa) {
+        Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
+        Materia materia = carrera.getMateriaById(mesa.getMateria());
+        mostrarError(materia.getNombre().toLowerCase());
     }
-    private IUpdateList fragment;
+
+    private IListadoMesasFragment.ViewFragment fragment;
 
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
@@ -88,11 +88,11 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
+        this.fragment = (IListadoMesasFragment.ViewFragment)
+                this.getSupportFragmentManager().findFragmentById(R.id.fragmentListadoProductos);
         this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
-
         this.presenter.getAlumno();
         verificar_login();
-        this.presenter.getMesasEInscripciones();
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estado_dialog = savedInstanceState.getString(KEY_1);
@@ -125,15 +125,16 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-                        getItems();
+                        updateItems();
+
                         //mostrarDialog();
                     }
                 },
                 filter
         );
     }
-    public final void getItems(){
-        this.presenter.getMesasEInscripciones();
+    public final void updateItems(){
+        this.fragment.updateList();
     }
     private void mostrarDialog(){
 
@@ -192,10 +193,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
     }
     private void setDatosAlumno(){
         lblAlumno.setText(_alumno.getNombre());
-  //      lblLegajo.setText("sin legajo");
     }
-
-
 
     @Override
     public void onBackPressed() {
@@ -207,14 +205,9 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
         Toast.makeText(AlumnoActivity.this, error, Toast.LENGTH_LONG).show();
     }
 
-    public void setFragment(IUpdateList fragment) {
+    public void setFragment(IListadoMesasFragment.ViewFragment fragment) {
         this.fragment = fragment;
     }
 
-    @Override
-    public void onMesaSeleccionadaFragment(Mesa mesa) {
-        Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
-        Materia materia = carrera.getMateriaById(mesa.getMateria());
-        mostrarError(materia.getNombre().toLowerCase());
-    }
+
 }

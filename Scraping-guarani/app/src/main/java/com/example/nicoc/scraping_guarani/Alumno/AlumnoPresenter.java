@@ -47,13 +47,5 @@ class AlumnoPresenter implements IAlumno.Presenter {
         this.view.mostrarError("Deslogueado");
     }
 
-    @Override
-    public void getMesasEInscripciones() {
-        this.model.getMesasEInscripciones();
-    }
 
-    @Override
-    public void onMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
-        this.view.setMesasEInscripciones(mesas, inscripciones);
-    }
 }

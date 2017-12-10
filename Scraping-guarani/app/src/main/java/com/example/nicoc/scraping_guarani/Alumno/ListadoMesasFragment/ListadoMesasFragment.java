@@ -2,6 +2,7 @@ package com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
-import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity.IUpdateList;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
@@ -22,20 +22,13 @@ import butterknife.OnItemClick;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
-
-public class ListadoMesasFragment extends Fragment implements IListadoMesasFragment.View {
+public class ListadoMesasFragment extends Fragment implements
+        IListadoMesasFragment.View, IListadoMesasFragment.ViewFragment {
 
     private IListadoMesasFragment.Presenter presenter;
+    private IListadoMesasFragment.ViewContainer mListener;
 
     @BindView(R.id.lista) ListView lista;
-
-    public interface onMesaSeleccionadaListener {
-        void onMesaSeleccionadaFragment(Mesa mesa);
-        public void mostrarError(String error);
-    }
-
-    private onMesaSeleccionadaListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,34 +40,32 @@ public class ListadoMesasFragment extends Fragment implements IListadoMesasFragm
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.presenter = new ListadoMesasPresenter(this, getContext().getSharedPreferences("loginPrefs", MODE_PRIVATE));
+    }
+
+    @Override
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
-        this.presenter = new ListadoMesasPresenter(this, getContext().getSharedPreferences("loginPrefs", MODE_PRIVATE));
-        this.setItemss();
+        this.getItems();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onMesaSeleccionadaListener) {
-            mListener = (onMesaSeleccionadaListener) context;
-            ((AlumnoActivity)getActivity()).setFragment(new IUpdateList(){
-                @Override
-                public void updateList(){
-                    setItemss();
-                }
-            });
-
+        if (context instanceof IListadoMesasFragment.ViewContainer) {
+            mListener = (IListadoMesasFragment.ViewContainer) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     @OnItemClick(R.id.lista) void itemClick(int position){
         Mesa mesa= (Mesa) lista.getAdapter().getItem(position);
-        this.mListener.onMesaSeleccionadaFragment(mesa);
+        this.mListener.onItemSelectedInFragment(mesa);
     }
-
     @Override
     public void getItems() {
         this.presenter.getItems();
@@ -82,19 +73,17 @@ public class ListadoMesasFragment extends Fragment implements IListadoMesasFragm
 
     @Override
     public void mostrarError(String error) {
-
         this.mListener.mostrarError(error);
     }
 
     @Override
-    public void setItems(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
+    public void setItems() {
         lista.setAdapter(new ListadoMesasAdapter(this, AlumnoActivity._alumno));
-
     }
-    public void setItemss(){
-        mostrarError("en set items");
-        lista.setAdapter(new ListadoMesasAdapter(this, AlumnoActivity._alumno));
 
+    @Override
+    public void updateList() {
+        getItems();
     }
 
 

@@ -36,26 +36,6 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
         this.presenter.onAlumno(alumno);
     }
 
-    @Override
-    public void getMesasEInscripciones() {
-        ArrayList<Mesa> mesas= new  ArrayList<Mesa>();
-        ArrayList<Inscripcion> inscripciones= new  ArrayList<Inscripcion>();
-
-        String mesas_string = preferences.getString("mesas", "");
-        String inscripciones_json = preferences.getString("inscripciones", "");
-
-        Type collectionType;
-        if (!mesas_string.isEmpty()){
-            collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
-            mesas= new  Gson().fromJson(mesas_string, collectionType);
-        }
-
-        if (!inscripciones_json.isEmpty()){
-            collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
-            inscripciones = new  Gson().fromJson(inscripciones_json, collectionType);
-        }
-        this.presenter.onMesasEInscripciones(mesas, inscripciones);
-    }
 
     @Override
     public void desloguearse() {

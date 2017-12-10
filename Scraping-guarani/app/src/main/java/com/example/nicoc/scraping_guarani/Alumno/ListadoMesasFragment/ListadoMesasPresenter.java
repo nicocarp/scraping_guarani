@@ -7,6 +7,8 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.util.ArrayList;
 
+import static com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity._alumno;
+
 /**
  * Created by nicoc on 08/10/17.
  */
@@ -24,12 +26,14 @@ class ListadoMesasPresenter implements IListadoMesasFragment.Presenter {
 
     @Override
     public void getItems() {
-        this.model.getItems();
+        this.model.getMesasEInscripciones();
     }
 
     @Override
     public void setItems(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
-        this.view.setItems(mesas, inscripciones);
+        _alumno.loadInscripciones(inscripciones);
+        _alumno.loadMesas(mesas);
+        this.view.setItems();
     }
 
     @Override

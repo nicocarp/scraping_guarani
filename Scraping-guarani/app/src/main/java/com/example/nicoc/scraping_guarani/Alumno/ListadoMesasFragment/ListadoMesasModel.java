@@ -30,7 +30,7 @@ class ListadoMesasModel implements IListadoMesasFragment.Model {
      * Obtenemos de SharedPreferences los datos relacionados con las mesas a inscripciones     *
      */
     @Override
-    public void getItems() {
+    public void getMesasEInscripciones() {
         ArrayList<Mesa> mesas= new  ArrayList<Mesa>();
         ArrayList<Inscripcion> inscripciones= new  ArrayList<Inscripcion>();
 
