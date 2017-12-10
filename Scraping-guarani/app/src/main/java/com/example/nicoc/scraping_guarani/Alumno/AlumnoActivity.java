@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import com.example.nicoc.scraping_guarani.Alarma;
 import com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment.onMesaSeleccionadaListener;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
@@ -32,6 +34,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,25 +116,18 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
     }
 
     private void escucharBroadcasts() {
-        //Escucho por mensajes que vienen a mi.....
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter("MesasActivity");
-        //filter.addAction(CountService.EXTRA_COUNT_TARGET);
         broadcastManager.registerReceiver(
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        Log.i("AlumnoActivity....", "encontre el mensaje brodcasteado!");
                         Bundle bundle = intent.getExtras();
-
-                        //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
                         Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         getItems();
-
                         //mostrarDialog();
                     }
                 },
@@ -157,7 +153,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
         dialogBuilder.setCancelable(false);
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
     }
 
 
@@ -188,8 +183,6 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
         startActivity(intent);
     }
-
-
 
     private void verificar_login(){
         if (_alumno!=null)
@@ -226,6 +219,8 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
 
     @Override
     public void onMesaSeleccionadaFragment(Mesa mesa) {
-        mostrarError("SELECCIONO");
+        Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
+        Materia materia = carrera.getMateriaById(mesa.getMateria());
+        mostrarError(materia.getNombre().toLowerCase());
     }
 }
