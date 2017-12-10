@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -18,7 +19,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +51,7 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
 
     }
     private IUpdateList fragment;
-
+    private Spinner cmb_carreras;
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
 //    @BindView(R.id.lblLegajo)
@@ -88,11 +92,16 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
-        this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
 
+        this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
         this.presenter.getAlumno();
         verificar_login();
         this.presenter.getMesasEInscripciones();
+        cargarComboCarreras();
+
+        //ArrayAdapter<Carrera> adapter = new ArrayAdapter<Carrera>(getApplicationContext(), R.layout.simple_spinner_item, carrera);
+        //adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        //cmb_carreras.setAdapter(adapter);
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estado_dialog = savedInstanceState.getString(KEY_1);
@@ -100,6 +109,26 @@ public class AlumnoActivity extends AppCompatActivity implements IAlumno.View, o
                 mostrarDialog();
         }
         escucharBroadcasts();
+    }
+
+    private void cargarComboCarreras() {
+        cmb_carreras = (Spinner) findViewById(R.id.cmb_carreras);
+        ArrayList<Carrera> listacarrera = new ArrayList<>();
+        listacarrera.addAll(_alumno.getCarreras());
+        ArrayList<String> carrera = new ArrayList<>();
+        for (Carrera car : listacarrera) {
+            carrera.add(car.getNombre());
+        }
+        cmb_carreras.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, carrera));
+        cmb_carreras.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
     }
 
     public void setAlumno(Alumno alumno) {
