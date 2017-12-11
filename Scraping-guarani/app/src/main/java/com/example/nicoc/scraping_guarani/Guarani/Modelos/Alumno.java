@@ -135,4 +135,15 @@ public class Alumno{
         }
         return result;
     }
+
+    public Inscripcion getInscripcionByMesa(Mesa mesa) {
+        Inscripcion result = null;
+        for (Inscripcion inscripcion : this.getInscripciones()){
+            if (inscripcion.esDeLaMesa(mesa)){
+                result = inscripcion;
+                break;
+            }
+        }
+        return result;
+    }
 }

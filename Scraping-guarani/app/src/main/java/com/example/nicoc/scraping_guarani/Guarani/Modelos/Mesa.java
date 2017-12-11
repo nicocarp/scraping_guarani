@@ -100,4 +100,12 @@ public class Mesa {
         return (this.getMaterias_necesarias().isEmpty());
     }
 
+    public String getSoloFecha(){
+        String[] result = this.getFecha().split(" ");
+        return result[0];
+    }
+    public String getHora(){
+        String[] result = this.getFecha().split(" ");
+        return result[1];
+    }
 }

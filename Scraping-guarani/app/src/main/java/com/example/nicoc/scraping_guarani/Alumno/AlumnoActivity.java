@@ -209,14 +209,14 @@ public class AlumnoActivity extends AppCompatActivity implements
         // ver especificacion en trello
         if (_alumno.estaInscripto(mesa)){
             // mostrar dialogo para desinscribirse
-            mostrarDialogDesinscripcion();
+            mostrarDialogDesinscripcion(_alumno.getInscripcionByMesa(mesa));
         }else{
             if (mesa.puedeInscribirse()){
                 // mostrar dialogo indicando las materias necesarias para isncribirse.
-                mostrarDialogFaltanMaterias();
+                mostrarDialogInscripcion(mesa, carrera, materia);
             }else{
                 // mostrar dialogo para inscribirse.
-                mostrarDialogInscripcion();
+                mostrarDialogFaltanMaterias();
             }
         }
 
@@ -224,17 +224,24 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
 
-    private void mostrarDialogInscripcion(){
+    private void mostrarDialogInscripcion(final Mesa mesa, Carrera carrera, Materia materia){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
         dialogBuilder.setView(dialogView);
+
+
+        ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(carrera.getNombre());
+        ((TextView) dialogView.findViewById(R.id.lblMateria)).setText(materia.getNombre());
+        ((TextView) dialogView.findViewById(R.id.lblFecha)).setText(mesa.getSoloFecha());
+        ((TextView) dialogView.findViewById(R.id.lblHora)).setText(mesa.getHora());
+        final Spinner cbo_tipo_mesa =(Spinner) dialogView.findViewById(R.id.cmb_tipo_mesa);
         dialogBuilder.setPositiveButton("Inscribir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //aca va el codigo que actualiza la activity
+                inscribirse(cbo_tipo_mesa.getSelectedItem().toString(), mesa);
             }
         });
         dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
@@ -247,9 +254,15 @@ public class AlumnoActivity extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+    public void inscribirse(String tipo, Mesa mesa){
+        mostrarError("en incribirse:" +tipo + mesa.getMateria());
+    }
 
+    public void desinscribirse(Inscripcion inscripcion){
+        mostrarError("Desinsribirse "+inscripcion.getMateria()+inscripcion.getCarrera());
+    }
 
-    private void mostrarDialogDesinscripcion(){
+    private void mostrarDialogDesinscripcion(final Inscripcion inscripcion){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -259,6 +272,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         dialogBuilder.setPositiveButton("Desinscribir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                desinscribirse(inscripcion);
                 //aca va el codigo que actualiza la activity
             }
         });
@@ -272,6 +286,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+
 
     private void mostrarDialogFaltanMaterias(){
 

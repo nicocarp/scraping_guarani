@@ -42,4 +42,9 @@ public class Inscripcion {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+
+    public boolean esDeLaMesa(Mesa mesa) {
+        return this.getCarrera().equals(mesa.getCarrera()) &&
+                this.getMateria().equals(mesa.getMateria());
+    }
 }
