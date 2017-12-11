@@ -96,4 +96,8 @@ public class Mesa {
         this.profesores = profesores;
     }
 
+    public Boolean puedeInscribirse(){
+        return (this.getMaterias_necesarias().isEmpty());
+    }
+
 }

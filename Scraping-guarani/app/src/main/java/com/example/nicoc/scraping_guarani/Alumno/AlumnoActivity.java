@@ -45,24 +45,17 @@ import butterknife.ButterKnife;
 public class AlumnoActivity extends AppCompatActivity implements
         IAlumno.View, IListadoMesasFragment.ViewContainer {
 
-    @Override
-    public void onItemSelectedInFragment(Mesa mesa) {
-        Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
-        Materia materia = carrera.getMateriaById(mesa.getMateria());
-        mostrarError(materia.getNombre().toLowerCase());
-    }
     private IListadoMesasFragment.ViewFragment fragment;
-
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
+
     public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
-
     private SharedPreferences loginPreferences;
+
     private SharedPreferences.Editor loginPrefsEditor;
     private android.app.AlertDialog alertDialog;
     private static final String KEY_1 = "alertDialog";
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_a, menu);
@@ -105,10 +98,10 @@ public class AlumnoActivity extends AppCompatActivity implements
         escucharBroadcasts();
     }
 
-
     public void setAlumno(Alumno alumno) {
         _alumno = alumno;
     }
+
 
     @Override
     public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
@@ -137,6 +130,7 @@ public class AlumnoActivity extends AppCompatActivity implements
                 filter
         );
     }
+
     public final void updateItems(){
         this.fragment.updateList();
     }
@@ -157,8 +151,6 @@ public class AlumnoActivity extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
-
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -187,6 +179,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+
     private void verificar_login(){
         if (_alumno!=null)
             setDatosAlumno();
@@ -195,10 +188,10 @@ public class AlumnoActivity extends AppCompatActivity implements
             startActivity(intent);
         }
     }
+
     private void setDatosAlumno(){
         lblAlumno.setText(_alumno.getNombre());
     }
-
     @Override
     public void onBackPressed() {
         return;
@@ -209,9 +202,24 @@ public class AlumnoActivity extends AppCompatActivity implements
         Toast.makeText(AlumnoActivity.this, error, Toast.LENGTH_LONG).show();
     }
 
-    public void setFragment(IListadoMesasFragment.ViewFragment fragment) {
-        this.fragment = fragment;
+    @Override
+    public void onItemSelectedInFragment(Mesa mesa) {
+        Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
+        Materia materia = carrera.getMateriaById(mesa.getMateria());
+        // ver especificacion en trello
+        if (_alumno.estaInscripto(mesa)){
+            // mostrar dialogo para desinscribirse
+        }else{
+            if (mesa.puedeInscribirse()){
+                // mostrar dialogo indicando las materias necesarias para isncribirse.
+            }else{
+                // mostrar dialogo para inscribirse.
+            }
+        }
+
+        mostrarError(materia.getNombre().toLowerCase());
     }
+
 
 
 }
