@@ -443,6 +443,7 @@ public class Guarani {
 
                     div_errores = document.select("div.mensaje_ua_contenido").first();
                     if (div_errores == null){
+                        mesa.setAnio_acedemico(document.select("legend").first().children().first().text());
                         fecha = document.select("td:matches(^[0-9]{2}/[0-9]{2}/[0-9]{4})").first().text();
                         hora  = document.select("td:matches(^[0-9]{2}:[0-9]{2})").first().text();
                         turno = this.utils.getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");

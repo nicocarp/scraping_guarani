@@ -12,6 +12,7 @@ public class Mesa {
     private String turno; // esto es necesario para lanzar post de inscripcion
     private ArrayList<Profesor> profesores;
     private ArrayList<String> materias_necesarias;
+    private String anio_acedemico;
 
     public Mesa(){
         this.materias_necesarias = new ArrayList<String>();
@@ -107,5 +108,13 @@ public class Mesa {
     public String getHora(){
         String[] result = this.getFecha().split(" ");
         return result[1];
+    }
+
+    public String getAnio_acedemico() {
+        return anio_acedemico;
+    }
+
+    public void setAnio_acedemico(String anio_acedemico) {
+        this.anio_acedemico = anio_acedemico;
     }
 }

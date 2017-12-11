@@ -212,7 +212,7 @@ public class AlumnoActivity extends AppCompatActivity implements
             mostrarDialogDesinscripcion(_alumno.getInscripcionByMesa(mesa));
         }else{
             if (mesa.puedeInscribirse()){
-                // mostrar dialogo indicando las materias necesarias para isncribirse.
+                // mostrar dixalogo indicando las materias necesarias para isncribirse.
                 mostrarDialogInscripcion(mesa, carrera, materia);
             }else{
                 // mostrar dialogo para inscribirse.
@@ -255,7 +255,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         alertDialog.show();
     }
     public void inscribirse(String tipo, Mesa mesa){
-        mostrarError("en incribirse:" +tipo + mesa.getMateria());
+        mostrarError("en incribirse anio academico:" +tipo + mesa.getAnio_acedemico());
     }
 
     public void desinscribirse(Inscripcion inscripcion){
