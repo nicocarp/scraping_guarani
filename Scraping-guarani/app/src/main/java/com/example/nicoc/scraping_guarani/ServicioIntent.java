@@ -114,30 +114,35 @@ public class ServicioIntent extends IntentService{
     private void crearNotificacionMesasDisponibles(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones){
 
         SharedPreferences.Editor edit = preferences.edit();
-        Boolean notificar = false;
+        Boolean notificar, lanzar_broadcast = false;
         Gson gson = new Gson();
 
         String mesas_json = gson.toJson(mesas);
         String inscripciones_json = gson.toJson(inscripciones);
 
         String mesas_json_guardadas = preferences.getString("mesas", "");
+        String inscripciones_json_guardadas = preferences.getString("inscripciones", "");
+        if (mesas_json_guardadas.isEmpty())
+            mesas_json_guardadas = "[]";
+        if (inscripciones_json_guardadas.isEmpty())
+            inscripciones_json_guardadas = "[]";
 
-        if (!mesas_json_guardadas.isEmpty()){
-            Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
-            ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
-            notificar = (mesas_guardadas.size() < mesas.size()) && (mesas.size() > 0);
-        }else
-            notificar=true;
+        Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
+        ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
+        collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
+        ArrayList<Inscripcion> inscripciones_guardadas = new Gson().fromJson(inscripciones_json_guardadas, collectionType);
+
+        notificar = (mesas_guardadas.size() < mesas.size());
+        lanzar_broadcast = (inscripciones_guardadas.size() != inscripciones.size());
 
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
-        /* Descomentar el siguiente if!: solo notificar si hay nuevas mesas.*/
-        if (!notificar)
-            return;
-        notificar();
-        enviarBroadcast();
+        if (lanzar_broadcast)
+            enviarBroadcast();
+        if (notificar)
+            notificar();
     }
 
 

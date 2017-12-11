@@ -36,6 +36,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
+import com.example.nicoc.scraping_guarani.ServicioIntent;
 
 import java.util.ArrayList;
 
@@ -113,12 +114,15 @@ public class AlumnoActivity extends AppCompatActivity implements
     @Override
     public void inscriptoCorrectamente(String mensaje) {
         mostrarError(mensaje);
+        startService(new Intent(this, ServicioIntent.class));
+
         //this.updateItems();
     }
 
     @Override
     public void desinscriptoCorrectamente(String mensaje) {
         mostrarError(mensaje);
+        startService(new Intent(this, ServicioIntent.class));
     }
 
     private void escucharBroadcasts() {
