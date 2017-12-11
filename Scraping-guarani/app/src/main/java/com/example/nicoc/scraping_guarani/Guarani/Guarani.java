@@ -184,14 +184,14 @@ public class Guarani {
                 inscripciones.add(inscripcion);
             }
         }
-        if (inscripciones.size() == 0){
+        /*if (inscripciones.size() == 0){
                 Inscripcion inscripcion = new Inscripcion();
                 inscripcion.setTipo("regular");
                 inscripcion.setMateria("IF005");
                 inscripcion.setCarrera("38");
                 inscripcion.setFecha(" 23/02/2017");
                 inscripciones.add(inscripcion);
-        }
+        }*/
         return inscripciones;
     }
 
@@ -474,7 +474,7 @@ public class Guarani {
             links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         }
         /* Probando tirar datos*/
-        if (mesas.isEmpty()){
+        /*if (mesas.isEmpty()){
             Mesa m = new Mesa();
             m.setCarrera("38");
             m.setMateria("IF003");
@@ -505,8 +505,7 @@ public class Guarani {
             m4.setFecha("11/12/2013");
             m4.setTurno("un-turno");
             mesas.add(m4);
-
-        }
+        }*/
         return mesas;
     }
 
