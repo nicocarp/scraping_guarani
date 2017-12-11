@@ -128,7 +128,7 @@ public class ServicioIntent extends IntentService{
         if (!mesas_json_guardadas.isEmpty()){
             Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
             ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
-            notificar = (mesas_guardadas.size() == 0) && (mesas.size() > 0);
+            notificar = (mesas_guardadas.size() < mesas.size()) && (mesas.size() > 0);
         }else
             notificar=true;
 
