@@ -24,8 +24,9 @@
                 android:layout_weight="1"
                 android:fontFamily="cursive"
                 android:text="@string/seleccioneCarrera_titulo"
+                android:textAlignment="viewStart"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
 
@@ -44,11 +45,12 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:fontFamily="cursive"
             android:text="Mesas"
+            android:textAlignment="center"
             android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:typeface="sans" />
 
