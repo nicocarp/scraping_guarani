@@ -128,8 +128,8 @@ public class Alarma extends Thread{
             //hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
             //if (hora == -1) hora = 23;
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 12); //Se disparará la alarma a las 12:00 pm
-            calendar.set(Calendar.MINUTE, 00);//30
+            calendar.set(Calendar.HOUR_OF_DAY, 14); //Se disparará la alarma a las 12:00 pm
+            calendar.set(Calendar.MINUTE, 15);//30
             calendar.set(Calendar.SECOND, 00);
 
 

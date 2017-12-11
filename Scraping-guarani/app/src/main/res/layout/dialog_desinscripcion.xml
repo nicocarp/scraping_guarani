@@ -26,6 +26,21 @@
 
 
         <TextView
+            android:id="@+id/lblTipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tipo"
+            android:layout_alignLeft="@+id/lblHora"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/lblHora"
+            android:text="REG/LIB"
+            android:textAlignment="textStart"
+            android:textColor="black"
+            android:textSize="20sp"
+            android:typeface="sans" />
+
+        <TextView
             android:id="@+id/tipo"
             android:layout_width="86dp"
             android:layout_height="wrap_content"
@@ -189,19 +204,6 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:entries="@array/arraySpinner"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:typeface="sans"
-            android:layout_alignLeft="@+id/lblHora"
-            android:layout_alignStart="@+id/lblHora"
-            android:layout_alignTop="@+id/tipo" />
 
         <!--<Button
             android:id="@+id/btnLogin"

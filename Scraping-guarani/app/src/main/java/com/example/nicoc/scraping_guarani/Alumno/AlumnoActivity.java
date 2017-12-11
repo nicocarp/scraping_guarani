@@ -209,15 +209,87 @@ public class AlumnoActivity extends AppCompatActivity implements
         // ver especificacion en trello
         if (_alumno.estaInscripto(mesa)){
             // mostrar dialogo para desinscribirse
+            mostrarDialogDesinscripcion();
         }else{
             if (mesa.puedeInscribirse()){
                 // mostrar dialogo indicando las materias necesarias para isncribirse.
+                mostrarDialogFaltanMaterias();
             }else{
                 // mostrar dialogo para inscribirse.
+                mostrarDialogInscripcion();
             }
         }
 
         mostrarError(materia.getNombre().toLowerCase());
+    }
+
+
+    private void mostrarDialogInscripcion(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Inscribir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+    private void mostrarDialogDesinscripcion(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_desinscripcion,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Desinscribir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void mostrarDialogFaltanMaterias(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_faltan_materias,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+            }
+        });
+
+        dialogBuilder.setCancelable(false);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
 

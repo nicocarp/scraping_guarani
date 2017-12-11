@@ -21,5 +21,11 @@
     <!--> Mensajes de error <-->
     <string name="exceptionIO">Error de IO</string>
 
+    <!--> Array para el spinner <-->
+    <string-array name="arraySpinner">
+        <item>REGULAR</item>
+        <item>LIBRE</item>
+    </string-array>
+
 
 </resources>
