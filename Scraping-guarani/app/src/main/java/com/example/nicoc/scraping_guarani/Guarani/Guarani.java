@@ -93,7 +93,16 @@ public class Guarani {
         this.connection.cookies(this.connection.response().cookies());
     }
 
-    public boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String tipo) throws IOException {
+    /**
+     * Se realiza una inscripcion a una mesa.
+     * @param alumno instancia de Alumno que se inscribira a la mesa.
+     * @param mesa instancia de Mesa que se va a inscribir.
+     * @param _tipo de inscripcion, regular o libre. Convertida toLowerCase
+     * @return true si no existio error, caso contrario obtener error de getError
+     * @throws IOException
+     */
+    public boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String _tipo) throws IOException {
+        String tipo = _tipo.toLowerCase();
         Document document = this.document_base;
         String url;
         if (!tipo.equals("libre") && !tipo.equals("regular")){
@@ -132,7 +141,7 @@ public class Guarani {
         m.put("legajo", alumno.getCarreraById(mesa.getCarrera()).getLegajo());
         m.put("materia", mesa.getMateria());
         m.put("generica", "");
-        m.put("anio_academico", "2017");
+        m.put("anio_academico", mesa.getAnio_acedemico());
         m.put("turno_examen", mesa.getTurno());
         m.put("mesa_examen", mesa.getMateria()+"-"+tipo);
         m.put("llamado", "1");
@@ -297,112 +306,7 @@ public class Guarani {
         return alumno;
     }
 
-    public ArrayList<Mesa> getMesasDeExamen(Carrera carrera) throws IOException {
-
-        Document document = this.document_base;
-        String url;
-
-
-        document = this.document_base;
-        // obtengo frame de operaciones (menu izquierda)
-        url = document.select("[src*=operaciones]").first().attr("abs:src");
-        document = this.connection.url(url).get();
-
-        String url_inscripcion = document.select("a:contains(examen)").first().attr("abs:href");
-        document = this.connection.url(url_inscripcion).get();
-
-        //url = document.select("[text*=LICENCIATURA]").first().attr("abs:href");
-        Element e = document.select("[text*=LICENCIATURA EN SISTEMAS]").first();
-
-        Elements link_carreras = document.select("[href*=elegirMateriaInscCursada]");
-        for (Element elem : link_carreras){
-            System.out.print(elem.text());
-            System.out.println(elem.attr("abs:href"));
-        }
-
-        // IGNORAMOS LAS CARRERAS SOLO MIRAMOS LICENCIATURA
-        url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
-        document = this.connection.url(url).get();
-
-        Elements link_materias = document.select("[href*=elegirMesaInscExamen]");
-
-        String cod, nombre, fecha, hora, profesores, turno;
-        Element elem;
-
-        ArrayList<String> resultados = new ArrayList<>();
-        String result = " {\"Result:\" { \"alumno\": [[alumno]], \"mesas\": [[mesas]], \"inscripciones\": [[inscripciones]] }}";
-
-
-        String mesas_json="";
-        String base_mesa_json = "{\"codigo\": [[codigo]], " +
-                "\"fecha\": [[fecha]], " +
-                "\"hora\":[[hora]], " +
-                "\"turno\":[[turno]], " +
-                "\"profesores\": [[profesores]]," +
-                "\"correlativas\": [[correlativas]] }";
-
-
-        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
-        for (int i = 0;  i < link_materias.size(); i++ ){
-            Mesa mesa = new Mesa();
-            elem = link_materias.get(i);
-
-            cod = this.utils.getMatch(elem.text(), "\\(([A-Z0-9]+)\\)");
-            nombre = this.utils.getMatch(elem.text(), "([\\s | [- | A-ZÑÁÉÍÓÚ]]+)");
-
-            mesa.setMateria(cod);
-
-            url = elem.attr("abs:href");
-            document = this.connection.url(url).get();
-
-            String mesa_json = base_mesa_json;
-            mesa_json=mesa_json.replace("[[codigo]]", cod);
-
-            Element div_errores = document.select("div.mensaje_ua_contenido").first();
-            System.out.print("MATERIA "+ cod + nombre );
-            if (div_errores == null){
-                fecha = document.select("td:matches(^[0-9]{2}/[0-9]{2}/[0-9]{4})").first().text();
-                hora  = document.select("td:matches(^[0-9]{2}:[0-9]{2})").first().text();
-                System.out.println("TURNOOO");
-                turno = this.utils.getMatch(document.html(), "([A-Z]+%[0-9]+[%[0-9]+]*)");
-
-                mesa_json = mesa_json.replace("[[fecha]]", fecha);
-                mesa_json = mesa_json.replace("[[hora]]", hora);
-                mesa_json = mesa_json.replace("[[turno]]", turno);
-
-                mesa.setFecha(fecha+hora);
-                mesa.setTurno(turno);
-
-                url = document.select("[href*=verDetalle]").first().attr("abs:href");
-                document = this.connection.url(url).get();
-                profesores = document.select("span.detalle_resaltado").first().html();
-                mesa_json= mesa_json.replace("[[profesores]]", profesores);
-
-            }
-            else{
-                for (String _cod_materia :  this.utils.getMatches(div_errores.html(), "([A-Z]+[0-9]+)")){
-                    mesa.addMateriaNecesariaById(_cod_materia);
-                }
-            }
-            // vuelvo a navegar hacia el listado e mesas.
-            document = this.connection.url(url_inscripcion).get();
-            url = document.select("a:contains(LICENCIATURA EN SISTEMAS)").first().attr("abs:href");
-            document = this.connection.url(url).get();
-            link_materias = document.select("[href*=elegirMesaInscExamen]");
-            mesas_json = mesas_json.concat(mesa_json);
-            mesas.add(mesa);
-        }
-        //mesas_json= mesas_json.replaceAll("[\\[\\[\\D\\]\\]]", "");
-        result = result.replace("[[mesas]]", mesas_json);
-
-
-        System.out.println("RESULT \n"+ result);
-
-        // AHORA RECORRO LAS MATERIAS PARA LAS CUALES ESTOY ANOTADO.
-        return mesas;
-    }
-
-    public ArrayList<Mesa> _getMesasDeExamen() throws IOException {
+    public ArrayList<Mesa> getMesasDeExamen() throws IOException {
 
         if (!estaLogueado())
             login();
@@ -510,15 +414,13 @@ public class Guarani {
         return mesas;
     }
 
-    public Boolean estaLogueado() throws IOException {
+    private Boolean estaLogueado() throws IOException {
         Document document = this.connection.url(URL).get();
         String url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
 
-        // click sobre boton iniciar Sesion
-        if (document.select("[href*=identificarse]").first() == null)
-            return true;
-        return false;
+        //  boton iniciar Sesion
+        return (document.select("[href*=identificarse]").first() == null);
     }
     /**
      * Intentamos hacer un login al servidor. Si hubo error, retrorno false y seteo mensaje de error.
@@ -675,7 +577,7 @@ public class Guarani {
             for (Carrera c : carreras){
                 System.out.println(c.getCodigo() +" "+ c.getNombre() +" "+ c.getActivo());
             }
-            ArrayList<Mesa> mesas = g._getMesasDeExamen();
+            ArrayList<Mesa> mesas = g.getMesasDeExamen();
             System.out.println("-- MESAS DE EXAMEN" + mesas.size());
             for (Mesa mesa : mesas){
                 System.out.println(mesa.getCarrera() +" "+mesa.getMateria());

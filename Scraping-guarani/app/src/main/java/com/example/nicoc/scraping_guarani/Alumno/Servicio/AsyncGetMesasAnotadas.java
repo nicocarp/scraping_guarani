@@ -1,9 +1,8 @@
-package com.example.nicoc.scraping_guarani.Mesa.Servicio;
+package com.example.nicoc.scraping_guarani.Alumno.Servicio;
 
 import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.util.ArrayList;
 

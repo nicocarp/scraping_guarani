@@ -1,24 +1,18 @@
 package com.example.nicoc.scraping_guarani.Alumno;
 
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
-import com.example.nicoc.scraping_guarani.Login.AsyncLogin;
-import com.example.nicoc.scraping_guarani.Mesa.Servicio.AsyncDesloguear;
-import com.google.common.reflect.TypeToken;
+import com.example.nicoc.scraping_guarani.Alumno.Servicio.AsyncDesloguear;
+import com.example.nicoc.scraping_guarani.Alumno.Servicio.AsyncInscribirse;
 import com.google.gson.Gson;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 /**
  * Created by nicoc on 06/12/17.
  */
 
-class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
+class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear, AsyncInscribirse.IInscribirse {
      private IAlumno.Presenter presenter;
     private SharedPreferences preferences;
 
@@ -34,6 +28,11 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
             this.presenter.mostrarError("Sin alumno guardado.");
         Alumno alumno = new Gson().fromJson(obj_json, Alumno.class);
         this.presenter.onAlumno(alumno);
+    }
+
+    @Override
+    public void inscribirseAMesa(Alumno alumno, Mesa mesa, String tipo) {
+        new AsyncInscribirse(this).execute(alumno, mesa, tipo);
     }
 
 
@@ -58,5 +57,10 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear {
     @Override
     public void onError(String error) {
         this.presenter.mostrarError(error);
+    }
+
+    @Override
+    public void onInscripcion(String mensaje) {
+        this.presenter.onInscripcion(mensaje);
     }
 }

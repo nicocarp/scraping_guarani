@@ -1,15 +1,10 @@
-package com.example.nicoc.scraping_guarani.Mesa.Servicio;
+package com.example.nicoc.scraping_guarani.Alumno.Servicio;
 
 import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
-import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by nicoc on 06/12/17.

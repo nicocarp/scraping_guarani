@@ -24,19 +24,10 @@
             android:name=".Alumno.AlumnoActivity"
             android:screenOrientation="sensor" />
 
-        <service
-            android:name=".Servicio"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".Mesa.Listado.MesaActivity"
             android:screenOrientation="sensor" />
 
-        <service
-            android:name=".ServicioPrueba"
-            android:enabled="true"
-            android:exported="true" />
         <service
             android:name=".ServicioIntent"
             android:exported="false" />

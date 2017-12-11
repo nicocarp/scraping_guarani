@@ -1,4 +1,4 @@
-package com.example.nicoc.scraping_guarani.Mesa.Servicio;
+package com.example.nicoc.scraping_guarani.Alumno.Servicio;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,11 +6,9 @@ import android.util.Log;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by nicoc on 01/12/17.
@@ -20,10 +18,11 @@ public class AsyncInscribirse extends AsyncTask<Object, Void, Boolean> {
 
     public interface IInscribirse {
         public void onError(String error);
-        public void onInscripcion();
+        public void onInscripcion(String mensaje);
     }
     private IInscribirse listener;
     private String error;
+    private String mensaje;
 
     public AsyncInscribirse(IInscribirse listener){
         this.listener = listener;
@@ -38,12 +37,13 @@ public class AsyncInscribirse extends AsyncTask<Object, Void, Boolean> {
         Log.i("Por enviar TIPO: ",tipo);
         Log.i("PROBANDO OTRO TIPO: ",tipo = String.valueOf(objects[2]));
 
-
-        Guarani guarani = ManagerGuarani._getInstance();
         try {
+            Guarani guarani = Guarani.getInstance();
             Boolean result =guarani.inscribirseMesaById(alumno, mesa, tipo);
             if (!result)
                 error = guarani.getError();
+            else
+                mensaje = guarani.getMensaje();
             return result;
 
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class AsyncInscribirse extends AsyncTask<Object, Void, Boolean> {
     protected void onPostExecute(Boolean inscripto) {
         super.onPostExecute(inscripto);
         if (inscripto)
-            this.listener.onInscripcion();
+            this.listener.onInscripcion(mensaje);
         else
             this.listener.onError(error);
     }

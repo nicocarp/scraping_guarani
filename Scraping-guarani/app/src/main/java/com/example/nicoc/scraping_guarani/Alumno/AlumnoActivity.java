@@ -110,6 +110,12 @@ public class AlumnoActivity extends AppCompatActivity implements
         this.fragment.updateList();
     }
 
+    @Override
+    public void inscriptoCorrectamente(String mensaje) {
+        mostrarError(mensaje);
+        //this.updateItems();
+    }
+
     private void escucharBroadcasts() {
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter("MesasActivity");
@@ -255,7 +261,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         alertDialog.show();
     }
     public void inscribirse(String tipo, Mesa mesa){
-        mostrarError("en incribirse anio academico:" +tipo + mesa.getAnio_acedemico());
+        this.presenter.inscribirseAMesa(_alumno, mesa, tipo);
     }
 
     public void desinscribirse(Inscripcion inscripcion){

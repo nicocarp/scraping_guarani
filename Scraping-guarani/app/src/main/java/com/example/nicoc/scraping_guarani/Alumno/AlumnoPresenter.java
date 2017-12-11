@@ -43,8 +43,18 @@ class AlumnoPresenter implements IAlumno.Presenter {
     }
 
     @Override
+    public void inscribirseAMesa(Alumno alumno, Mesa mesa, String tipo) {
+        this.model.inscribirseAMesa(alumno, mesa, tipo);
+    }
+
+    @Override
     public void deslogueado() {
         this.view.mostrarError("Deslogueado");
+    }
+
+    @Override
+    public void onInscripcion(String mensaje) {
+        this.view.inscriptoCorrectamente(mensaje);
     }
 
 

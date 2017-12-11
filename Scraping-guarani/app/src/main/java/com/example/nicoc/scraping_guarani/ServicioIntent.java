@@ -5,26 +5,23 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
-import com.example.nicoc.scraping_guarani.Mesa.Listado.MesaActivity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -78,7 +75,7 @@ public class ServicioIntent extends IntentService{
 
             while(bandera==true && contador<=MAXIMA_REPETICION){
                 try {
-                    ArrayList<Mesa> mesas = Guarani.getInstance()._getMesasDeExamen();
+                    ArrayList<Mesa> mesas = Guarani.getInstance().getMesasDeExamen();
                     ArrayList<Inscripcion> inscripciones = Guarani.getInstance().getMesasAnotadas();
                     crearNotificacionMesasDisponibles(mesas, inscripciones);
                     bandera = false;
@@ -148,7 +145,7 @@ public class ServicioIntent extends IntentService{
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
         int icono = R.mipmap.ic_launcher;
-        Intent intent = new Intent(ServicioIntent.this, MesaActivity.class);
+        Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
         mBuilder =new NotificationCompat.Builder(getApplicationContext())
                 .setContentIntent(pendingIntent)

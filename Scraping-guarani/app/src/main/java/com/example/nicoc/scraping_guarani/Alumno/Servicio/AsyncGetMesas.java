@@ -1,11 +1,8 @@
-package com.example.nicoc.scraping_guarani.Mesa.Servicio;
+package com.example.nicoc.scraping_guarani.Alumno.Servicio;
 
 import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
-import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 
 import java.io.IOException;
@@ -40,7 +37,7 @@ public class AsyncGetMesas extends AsyncTask<Void, Void, ArrayList<Mesa>> {
         ArrayList<Mesa> mesas = new ArrayList<Mesa>();
         try {
             Guarani guarani = Guarani.getInstance();
-            mesas = guarani._getMesasDeExamen();
+            mesas = guarani.getMesasDeExamen();
         } catch (IOException e) {
             e.printStackTrace();
             this.error = "Error en la conexion";
