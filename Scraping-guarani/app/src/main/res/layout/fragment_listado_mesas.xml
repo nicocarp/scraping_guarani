@@ -9,22 +9,48 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_carrera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tituloElija"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:fontFamily="cursive"
+                android:text="@string/seleccioneCarrera_titulo"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Spinner
             android:id="@+id/cmb_carreras"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:popupBackground="#becaf2"
+            android:dropDownWidth="match_parent"
+            android:popupBackground="#FFFFFF"
             android:textSize="20sp"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp"
-                    />
+            tools:layout_editor_absoluteY="0dp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mesas" />
+            android:fontFamily="cursive"
+            android:text="Mesas"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
 
         <ListView
             android:id="@+id/lista"

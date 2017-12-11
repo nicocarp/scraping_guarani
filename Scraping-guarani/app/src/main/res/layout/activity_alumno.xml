@@ -44,38 +44,6 @@
                 android:typeface="sans"
                 tools:text="@string/alumno_campo" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/linearLayout2"
-            android:layout_alignLeft="@+id/linearLayout9"
-            android:layout_alignStart="@+id/linearLayout9"
-            android:id="@+id/linearLayout12">
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_carrera"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tituloElija"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="6dp"
-                    android:layout_weight="1"
-                    android:fontFamily="cursive"
-                    android:text="@string/seleccioneCarrera_titulo"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans" />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout9"
@@ -84,14 +52,14 @@
             android:layout_above="@+id/include"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/linearLayout12"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_below="@+id/linearLayout2">
 
             <fragment
                 android:id="@+id/fragmentListadoProductos"
                 android:name="com.example.nicoc.scraping_guarani.Alumno.ListadoMesasFragment.ListadoMesasFragment"
-                android:layout_width="366dp"
-                android:layout_height="411dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_above="@+id/include"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentLeft="true"
