@@ -128,6 +128,7 @@ public class Guarani {
 
         Element link_mesa = document.select("a:contains("+mesa.getMateria()+")").first();
 
+
         System.out.println(link_mesa.attr("abs:href"));
         url = link_mesa.attr("abs:href");
         document = this.connection.url(url).get();
@@ -204,6 +205,13 @@ public class Guarani {
         return inscripciones;
     }
 
+    /**
+     * Se desinscribe de una mesa de examen, identificandola por codigo de carrera y materia.
+     * @param id_carrera
+     * @param id_materia
+     * @return true si se logro desinscribir correctamente, sino obtener error con getError().
+     * @throws IOException
+     */
     public Boolean desinscribirseDeMesa(String id_carrera, String id_materia) throws IOException {
         Document document = this.document_base;
         String url;

@@ -57,5 +57,15 @@ class AlumnoPresenter implements IAlumno.Presenter {
         this.view.inscriptoCorrectamente(mensaje);
     }
 
+    @Override
+    public void desinscribirseDeMesa(Inscripcion inscripcion) {
+        this.model.desinscribirseDeMesa(inscripcion);
+    }
+
+    @Override
+    public void onDesinscripcion(String mensaje) {
+        this.view.desinscriptoCorrectamente(mensaje);
+    }
+
 
 }

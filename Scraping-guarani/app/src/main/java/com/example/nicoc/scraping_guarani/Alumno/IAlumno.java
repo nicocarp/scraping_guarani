@@ -17,6 +17,8 @@ public class IAlumno {
         public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones);
 
         void inscriptoCorrectamente(String mensaje);
+
+        void desinscriptoCorrectamente(String mensaje);
     }
     public interface Presenter {
         public void mostrarError(String error);
@@ -27,10 +29,16 @@ public class IAlumno {
         void deslogueado();
 
         public void onInscripcion(String mensaje);
+
+        void desinscribirseDeMesa(Inscripcion inscripcion);
+
+        void onDesinscripcion(String mensaje);
     }
     public interface Model {
         public void getAlumno();
         public void inscribirseAMesa(Alumno alumno, Mesa mesa, String tipo);
         public void desloguearse();
+
+        void desinscribirseDeMesa(Inscripcion inscripcion);
     }
 }

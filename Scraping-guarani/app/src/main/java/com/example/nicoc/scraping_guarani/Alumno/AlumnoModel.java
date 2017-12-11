@@ -2,7 +2,9 @@ package com.example.nicoc.scraping_guarani.Alumno;
 
 import android.content.SharedPreferences;
 
+import com.example.nicoc.scraping_guarani.Alumno.Servicio.AsyncDesinscribirse;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.Alumno.Servicio.AsyncDesloguear;
 import com.example.nicoc.scraping_guarani.Alumno.Servicio.AsyncInscribirse;
@@ -12,7 +14,7 @@ import com.google.gson.Gson;
  * Created by nicoc on 06/12/17.
  */
 
-class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear, AsyncInscribirse.IInscribirse {
+class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear, AsyncInscribirse.IInscribirse, AsyncDesinscribirse.IDesinscribirse {
      private IAlumno.Presenter presenter;
     private SharedPreferences preferences;
 
@@ -49,6 +51,11 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear, AsyncIn
     }
 
     @Override
+    public void desinscribirseDeMesa(Inscripcion inscripcion) {
+        new AsyncDesinscribirse(this).execute(inscripcion.getCarrera(), inscripcion.getMateria());
+    }
+
+    @Override
     public void onSuccess() {
         this.presenter.deslogueado();
 
@@ -57,6 +64,11 @@ class AlumnoModel implements IAlumno.Model, AsyncDesloguear.IDesloguear, AsyncIn
     @Override
     public void onError(String error) {
         this.presenter.mostrarError(error);
+    }
+
+    @Override
+    public void onDesinscripcion(String mensaje) {
+        this.presenter.onDesinscripcion(mensaje);
     }
 
     @Override

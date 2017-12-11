@@ -116,6 +116,11 @@ public class AlumnoActivity extends AppCompatActivity implements
         //this.updateItems();
     }
 
+    @Override
+    public void desinscriptoCorrectamente(String mensaje) {
+        mostrarError(mensaje);
+    }
+
     private void escucharBroadcasts() {
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter("MesasActivity");
@@ -266,6 +271,7 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     public void desinscribirse(Inscripcion inscripcion){
         mostrarError("Desinsribirse "+inscripcion.getMateria()+inscripcion.getCarrera());
+        this.presenter.desinscribirseDeMesa(inscripcion);
     }
 
     private void mostrarDialogDesinscripcion(final Inscripcion inscripcion){

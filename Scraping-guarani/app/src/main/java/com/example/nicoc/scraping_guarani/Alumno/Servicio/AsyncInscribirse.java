@@ -37,19 +37,19 @@ public class AsyncInscribirse extends AsyncTask<Object, Void, Boolean> {
         Log.i("Por enviar TIPO: ",tipo);
         Log.i("PROBANDO OTRO TIPO: ",tipo = String.valueOf(objects[2]));
 
+        Boolean result =false;
         try {
             Guarani guarani = Guarani.getInstance();
-            Boolean result =guarani.inscribirseMesaById(alumno, mesa, tipo);
+            result = guarani.inscribirseMesaById(alumno, mesa, tipo);
             if (!result)
                 error = guarani.getError();
             else
                 mensaje = guarani.getMensaje();
-            return result;
-
         } catch (IOException e) {
             e.printStackTrace();
+            error = "Error en la conexion";
         }
-        return null;
+        return result;
     }
 
     @Override
