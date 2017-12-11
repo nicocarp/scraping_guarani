@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -18,6 +19,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,18 +51,13 @@ public class AlumnoActivity extends AppCompatActivity implements
         Materia materia = carrera.getMateriaById(mesa.getMateria());
         mostrarError(materia.getNombre().toLowerCase());
     }
-
     private IListadoMesasFragment.ViewFragment fragment;
 
     @BindView(R.id.lblAlumno)
     TextView lblAlumno;
-//    @BindView(R.id.lblLegajo)
-//    TextView lblLegajo;
     public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
-    // @BindView(R.id.lblFecha)    TextView lblFecha;
-    // @BindView(R.id.lblMaterias)    TextView lblMaterias;
-    // @BindView(R.id.listaMaterias)    ListView listaMatrias;
+
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private android.app.AlertDialog alertDialog;
@@ -88,11 +89,13 @@ public class AlumnoActivity extends AppCompatActivity implements
         DrawableCompat.setTint(myIcon, getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_alumno);
         ButterKnife.bind(this);
+
         this.fragment = (IListadoMesasFragment.ViewFragment)
                 this.getSupportFragmentManager().findFragmentById(R.id.fragmentListadoProductos);
         this.presenter = new AlumnoPresenter(this, getSharedPreferences("loginPrefs", MODE_PRIVATE));
         this.presenter.getAlumno();
         verificar_login();
+
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estado_dialog = savedInstanceState.getString(KEY_1);
@@ -101,6 +104,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         }
         escucharBroadcasts();
     }
+
 
     public void setAlumno(Alumno alumno) {
         _alumno = alumno;

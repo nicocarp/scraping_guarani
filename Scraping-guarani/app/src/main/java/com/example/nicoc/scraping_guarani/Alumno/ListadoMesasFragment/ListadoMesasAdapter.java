@@ -77,8 +77,9 @@ public class ListadoMesasAdapter extends BaseAdapter  {
         Carrera carrera = alumno.getCarreraById(mesa.getCarrera());
         Materia materia = carrera.getMateriaById(mesa.getMateria());
 
-        view_txt_codigo.setText(materia.getNombre()+" "+mesa.getFecha());
-        view_txt_nombre.setText(carrera.getNombre().toLowerCase());
+        view_txt_codigo.setText(materia.getNombre());
+        view_txt_nombre.setText(mesa.getFecha());
+        //view_txt_nombre.setText(carrera.getNombre().toLowerCase());
 
         return v;
     }
@@ -105,24 +106,20 @@ public class ListadoMesasAdapter extends BaseAdapter  {
         notifyDataSetChanged();
     }
 
+    public void limpiarFiltro(){
+        this.refreshData(items_all);
+    }
     /**
-     * Metodo personalizado para filtrar listado de productos por nombre y codigo
-     * @param codigo String (convertido a minuscula para buscar)
-     * @param nombre String (convertido a minuscula para buscar)
+     * Metodo personalizado para filtrar listado de mesas por codigo carrera
+     * @param codigo_carrera String
      */
-    public void filtrado(String codigo, String nombre){
-
-        String filtro_nombre = nombre.toString().toLowerCase();
-        String filtro_codigo = codigo.toString().toLowerCase();
-
+    public void filtrado(String codigo_carrera){
         List<Mesa> filtrado = new ArrayList<>();
 
-        /*for (Mesa producto : this.items_all){
-            if (producto.getNombre().toLowerCase().contains(filtro_nombre) &&
-                    producto.getCodigo().toLowerCase().contains(filtro_codigo))
-                filtrado.add(producto);
-        }*/
-
+        for (Mesa mesa : this.items_all){
+            if (mesa.getCarrera().equals(codigo_carrera))
+                filtrado.add(mesa);
+        }
         this.refreshData(filtrado);
     }
 

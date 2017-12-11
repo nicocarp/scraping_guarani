@@ -118,4 +118,21 @@ public class Alumno{
         return this.mesas;
     }
 
+    /**
+     * Retornamos la carrera del alumno con el nombre buscado. Se comparan cadenas previamente
+     * convertidas a lower case
+     * @param nombre_carrera String a buscar.
+     * @return Carrera o null si no existe.
+     */
+    public Carrera getCarreraByName(String nombre_carrera){
+        String buscadr = nombre_carrera.toLowerCase();
+        Carrera result = null;
+        for (Carrera carrera : this.getCarreras()){
+            if (carrera.getNombre().toLowerCase().equals(nombre_carrera)){
+                result = carrera;
+                break;
+            }
+        }
+        return result;
+    }
 }
