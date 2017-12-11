@@ -18,6 +18,10 @@
     <string name="materias_titulo">Materias</string>
     <string name="iniciarsesion_titulo">Iniciar Sesion</string>
 
+    <string name="confirmar_titulo">Confirmar Inscripcion</string>
+    <string name="confirmar_mensaje">¿Desea inscribirse en esta materia?</string>
+    <string name="confirmar_confirmacion">Inscripto</string>
+
     <!--> Mensajes de error <-->
     <string name="exceptionIO">Error de IO</string>
 
