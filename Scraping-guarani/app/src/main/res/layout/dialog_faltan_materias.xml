@@ -61,7 +61,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="cursive"
             android:text="Necesita las siguientes materias: "
-            android:textColor="blacky"
+            android:textColor="@color/colorNegro"
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans" />

@@ -54,7 +54,7 @@
             android:layout_alignStart="@+id/lblFecha"
             android:text="HORA"
             android:textAlignment="textStart"
-            android:textColor="black"
+            android:textColor="@color/colorNegro"
             android:textSize="20sp"
             android:typeface="sans" />
 
@@ -140,7 +140,7 @@
             android:layout_alignStart="@+id/titulo"
             android:text="CARRERA"
             android:textAlignment="textStart"
-            android:textColor="black"
+            android:textColor="@color/colorNegro"
             android:textSize="20sp"
             android:typeface="sans" />
 
@@ -153,7 +153,7 @@
             android:layout_alignStart="@+id/lblCarrera"
             android:text="MATERIA"
             android:textAlignment="textStart"
-            android:textColor="black"
+            android:textColor="@color/colorNegro"
             android:textSize="20sp"
             android:typeface="sans" />
 
@@ -169,7 +169,7 @@
             android:layout_alignStart="@+id/lblMateria"
             android:text="FECHA"
             android:textAlignment="textStart"
-            android:textColor="black"
+            android:textColor="@color/colorNegro"
             android:textSize="20sp"
             android:typeface="sans" />
 
