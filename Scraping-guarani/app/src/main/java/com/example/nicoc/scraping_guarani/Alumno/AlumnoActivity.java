@@ -217,16 +217,12 @@ public class AlumnoActivity extends AppCompatActivity implements
     public void onItemSelectedInFragment(Mesa mesa) {
         Carrera carrera= _alumno.getCarreraById(mesa.getCarrera());
         Materia materia = carrera.getMateriaById(mesa.getMateria());
-        // ver especificacion en trello
         if (_alumno.estaInscripto(mesa)){
-            // mostrar dialogo para desinscribirse
             mostrarDialogDesinscripcion(_alumno.getInscripcionByMesa(mesa));
         }else{
             if (mesa.puedeInscribirse()){
-                // mostrar dixalogo indicando las materias necesarias para isncribirse.
                 mostrarDialogInscripcion(mesa, carrera, materia);
             }else{
-                // mostrar dialogo para inscribirse.
                 mostrarDialogFaltanMaterias();
             }
         }
