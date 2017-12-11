@@ -133,7 +133,7 @@ public class ServicioIntent extends IntentService{
         ArrayList<Inscripcion> inscripciones_guardadas = new Gson().fromJson(inscripciones_json_guardadas, collectionType);
 
         notificar = (mesas_guardadas.size() < mesas.size());
-        lanzar_broadcast = (inscripciones_guardadas.size() != inscripciones.size());
+        lanzar_broadcast = (inscripciones_guardadas.size() != inscripciones.size() || notificar);
 
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
