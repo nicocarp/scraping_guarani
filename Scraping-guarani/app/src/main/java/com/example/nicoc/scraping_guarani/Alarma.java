@@ -29,7 +29,7 @@ public class Alarma extends Thread{
     public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    private int tiempo_repeticion = 1000 * 60;// 12 hs
+    private int tiempo_repeticion = 1000 * 59;// 12 hs
     private int hora;
 
     public static final int MAXIMA_REPETICION = 1;
