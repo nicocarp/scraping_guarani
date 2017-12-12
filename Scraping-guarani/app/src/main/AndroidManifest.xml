@@ -30,7 +30,6 @@
 
         <service
             android:name=".ServicioIntent"
-            android:process=":service"
             android:exported="false" />
 
         <receiver

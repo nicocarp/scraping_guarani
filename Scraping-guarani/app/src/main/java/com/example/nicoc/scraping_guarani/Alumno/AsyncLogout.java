@@ -56,7 +56,7 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
                 bandera = isMyServiceRunning(ServicioIntent.class);
             }
         }
-        return null;
+        return null;//NOTA: Si mato el servicio de una puede lanzar error
     }
 
 

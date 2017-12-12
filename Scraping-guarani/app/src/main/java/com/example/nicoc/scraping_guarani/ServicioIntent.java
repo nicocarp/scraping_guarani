@@ -155,7 +155,10 @@ public class ServicioIntent extends IntentService{
 
     private void notificarInscripciones( ArrayList<Inscripcion> inscripciones){
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-
+        String mensaje ="Usted esta inscripto a las siguientes materias: \n";
+        for(Inscripcion i: inscripciones){
+            mensaje+="" + i.getMateria();
+        }
         int icono = R.mipmap.ic_launcher;
         Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
@@ -163,7 +166,8 @@ public class ServicioIntent extends IntentService{
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
-                .setContentText("Usted esta inscripto ha " + inscripciones.size() + " examen/es.")
+                //.setContentText("Usted esta inscripto ha " + inscripciones.size() + " examen/es.")
+                .setContentText(mensaje)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
         mNotifyMgr.notify(1234, mBuilder.build());
