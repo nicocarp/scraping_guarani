@@ -1,7 +1,9 @@
 package com.example.nicoc.scraping_guarani.Alumno;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,7 +55,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     public static Alumno _alumno = null;
     private IAlumno.Presenter presenter;
     private SharedPreferences loginPreferences;
-
+    private ProgressDialog progressDialog;
     private SharedPreferences.Editor loginPrefsEditor;
     private android.app.AlertDialog alertDialog;
     private static final String KEY_1 = "alertDialog";
@@ -185,6 +187,38 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
     private void cerrarSesion() {
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean estoyEjecutandome = isMyServiceRunning(ServicioIntent.class);
+
+
+                while (estoyEjecutandome) {
+
+                    try {
+
+                        Thread.sleep(1000 * 10);
+                        estoyEjecutandome = isMyServiceRunning(ServicioIntent.class);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+
+
+
+
+            }
+        });
+        t.start();
+
+
+        //mostrarProgressDialog();
+        //for (int i=0;i<2000000;i++)i++;
+
         Alarma.cancelarAlarma();
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
@@ -194,6 +228,29 @@ public class AlumnoActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+
+    private void mostrarProgressDialog(){
+        try{
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Cerrando Sesión...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }catch (Exception e){
+        }
+
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void verificar_login(){
         if (_alumno!=null)
