@@ -55,7 +55,7 @@ public class Guarani {
         _auth = auth;
     }
 
-    public static Guarani getInstance() throws IOException, IllegalArgumentException {
+    public synchronized static Guarani getInstance() throws IOException, IllegalArgumentException {
         if (_auth == null)
             throw new IllegalArgumentException("Debe inicializar guarani con una cuenta valida.");
         if (_instance == null)
@@ -101,7 +101,7 @@ public class Guarani {
      * @return true si no existio error, caso contrario obtener error de getError
      * @throws IOException
      */
-    public boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String _tipo) throws IOException {
+    public synchronized boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String _tipo) throws IOException {
         String tipo = _tipo.toLowerCase();
         Document document = this.document_base;
         String url;
@@ -166,7 +166,7 @@ public class Guarani {
         return false;
     }
 
-    public ArrayList<Inscripcion> getMesasAnotadas() throws IOException {
+    public synchronized ArrayList<Inscripcion> getMesasAnotadas() throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -212,7 +212,7 @@ public class Guarani {
      * @return true si se logro desinscribir correctamente, sino obtener error con getError().
      * @throws IOException
      */
-    public Boolean desinscribirseDeMesa(String id_carrera, String id_materia) throws IOException {
+    public synchronized Boolean desinscribirseDeMesa(String id_carrera, String id_materia) throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -266,7 +266,7 @@ public class Guarani {
      * @return Alumno instancia.
      * @throws IOException
      */
-    public Alumno getDatosAlumno(ArrayList<Carrera> carreras) throws IOException {
+    private Alumno getDatosAlumno(ArrayList<Carrera> carreras) throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -314,7 +314,7 @@ public class Guarani {
         return alumno;
     }
 
-    public ArrayList<Mesa> getMesasDeExamen() throws IOException {
+    public synchronized ArrayList<Mesa> getMesasDeExamen() throws IOException {
 
         if (!estaLogueado())
             login();
@@ -422,11 +422,15 @@ public class Guarani {
         return mesas;
     }
 
-    private Boolean estaLogueado() throws IOException {
+    /**
+     * Determinamos si el alumno esta logueado ingresando al menu.
+     * @return true si todavia existe la sesion.
+     * @throws IOException
+     */
+    private synchronized Boolean estaLogueado() throws IOException {
         Document document = this.connection.url(URL).get();
         String url = document.select("[src*=barra]").first().attr("abs:src");
         document = this.connection.url(url).get();
-
         //  boton iniciar Sesion
         return (document.select("[href*=identificarse]").first() == null);
     }
@@ -435,7 +439,7 @@ public class Guarani {
      * @return boolean si se pudo loguear.
      * @throws IOException
      */
-    public boolean login() throws IOException, IllegalArgumentException {
+    private  synchronized boolean login() throws IOException, IllegalArgumentException {
         if (estaLogueado())
             desloguearse();
         String username = _auth.getUsername();
@@ -466,24 +470,16 @@ public class Guarani {
         Elements div_mensajes_errores = document.select("div.mensaje_ua_contenido");
         if (!div_mensajes_errores .isEmpty()){
             throw new IllegalArgumentException(div_mensajes_errores.first().text());
-            //this.setError(div_mensajes_errores.first().text());
-            //return false;
         }
-        //this.username = username;
-        //this.password = password;
         return true;
     }
-
-
-
-
 
     /**
      * Recorremos el plan de estudios de cada una de las materias del alumno.
      * @return ArrayList<Carrera> representan las carreras del alumno, sea regular o no.
      * @throws IOException
      */
-    public ArrayList<Carrera> getPlanDeEstudios() throws IOException {
+    private ArrayList<Carrera> getPlanDeEstudios() throws IOException {
         Document document = this.document_base;
         String url;
 
@@ -542,11 +538,10 @@ public class Guarani {
         return carreras;
     }
     /**
-     * Borramos las cookies.
+     * Si existe una sesion activa, cerramos sesion contra el servidor guarani.
      * @throws IOException
      */
     public void desloguearse() throws IOException {
-
         if (!this.estaLogueado())
             return;
         Document document = this.connection.url(URL).get();
@@ -555,15 +550,18 @@ public class Guarani {
         url = document.select("a[href*=finalizarSesion]").first().attr("abs:href");
         this.connection.url(url).get();
         _auth = null;
-        //this.startConnection();
     }
 
+    /**
+     * Obtenemos datos del alumno, nombre, carreras y respectivas materias.
+     * @return
+     * @throws IOException
+     */
     public Alumno getAlumno() throws IOException {
         if (!estaLogueado())
             login();
         ArrayList<Carrera> carreras = getPlanDeEstudios();
         Alumno alumno = getDatosAlumno(carreras);
-        alumno.setInscripciones(getMesasAnotadas());
         return alumno;
     }
 
