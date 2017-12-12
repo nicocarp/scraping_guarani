@@ -57,7 +57,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     TextView lblAlumno;
 
     public static Alumno _alumno = null;
-    private IAlumno.Presenter presenter;
+    public static IAlumno.Presenter presenter;
     private SharedPreferences loginPreferences;
     private ProgressDialog progressDialog;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -103,6 +103,7 @@ public class AlumnoActivity extends AppCompatActivity implements
                 mostrarDialog();
         }
         escucharBroadcasts();
+        escucharBroadcastsError();
     }
 
     public void setAlumno(Alumno alumno) {
@@ -143,9 +144,33 @@ public class AlumnoActivity extends AppCompatActivity implements
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         updateItems();
 
                         mostrarDialog();
+                    }
+                },
+                filter
+        );
+    }
+
+    private void escucharBroadcastsError(){
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter("LoginError");
+        broadcastManager.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Bundle bundle = intent.getExtras();
+                        //Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+                        //aca elimino la notificacion
+                        NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        mNotifyMgr.cancel(234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+
+
+                        mostrarDialogError();
                     }
                 },
                 filter
@@ -171,6 +196,24 @@ public class AlumnoActivity extends AppCompatActivity implements
         });
         dialogBuilder.setCancelable(false);
         alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+    private void mostrarDialogError(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_login_error,null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //aca va el codigo que actualiza la activity
+                cerrarSesion();
+            }
+        });
+        dialogBuilder.setCancelable(false);
+        AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
     @Override

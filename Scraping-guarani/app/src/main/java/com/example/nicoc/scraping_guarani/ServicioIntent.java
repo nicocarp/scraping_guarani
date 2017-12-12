@@ -18,6 +18,7 @@ import com.example.nicoc.scraping_guarani.Guarani.Guarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -69,8 +70,11 @@ public class ServicioIntent extends IntentService{
             String usuario = preferences.getString("username", "");
             String password = preferences.getString("password", "");
 
-            if (usuario.isEmpty() || password.isEmpty())
+            if (usuario.isEmpty() || password.isEmpty()){
+                notificarError();
+                enviarBroadcastError();
                 return; // debemos mandar notificar esto es un error.
+            }
             Guarani.setAuth(new Auth(usuario, password));
 
             while(bandera==true && contador<=MAXIMA_REPETICION){
@@ -139,10 +143,53 @@ public class ServicioIntent extends IntentService{
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
+        if (inscripciones.size()>0)
+            notificarInscripciones(inscripciones);
         if (notificar)
             notificar();
         if (lanzar_broadcast)
             enviarBroadcast();
+
+    }
+
+    private void notificarInscripciones( ArrayList<Inscripcion> inscripciones){
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+
+        int icono = R.mipmap.ic_launcher;
+        Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
+        mBuilder =new NotificationCompat.Builder(getApplicationContext())
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(icono)
+                .setContentTitle("SIU GUARANI")
+                .setContentText("Usted esta inscripto ha " + inscripciones.size() + " examen/es.")
+                .setVibrate(new long[] {100, 250, 100, 500})
+                .setAutoCancel(true);
+        mNotifyMgr.notify(1234, mBuilder.build());
+    }
+
+
+    private void notificarError(){
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+
+        int icono = R.mipmap.ic_launcher;
+        Intent intent = new Intent(ServicioIntent.this, LoginActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
+        mBuilder =new NotificationCompat.Builder(getApplicationContext())
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(icono)
+                .setContentTitle("SIU GUARANI")
+                .setContentText("Ha ocurrido un error.")
+                .setVibrate(new long[] {100, 250, 100, 500})
+                .setAutoCancel(true);
+        mNotifyMgr.notify(234, mBuilder.build());
+
+        try{
+            Alarma.cancelarAlarma();
+            AlumnoActivity.presenter.desloguearse();
+        }catch(Exception e){
+
+        }
 
     }
 
@@ -156,7 +203,7 @@ public class ServicioIntent extends IntentService{
         mBuilder =new NotificationCompat.Builder(getApplicationContext())
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
-                .setContentTitle("TNT")
+                .setContentTitle("SIU GUARANI")
                 .setContentText("Hay mesas de examenes disponibles.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
@@ -177,6 +224,19 @@ public class ServicioIntent extends IntentService{
 
     }
 
+    private void enviarBroadcastError()
+    {
+        Log.i("MyService....","estoy en sendBroadcastError.");
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(ServicioIntent.this);
+
+        Intent resultIntent = new Intent("LoginError");//le pongo un nombre al intent asi se como atraparlo despues.
+        //resultIntent.putExtra("TNT", "Hay mesas de examenes");
+        Bundle bundle = new Bundle();
+        bundle.putString("Nombre","Ha ocurrido un error.");
+        resultIntent.putExtras(bundle);
+        broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
+
+    }
 
     //Metodo devuelve si hay conexion a Internet o no.
     private boolean isNetworkAvailable() {
