@@ -29,7 +29,7 @@ public class Alarma extends Thread{
     public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
+    private int tiempo_repeticion = 1000 * 20;// 12 hs
     private int hora;
 
     public static final int MAXIMA_REPETICION = 1;
@@ -128,7 +128,7 @@ public class Alarma extends Thread{
             //hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
             //if (hora == -1) hora = 23;
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 14); //Se disparará la alarma a las 12:00 pm
+            calendar.set(Calendar.HOUR_OF_DAY, 10); //Se disparará la alarma a las 12:00 pm
             calendar.set(Calendar.MINUTE, 15);//30
             calendar.set(Calendar.SECOND, 00);
 
@@ -139,7 +139,7 @@ public class Alarma extends Thread{
                     tiempo_repeticion, alarmIntent);//60 segundos
             //tiempo_repeticion = 1000 * 60 = 1 minuto
             // setearle horas predefinidas: por ejemplo a las 12 y a las 12, y correr el servicio YA,
-            contexto.startService(intent);
+            //contexto.startService(intent);
 
         }catch(Exception e){
             Log.i("Alarma RUNTIME ERRROR: ","" + e.getMessage());

@@ -63,4 +63,8 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
         }
         return false;
     }
+
+    //Nota: para matar el intent service
+    //https://stackoverflow.com/questions/11258083/how-to-force-an-intentservice-to-stop-immediately-with-a-cancel-button-from-an-a
+    //https://stackoverflow.com/questions/8709989/how-to-stop-intentservice-in-android
 }

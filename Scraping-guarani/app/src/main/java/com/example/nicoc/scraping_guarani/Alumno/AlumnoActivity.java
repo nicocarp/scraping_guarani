@@ -139,13 +139,13 @@ public class AlumnoActivity extends AppCompatActivity implements
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         Bundle bundle = intent.getExtras();
-                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         updateItems();
 
-                        //mostrarDialog();
+                        mostrarDialog();
                     }
                 },
                 filter
@@ -166,6 +166,7 @@ public class AlumnoActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //aca va el codigo que actualiza la activity
+                updateItems();
             }
         });
         dialogBuilder.setCancelable(false);

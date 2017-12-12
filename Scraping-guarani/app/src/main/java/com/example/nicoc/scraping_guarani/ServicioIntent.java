@@ -139,10 +139,11 @@ public class ServicioIntent extends IntentService{
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
-        if (lanzar_broadcast)
-            enviarBroadcast();
         if (notificar)
             notificar();
+        if (lanzar_broadcast)
+            enviarBroadcast();
+
     }
 
 
@@ -159,7 +160,7 @@ public class ServicioIntent extends IntentService{
                 .setContentText("Hay mesas de examenes disponibles.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
-        mNotifyMgr.notify(1, mBuilder.build());
+        mNotifyMgr.notify(123, mBuilder.build());
     }
 
     private void enviarBroadcast()
