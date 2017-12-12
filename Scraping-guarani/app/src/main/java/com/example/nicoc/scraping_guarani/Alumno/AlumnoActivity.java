@@ -170,7 +170,7 @@ public class AlumnoActivity extends AppCompatActivity implements
             }
         });
         dialogBuilder.setCancelable(false);
-        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
     @Override
@@ -252,7 +252,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     public void desloguearse(){
         Alarma.cancelarAlarma();
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
         this.presenter.desloguearse();
         finish();
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
