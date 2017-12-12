@@ -3,6 +3,7 @@ package com.example.nicoc.scraping_guarani.Alumno;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -102,6 +104,7 @@ public class AlumnoActivity extends AppCompatActivity implements
             if(estado_dialog.equals("Visible"))
                 mostrarDialog();
         }
+        alarma();
         escucharBroadcasts();
         escucharBroadcastsError();
     }
@@ -110,6 +113,13 @@ public class AlumnoActivity extends AppCompatActivity implements
         _alumno = alumno;
     }
 
+
+    private void alarma(){
+        Intent intent = new Intent(this, ServicioIntent.class);
+        boolean alarmUp = (PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
+        if(!alarmUp) new Alarma(this,ServicioIntent.class).start();
+
+    }
 
     @Override
     public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
@@ -147,7 +157,11 @@ public class AlumnoActivity extends AppCompatActivity implements
                         mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         updateItems();
 
-                        mostrarDialog();
+                        try{
+                            mostrarDialog();
+                        }catch(Exception e){
+
+                        }
                     }
                 },
                 filter
@@ -195,8 +209,8 @@ public class AlumnoActivity extends AppCompatActivity implements
             }
         });
         dialogBuilder.setCancelable(false);
-        alertDialog = dialogBuilder.create();
-        alertDialog.show();
+        AlertDialog alertDialog = dialogBuilder.create();
+        if (alertDialog!=null)alertDialog.show();
     }
     private void mostrarDialogError(){
 
@@ -214,7 +228,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         });
         dialogBuilder.setCancelable(false);
         AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+        if (alertDialog!=null)alertDialog.show();
     }
     @Override
     protected void onSaveInstanceState (Bundle outState) {

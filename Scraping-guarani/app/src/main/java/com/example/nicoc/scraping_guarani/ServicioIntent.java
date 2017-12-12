@@ -66,7 +66,8 @@ public class ServicioIntent extends IntentService{
             edit.putBoolean("aviso", false);
             edit.commit();
             Log.i("Intent Service"," Hay conexion.");
-
+            //if(Alarma.estoyVivo())Log.i("ALARMA","ESTOY FUNCIONANDO");
+            //else Log.i("ALARMA","NO FUNCA");
             String usuario = preferences.getString("username", "");
             String password = preferences.getString("password", "");
 
