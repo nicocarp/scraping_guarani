@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,12 +36,15 @@ import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
+import com.example.nicoc.scraping_guarani.Login.AsyncLogin;
 import com.example.nicoc.scraping_guarani.Login.LoginActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.R;
 import com.example.nicoc.scraping_guarani.ServicioIntent;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -188,7 +192,7 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     private void cerrarSesion() {
 
-        Thread t = new Thread(new Runnable() {
+        /*Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 boolean estoyEjecutandome = isMyServiceRunning(ServicioIntent.class);
@@ -213,12 +217,38 @@ public class AlumnoActivity extends AppCompatActivity implements
 
             }
         });
-        t.start();
+        t.start();*/
 
 
-        //mostrarProgressDialog();
-        //for (int i=0;i<2000000;i++)i++;
+        /*mostrarProgressDialog();
+        long delayInMillis = 1000 * 10;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        }, delayInMillis);*/
 
+        /*Alarma.cancelarAlarma();
+        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+        this.presenter.desloguearse();
+        finish();
+        Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
+        startActivity(intent);*/
+
+
+
+
+
+        //ACA VA LO NUEVO...
+        AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute();
+    }
+
+
+
+    public void desloguearse(){
         Alarma.cancelarAlarma();
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
@@ -229,7 +259,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
 
-    private void mostrarProgressDialog(){
+    public void mostrarProgressDialog(){
         try{
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Cerrando Sesión...");
@@ -240,6 +270,14 @@ public class AlumnoActivity extends AppCompatActivity implements
         }catch (Exception e){
         }
 
+    }
+
+    public void ocultarProgressDialog(){
+        try{
+            progressDialog.dismiss();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
