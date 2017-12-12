@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,6 @@
         <activity
             android:name=".Alumno.AlumnoActivity"
             android:screenOrientation="sensor" />
-
         <activity
             android:name=".Mesa.Listado.MesaActivity"
             android:screenOrientation="sensor" />
@@ -44,14 +44,18 @@
             android:name=".ConectividadBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
-              <intent-filter>
-
-                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-
             </intent-filter>
-
-
+        </receiver>
+        <receiver
+            android:name=".BootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
     </application>
 
