@@ -182,7 +182,7 @@ public class AlumnoActivity extends AppCompatActivity implements
                         mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         mNotifyMgr.cancel(234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-
+                        cerrarSesion();
 
                         //mostrarDialogError();
                     }
