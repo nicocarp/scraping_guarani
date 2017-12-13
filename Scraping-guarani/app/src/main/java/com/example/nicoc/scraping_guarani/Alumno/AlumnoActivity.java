@@ -151,17 +151,10 @@ public class AlumnoActivity extends AppCompatActivity implements
                     public void onReceive(Context context, Intent intent) {
                         Bundle bundle = intent.getExtras();
                         Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-                        //aca elimino la notificacion
-                        NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-                        mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        matarNotificaciones();
+                        //mostrarDialog();
                         updateItems();
 
-                        /*try{
-                            mostrarDialog();
-                        }catch(Exception e){
-
-                        }*/
                     }
                 },
                 filter
@@ -177,13 +170,8 @@ public class AlumnoActivity extends AppCompatActivity implements
                     public void onReceive(Context context, Intent intent) {
                         Bundle bundle = intent.getExtras();
                         Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-                        //aca elimino la notificacion
-                        NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-                        mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-                        mNotifyMgr.cancel(234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+                        matarNotificaciones();
                         cerrarSesion();
-
                         //mostrarDialogError();
                     }
                 },
@@ -194,6 +182,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     public final void updateItems(){
         this.fragment.updateList();
     }
+
     private void mostrarDialog(){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -212,6 +201,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         if (alertDialog!=null)alertDialog.show();
     }
+
     private void mostrarDialogError(){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -248,68 +238,21 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
 
-    private void cerrarSesion() {
-
-        /*Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                boolean estoyEjecutandome = isMyServiceRunning(ServicioIntent.class);
+    private void cerrarSesion() { AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute(); }
 
 
-                while (estoyEjecutandome) {
-
-                    try {
-
-                        Thread.sleep(1000 * 10);
-                        estoyEjecutandome = isMyServiceRunning(ServicioIntent.class);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-
-
-
-
-
-            }
-        });
-        t.start();*/
-
-
-        /*mostrarProgressDialog();
-        long delayInMillis = 1000 * 10;
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                progressDialog.dismiss();
-            }
-        }, delayInMillis);*/
-
-        /*Alarma.cancelarAlarma();
+    private void matarNotificaciones(){
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-        this.presenter.desloguearse();
-        finish();
-        Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
-        startActivity(intent);*/
+        mNotifyMgr.cancel(ServicioIntent.NOTIFICACION_INSCRIPCION);
+        mNotifyMgr.cancel(ServicioIntent.NOTIFICACION_ERROR);
+        mNotifyMgr.cancel(ServicioIntent.NOTIFICACION_MESAS);
 
-
-
-
-
-        //ACA VA LO NUEVO...
-        AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute();
     }
-
 
 
     public void desloguearse(){
         Alarma.cancelarAlarma();
-        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
+        matarNotificaciones();
         this.presenter.desloguearse();
         finish();
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);

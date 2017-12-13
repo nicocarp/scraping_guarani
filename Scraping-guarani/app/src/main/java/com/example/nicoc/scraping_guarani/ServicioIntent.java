@@ -43,6 +43,10 @@ public class ServicioIntent extends IntentService{
     private int contador = 1;
     private ConectividadBroadcastReceiver receiver;
 
+    public static final int NOTIFICACION_INSCRIPCION = 1234;
+    public static final int NOTIFICACION_ERROR = 234;
+    public static final int NOTIFICACION_MESAS = 123;
+
     public ServicioIntent() {
         super(" Intent Servicio Scraping");
     }
@@ -144,20 +148,33 @@ public class ServicioIntent extends IntentService{
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
+        boolean notifique = false;
+
         if (inscripciones.size()>0)
             notificarInscripciones(inscripciones);
         if (notificar)
+        {
             notificar();
+            notifique = true;
+        }
         if (lanzar_broadcast)
             enviarBroadcast();
+        if (!notifique && mesas.size()>0){
+            notificar();
+            enviarBroadcast();
+        }
 
     }
 
+
+
+
+
     private void notificarInscripciones( ArrayList<Inscripcion> inscripciones){
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        String mensaje ="Usted esta inscripto a las siguientes materias: \n";
+        String mensaje ="Usted esta inscripto a los examenes: \n";
         for(Inscripcion i: inscripciones){
-            mensaje+="" + i.getMateria();
+            mensaje+="" + i.getMateria() + "\n";
         }
         int icono = R.mipmap.ic_launcher;
         //Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
@@ -170,8 +187,9 @@ public class ServicioIntent extends IntentService{
                 .setContentText(mensaje)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
-        mNotifyMgr.notify(1234, mBuilder.build());
+        mNotifyMgr.notify(NOTIFICACION_INSCRIPCION, mBuilder.build());
     }
+
 
 
     private void notificarError(){
@@ -187,7 +205,7 @@ public class ServicioIntent extends IntentService{
                 .setContentText("Ha ocurrido un error.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
-        mNotifyMgr.notify(234, mBuilder.build());
+        mNotifyMgr.notify(NOTIFICACION_ERROR, mBuilder.build());
 
         try{
             Alarma.cancelarAlarma();
@@ -209,11 +227,15 @@ public class ServicioIntent extends IntentService{
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
-                .setContentText("Hay mesas de examenes disponibles.")
+                .setContentText("Ya te podes inscribir. Hay mesas de examenes disponibles.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setAutoCancel(true);
-        mNotifyMgr.notify(123, mBuilder.build());
+        mNotifyMgr.notify(NOTIFICACION_MESAS, mBuilder.build());
     }
+
+
+
+
 
     private void enviarBroadcast()
     {

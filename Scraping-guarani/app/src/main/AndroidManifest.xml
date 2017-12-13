@@ -33,14 +33,6 @@
             android:exported="false" />
 
         <receiver
-            android:name=".RestartServiceReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="YouWillNeverKillMe" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name=".ConectividadBroadcastReceiver"
             android:enabled="true"
             android:exported="true">

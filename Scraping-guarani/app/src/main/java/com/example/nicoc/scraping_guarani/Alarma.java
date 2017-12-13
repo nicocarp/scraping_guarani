@@ -24,16 +24,15 @@ public class Alarma extends Thread{
 
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
-    public static  AlarmaTimer alarmaTimer = null;
+    
 
     public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
+    //private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
+    private int tiempo_repeticion = 1000 * 20;// 12 hs
     private int hora;
 
-    public static final int MAXIMA_REPETICION = 1;
-    public static int REPETICION_ACTUAL = 1;
 
     public Alarma (Context contexto, Class clase_del_servicio){
         this.contexto = contexto;
@@ -144,36 +143,6 @@ public class Alarma extends Thread{
         }catch(Exception e){
             Log.i("Alarma RUNTIME ERRROR: ","" + e.getMessage());
         }
-    }
-
-
-    //Este es el codigo que debo poner en la activity donde deseo verificar si la alarma esta viva
-    //en caso de que no lo este, la creo de nuevo!!!!
-    public static boolean estoyVivo(){
-        /*boolean alarmUp = (PendingIntent.getBroadcast(context, 0,
-                new Intent("com.my.package.MY_UNIQUE_ACTION"),
-                PendingIntent.FLAG_NO_CREATE) != null);*/
-
-
-        //Primera forma de saber si alarma esta viva....
-        /*boolean alarmUp = (PendingIntent.getBroadcast(contexto, 0,
-                new Intent("com.example.nicoc.scraping_guarani.Alarma"),
-                PendingIntent.FLAG_NO_CREATE) != null);*/
-
-        Intent intent = new Intent(contexto, ServicioIntent.class);
-        boolean alarmUp = (PendingIntent.getService(contexto, 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
-
-        return alarmUp;
-        //Segunda forma de saber si alarma esta viva....
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(contexto, 234324243, intent, PendingIntent.FLAG_NO_CREATE);
-        //si pendingIntent es null significa que la alarma no existe.
-    }
-
-
-    public void reiniciarAlarma()
-    {
-        this.contexto.stopService(new Intent(contexto,clase_del_servicio));
-        this.contexto.startService(new Intent(contexto,clase_del_servicio));
     }
 
 
