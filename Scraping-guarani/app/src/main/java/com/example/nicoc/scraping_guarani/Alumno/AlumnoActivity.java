@@ -99,11 +99,11 @@ public class AlumnoActivity extends AppCompatActivity implements
         verificar_login();
 
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
-        if (savedInstanceState != null) {
+        /*if (savedInstanceState != null) {
             String estado_dialog = savedInstanceState.getString(KEY_1);
             if(estado_dialog.equals("Visible"))
                 mostrarDialog();
-        }
+        }*/
         alarma();
         escucharBroadcasts();
         escucharBroadcastsError();
@@ -150,18 +150,18 @@ public class AlumnoActivity extends AppCompatActivity implements
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         Bundle bundle = intent.getExtras();
-                        //Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         mNotifyMgr.cancel(1234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
                         updateItems();
 
-                        try{
+                        /*try{
                             mostrarDialog();
                         }catch(Exception e){
 
-                        }
+                        }*/
                     }
                 },
                 filter
@@ -176,7 +176,7 @@ public class AlumnoActivity extends AppCompatActivity implements
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         Bundle bundle = intent.getExtras();
-                        //Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
                         //aca elimino la notificacion
                         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                         mNotifyMgr.cancel(123);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
@@ -184,7 +184,7 @@ public class AlumnoActivity extends AppCompatActivity implements
                         mNotifyMgr.cancel(234);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
 
 
-                        mostrarDialogError();
+                        //mostrarDialogError();
                     }
                 },
                 filter

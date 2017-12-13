@@ -160,10 +160,10 @@ public class ServicioIntent extends IntentService{
             mensaje+="" + i.getMateria();
         }
         int icono = R.mipmap.ic_launcher;
-        Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
+        //Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
         mBuilder =new NotificationCompat.Builder(getApplicationContext())
-                .setContentIntent(pendingIntent)
+                //.setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
                 //.setContentText("Usted esta inscripto ha " + inscripciones.size() + " examen/es.")
