@@ -375,20 +375,14 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
     private void mostrarDialogInscripcion(final Mesa mesa, Carrera carrera, Materia materia){
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final AlertDialog.Builder confirmaInscripcion = new AlertDialog.Builder(this);
         confirmaInscripcion.setIcon(android.R.drawable.ic_dialog_alert);
         confirmaInscripcion.setTitle(getResources().getString(R.string.confirmar_titulo));
         confirmaInscripcion.setMessage(getResources().getString(R.string.confirmar_mensaje));
-        //confirmaInscripcion.setPositiveButton(getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-
-
-            View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
+        View dialogView = inflater.inflate(R.layout.dialog_inscripcion,null);
         dialogBuilder.setView(dialogView);
-
-
         ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(carrera.getNombre());
         ((TextView) dialogView.findViewById(R.id.lblMateria)).setText(materia.getNombre());
         ((TextView) dialogView.findViewById(R.id.lblFecha)).setText(mesa.getSoloFecha());
@@ -397,7 +391,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         dialogBuilder.setPositiveButton("Inscribir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                confirmaInscripcion.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                confirmaInscripcion.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int boton) {
                     inscribirse(cbo_tipo_mesa.getSelectedItem().toString(), mesa);
                     }
