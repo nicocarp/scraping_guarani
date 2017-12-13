@@ -149,7 +149,7 @@ public class ServicioIntent extends IntentService{
         edit.commit();
 
         boolean notifique = false;
-
+        boolean broadcastie = false;
         if (inscripciones.size()>0)
             notificarInscripciones(inscripciones);
         if (notificar)
@@ -158,10 +158,15 @@ public class ServicioIntent extends IntentService{
             notifique = true;
         }
         if (lanzar_broadcast)
+        {
             enviarBroadcast();
+            broadcastie = true;
+        }
         if (!notifique && mesas.size()>0){
             notificar();
-            enviarBroadcast();
+            if(!broadcastie){
+                enviarBroadcast();
+            }
         }
 
     }
@@ -186,6 +191,7 @@ public class ServicioIntent extends IntentService{
                 //.setContentText("Usted esta inscripto ha " + inscripciones.size() + " examen/es.")
                 .setContentText(mensaje)
                 .setVibrate(new long[] {100, 250, 100, 500})
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
         mNotifyMgr.notify(NOTIFICACION_INSCRIPCION, mBuilder.build());
     }
@@ -204,6 +210,7 @@ public class ServicioIntent extends IntentService{
                 .setContentTitle("SIU GUARANI")
                 .setContentText("Ha ocurrido un error.")
                 .setVibrate(new long[] {100, 250, 100, 500})
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
         mNotifyMgr.notify(NOTIFICACION_ERROR, mBuilder.build());
 
@@ -229,6 +236,7 @@ public class ServicioIntent extends IntentService{
                 .setContentTitle("SIU GUARANI")
                 .setContentText("Ya te podes inscribir. Hay mesas de examenes disponibles.")
                 .setVibrate(new long[] {100, 250, 100, 500})
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
         mNotifyMgr.notify(NOTIFICACION_MESAS, mBuilder.build());
     }

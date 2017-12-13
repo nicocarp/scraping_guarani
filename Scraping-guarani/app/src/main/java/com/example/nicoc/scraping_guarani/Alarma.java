@@ -24,13 +24,13 @@ public class Alarma extends Thread{
 
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
-    
+
 
     public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    //private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
-    private int tiempo_repeticion = 1000 * 20;// 12 hs
+    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
+    //private int tiempo_repeticion = 1000 * 20;// 12 hs
     private int hora;
 
 
