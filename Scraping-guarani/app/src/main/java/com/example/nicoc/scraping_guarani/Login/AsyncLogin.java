@@ -3,7 +3,6 @@ package com.example.nicoc.scraping_guarani.Login;
 import android.os.AsyncTask;
 
 import com.example.nicoc.scraping_guarani.Guarani.Guarani;
-import com.example.nicoc.scraping_guarani.Guarani.ManagerGuarani;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 

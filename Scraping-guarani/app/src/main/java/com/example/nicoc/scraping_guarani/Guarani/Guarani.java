@@ -257,8 +257,6 @@ public class Guarani {
         return false;
     }
 
-
-
     /**
      * Crea instancia alumnmo seteandole sus datos: nombre y carreras.
      * Por cada carrera setea si es regular o no, y su correspondiente legajo.
@@ -565,64 +563,51 @@ public class Guarani {
         return alumno;
     }
 
+    // EJEMPLO DE USO DE GUARANI.
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
-        // franco = 31636564 gabriel1
-        // gaston = 27042881 valenti2
-        // maxi =  37860301  ym7k
 
-        /*Guarani.setAuth(new Auth("37860301", "ym7k"));
+        Guarani.setAuth(new Auth("username", "password"));
         Guarani g = getInstance();
 
-        if (g.login()){
+        try{
+            g.login();
+            Alumno alumno= g.getAlumno();
+            System.out.println("1- Alumno " + alumno.getNombre());
 
-            ArrayList<Carrera> carreras = g.getPlanDeEstudios();
-            Alumno alumno = g.getDatosAlumno(carreras);
-            System.out.println("-- Alumno " + alumno.getNombre());
-            System.out.println("-- Carreras" );
-
+            ArrayList<Carrera> carreras = alumno.getCarreras();
+            System.out.println("2- Carreras "+carreras.size());
             for (Carrera c : carreras){
                 System.out.println(c.getCodigo() +" "+ c.getNombre() +" "+ c.getActivo());
             }
             ArrayList<Mesa> mesas = g.getMesasDeExamen();
-            System.out.println("-- MESAS DE EXAMEN" + mesas.size());
+            System.out.println("3- Mesas de examen" + mesas.size());
             for (Mesa mesa : mesas){
                 System.out.println(mesa.getCarrera() +" "+mesa.getMateria());
             }
 
+            System.out.println("4- Probando inscripcion a examen.");
+            if (g.inscribirseMesaById(alumno, mesas.get(mesas.size()-1), "regular")) {
+                System.out.println(g.getMensaje());
+            }
+            else {
+                System.out.println("Error: "+g.getError());
+            }
 
-            if (g.desinscribirseDeMesa("38", "MA048"))
+            System.out.println("5- Probando desinscripcion a mesa.");
+            if (g.desinscribirseDeMesa("38", mesas.get(mesas.size()-1).getMateria()))
                 System.out.println(g.getMensaje());
             else
                 System.out.println(g.getError());
 
-
-            if (g.inscribirseMesaById(alumno, mesas.get(mesas.size()-1), "regular"))
-                System.out.println(g.getMensaje());
-            else
-                System.out.println("Error: "+g.getError());
-
-
-            System.out.println("-- Mesas a las que esta anotado");
-
-
-            //alumno.setInscripciones(g.getMesasAnotadas());
-
-            //System.out.println(alumno.getInscripciones());
-
-
+            alumno.setInscripciones(g.getMesasAnotadas());
+            System.out.println("6- Mesas a las que esta anotado");
+            System.out.println(alumno.getInscripciones());
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
         }
-        else{
-            System.out.println(g.getError());
-        }
-*/
-        Gson gson = new Gson();
-
-        String s = gson.toJson(new ArrayList<Mesa>());
-        System.out.println(s);
-        Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
-        ArrayList<Mesa> result = new Gson().fromJson(s, collectionType);
-        System.out.println(result.size());
-
-     }
-
+    }
 }
