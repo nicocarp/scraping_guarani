@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:background="@color/colorBlanco"
-    android:weightSum="1">
-
+    android:background="@color/colorBlanco">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -23,204 +21,174 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
-
-
-        <TextView
-            android:id="@+id/lblTipo"
+        <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tipo"
-            android:layout_alignLeft="@+id/lblHora"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:fontFamily="cursive"
+                android:text="Detalle de la Mesa Inscripto"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignStart="@+id/lblHora"
-            android:text="REG/LIB"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorNegro"
-            android:textSize="20sp"
-            android:typeface="sans" />
-
-        <TextView
-            android:id="@+id/tipo"
-            android:layout_width="86dp"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/hora"
-            android:layout_alignLeft="@+id/hora"
-            android:layout_alignRight="@+id/hora"
-            android:layout_alignStart="@+id/hora"
-            android:layout_below="@+id/hora"
-            android:layout_marginTop="18dp"
-            android:fontFamily="cursive"
-            android:text="Tipo"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
-
-        <TextView
-            android:id="@+id/lblHora"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/hora"
-            android:layout_alignBottom="@+id/hora"
-            android:layout_alignLeft="@+id/lblFecha"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignStart="@+id/lblFecha"
-            android:text="HORA"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorNegro"
-            android:textSize="20sp"
-            android:typeface="sans" />
-
-        <ImageView
-            android:id="@+id/imageLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageLabel"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="17dp"
-            android:fontFamily="cursive"
-            android:text="Detalle de la Mesa"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
-
-
-        <TextView
-            android:id="@+id/carrera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linearLayout3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/titulo"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="22dp"
-            android:fontFamily="cursive"
-            android:text="Carrera"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+            android:weightSum="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/carrera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="cursive"
+                        android:text="Carrera"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/materia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/carrera"
-            android:layout_alignStart="@+id/carrera"
-            android:layout_below="@+id/carrera"
-            android:layout_marginTop="18dp"
-            android:fontFamily="cursive"
-            android:text="Materia"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+                    <TextView
+                        android:id="@+id/lblCarrera"
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:layout_weight="1"
+                        android:text="CARRERA"
+                        android:textColor="@color/colorNegro"
+                        android:textSize="20sp"
+                        android:typeface="sans" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/materia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="cursive"
+                        android:text="Materia"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/fecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/materia"
-            android:layout_alignLeft="@+id/materia"
-            android:layout_alignRight="@+id/materia"
-            android:layout_alignStart="@+id/materia"
-            android:layout_below="@+id/materia"
-            android:layout_marginTop="21dp"
-            android:fontFamily="cursive"
-            android:text="Fecha"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+                    <TextView
+                        android:id="@+id/lblMateria"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:text="MATERIA"
+                        android:textColor="@color/colorNegro"
+                        android:textSize="20sp"
+                        android:typeface="sans" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <TextView
+                            android:id="@+id/fecha"
+                            android:layout_width="117dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="cursive"
+                            android:text="Fecha y Hora"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:typeface="sans" />
 
-        <TextView
-            android:id="@+id/lblCarrera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/materia"
-            android:layout_alignLeft="@+id/titulo"
-            android:layout_alignStart="@+id/titulo"
-            android:text="CARRERA"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorNegro"
-            android:textSize="20sp"
-            android:typeface="sans" />
+                        <TextView
+                            android:id="@+id/lblFecha"
+                            android:layout_width="119dp"
+                            android:layout_height="wrap_content"
+                            android:text="FECHA"
+                            android:textColor="@color/colorNegro"
+                            android:textSize="20sp"
+                            android:typeface="sans" />
 
-        <TextView
-            android:id="@+id/lblMateria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/materia"
-            android:layout_alignLeft="@+id/lblCarrera"
-            android:layout_alignStart="@+id/lblCarrera"
-            android:text="MATERIA"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorNegro"
-            android:textSize="20sp"
-            android:typeface="sans" />
+                        <TextView
+                            android:id="@+id/lblHora"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="HORA"
+                            android:textColor="@color/colorNegro"
+                            android:textSize="20sp"
+                            android:typeface="sans" />
+                    </LinearLayout>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/lblFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/fecha"
-            android:layout_alignBottom="@+id/fecha"
-            android:layout_alignLeft="@+id/lblMateria"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignStart="@+id/lblMateria"
-            android:text="FECHA"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorNegro"
-            android:textSize="20sp"
-            android:typeface="sans" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/hora"
-            android:layout_width="86dp"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/fecha"
-            android:layout_alignLeft="@+id/fecha"
-            android:layout_alignRight="@+id/fecha"
-            android:layout_alignStart="@+id/fecha"
-            android:layout_below="@+id/fecha"
-            android:layout_marginTop="21dp"
-            android:fontFamily="cursive"
-            android:text="Hora"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
 
-        <!--<Button
-            android:id="@+id/btnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:background="@color/colorPrimary"
-            android:text="Actualizar"
-            android:textAllCaps="false"
-            android:textColor="@color/colorBlanco"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:typeface="sans"
-            android:layout_below="@+id/iniciarSesion"
-            android:layout_centerHorizontal="true" />-->
-
-
+                        <TextView
+                            android:id="@+id/tipo"
+                            android:layout_width="117dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="cursive"
+                            android:text="Tipo de mesa"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:typeface="sans" />
+                        <TextView
+                            android:id="@+id/lblTipo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@+id/lblHora"
+                            android:text="REG/LIB"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/colorNegro"
+                            android:textSize="20sp"
+                            android:typeface="sans" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
-
-</LinearLayout>
+</ScrollView>
