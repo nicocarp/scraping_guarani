@@ -22,13 +22,17 @@
     <string name="confirmar_mensaje">¿Desea inscribirse en esta materia?</string>
     <string name="confirmar_confirmacion">Inscripto</string>
 
+    <string name="confirmar_titulo2">Confirmar Desinscripcion</string>
+    <string name="confirmar_mensaje2">¿Desea anular la inscripción en esta materia?</string>
+    <string name="confirmar_confirmacion2">Desinscripto</string>
+
     <!--> Mensajes de error <-->
     <string name="exceptionIO">Error de IO</string>
 
     <!--> Array para el spinner <-->
     <string-array name="arraySpinner">
-        <item>REGULAR</item>
-        <item>LIBRE</item>
+        <item>Regular</item>
+        <item>Libre</item>
     </string-array>
 
 

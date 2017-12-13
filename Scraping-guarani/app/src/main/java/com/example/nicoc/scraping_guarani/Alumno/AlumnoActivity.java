@@ -420,10 +420,12 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
     private void mostrarDialogDesinscripcion(final Inscripcion inscripcion){
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-
+        final AlertDialog.Builder confirmaDesinscripcion = new AlertDialog.Builder(this);
+        confirmaDesinscripcion.setIcon(android.R.drawable.ic_dialog_alert);
+        confirmaDesinscripcion.setTitle(getResources().getString(R.string.confirmar_titulo2));
+        confirmaDesinscripcion.setMessage(getResources().getString(R.string.confirmar_mensaje2));
         View dialogView = inflater.inflate(R.layout.dialog_desinscripcion,null);
         dialogBuilder.setView(dialogView);
         ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(inscripcion.getCarrera());
@@ -433,8 +435,14 @@ public class AlumnoActivity extends AppCompatActivity implements
         dialogBuilder.setPositiveButton("Desinscribir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                desinscribirse(inscripcion);
-                //aca va el codigo que actualiza la activity
+                confirmaDesinscripcion.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int boton) {
+                        desinscribirse(inscripcion);
+                        //aca va el codigo que actualiza la activity                    }
+                    }
+                    });
+                confirmaDesinscripcion.setNegativeButton(android.R.string.no, null);
+                confirmaDesinscripcion.show();
             }
         });
         dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
@@ -447,6 +455,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+
 
 
     private void mostrarDialogFaltanMaterias(){
