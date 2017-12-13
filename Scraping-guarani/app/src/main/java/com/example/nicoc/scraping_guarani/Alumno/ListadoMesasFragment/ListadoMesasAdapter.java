@@ -72,8 +72,11 @@ public class ListadoMesasAdapter extends BaseAdapter  {
 
         // view_img_producto.setImageDrawable(p.getImagen()); ARREGLAR LO DE IMAGEN
         if (alumno.estaInscripto(mesa))
-            v.setBackgroundColor(Color.GREEN);
+            v.setBackgroundColor(Color.rgb(202, 249, 192));
+
         //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
+        if (!alumno.estaInscripto(mesa))
+            v.setBackgroundColor(Color.rgb(214, 216, 216));
         Carrera carrera = alumno.getCarreraById(mesa.getCarrera());
         Materia materia = carrera.getMateriaById(mesa.getMateria());
 

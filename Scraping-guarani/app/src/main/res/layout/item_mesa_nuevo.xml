@@ -16,6 +16,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:text=""
+            android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
@@ -28,7 +29,7 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:text=""
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="@color/colorNegro"
             android:textSize="12dp"
             android:typeface="sans" />
