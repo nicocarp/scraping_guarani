@@ -43,7 +43,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="sans"
-                tools:text="@string/alumno_campo" />
+                tools:text="@string/alumno_campo"
+                />
         </LinearLayout>
 
         <LinearLayout
