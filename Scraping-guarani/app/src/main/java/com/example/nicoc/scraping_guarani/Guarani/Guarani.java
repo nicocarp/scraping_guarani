@@ -128,7 +128,10 @@ public class Guarani {
 
         Element link_mesa = document.select("a:contains("+mesa.getMateria()+")").first();
 
-
+        if (link_mesa == null){
+            this.setError("No existe una inscripcion abierta para la materia.");
+            return false;
+        }
         System.out.println(link_mesa.attr("abs:href"));
         url = link_mesa.attr("abs:href");
         document = this.connection.url(url).get();
