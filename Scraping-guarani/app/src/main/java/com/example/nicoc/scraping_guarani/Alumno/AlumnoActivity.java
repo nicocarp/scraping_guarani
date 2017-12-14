@@ -177,7 +177,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         Log.i("registrarBroadcasts","ENTRE");
     }
 
-    private void desregistrarBroadcasts(){
+    public void desregistrarBroadcasts(){
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerMesas);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerError);
         Log.i("desregistrarBroadcasts","ENTRE");
@@ -281,7 +281,10 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
 
-    private void cerrarSesion() { AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute(); }
+    private void cerrarSesion() {
+        desregistrarBroadcasts();
+        AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute();
+    }
 
 
     private void matarNotificaciones(){
@@ -295,9 +298,10 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     public void desloguearse(){
         Alarma.cancelarAlarma();
-        matarNotificaciones();
+        desregistrarBroadcasts();
         this.presenter.desloguearse();
         finish();
+        matarNotificaciones();
         Intent intent = new Intent(AlumnoActivity.this, LoginActivity.class);
         startActivity(intent);
     }
