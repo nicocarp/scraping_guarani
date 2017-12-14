@@ -104,9 +104,9 @@ public class AlumnoActivity extends AppCompatActivity implements
             if(estado_dialog.equals("Visible"))
                 mostrarDialog();
         }*/
+
         alarma();
-        escucharBroadcasts();
-        escucharBroadcastsError();
+        //registrarBroadcasts();
     }
 
     public void setAlumno(Alumno alumno) {
@@ -142,42 +142,85 @@ public class AlumnoActivity extends AppCompatActivity implements
         startService(new Intent(this, ServicioIntent.class));
     }
 
-    private void escucharBroadcasts() {
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter filter = new IntentFilter("MesasActivity");
-        broadcastManager.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        Bundle bundle = intent.getExtras();
-                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-                        matarNotificaciones();
-                        //mostrarDialog();
-                        updateItems();
 
-                    }
-                },
-                filter
-        );
+
+
+
+
+
+
+    private BroadcastReceiver broadcastManagerMesas = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+            matarNotificaciones();
+            //mostrarDialog();
+            updateItems();
+        }
+    };
+
+    private BroadcastReceiver broadcastManagerError = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+            matarNotificaciones();
+            cerrarSesion();
+        }
+    };
+
+
+    private void registrarBroadcasts(){
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,new IntentFilter("MesasActivity"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,new IntentFilter("LoginError"));
+        Log.i("registrarBroadcasts","ENTRE");
     }
 
-    private void escucharBroadcastsError(){
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter filter = new IntentFilter("LoginError");
-        broadcastManager.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        Bundle bundle = intent.getExtras();
-                        Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-                        matarNotificaciones();
-                        cerrarSesion();
-                        //mostrarDialogError();
-                    }
-                },
-                filter
-        );
+    private void desregistrarBroadcasts(){
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerMesas);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerError);
+        Log.i("desregistrarBroadcasts","ENTRE");
     }
+
+
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        desregistrarBroadcasts();
+        Log.i("ONPAUSE","ENTRE");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        desregistrarBroadcasts();
+        Log.i("ONSTOP","ENTRE");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        desregistrarBroadcasts();
+        Log.i("ONDESTROY","ENTRE");
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registrarBroadcasts();
+        Log.i("ONRESUME","ENTRE");
+
+    }
+
 
     public final void updateItems(){
         this.fragment.updateList();

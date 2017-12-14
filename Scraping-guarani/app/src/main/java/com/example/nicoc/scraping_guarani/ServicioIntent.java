@@ -179,8 +179,10 @@ public class ServicioIntent extends IntentService{
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         String mensaje ="Usted esta inscripto a los examenes: \n";
         for(Inscripcion i: inscripciones){
-            mensaje+="" + i.getMateria() + "\n";
+            mensaje+="" + i.getMateria() + "el dia: " + i.getFecha() + "\n";
+
         }
+        mensaje+="IF33 el dia 14/12/2017 \n";
         int icono = R.mipmap.ic_launcher;
         //Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
         //PendingIntent pendingIntent = PendingIntent.getActivity(ServicioIntent.this, 0, intent, 0);
@@ -208,7 +210,7 @@ public class ServicioIntent extends IntentService{
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
-                .setContentText("Ha ocurrido un error.")
+                .setContentText("Ups.. ocurrio un error, volvete a loguear!.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
@@ -234,7 +236,7 @@ public class ServicioIntent extends IntentService{
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
-                .setContentText("Ya te podes inscribir. Hay mesas de examenes disponibles.")
+                .setContentText("Ya te podes inscribir!. Mesas de examenes disponibles!.")
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
@@ -253,7 +255,7 @@ public class ServicioIntent extends IntentService{
         Intent resultIntent = new Intent("MesasActivity");//le pongo un nombre al intent asi se como atraparlo despues.
         //resultIntent.putExtra("TNT", "Hay mesas de examenes");
         Bundle bundle = new Bundle();
-        bundle.putString("Nombre","Hay mesas de examenes disponibles.");
+        bundle.putString("Nombre","Hay mesas de examenes!.");
         resultIntent.putExtras(bundle);
         broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
 
@@ -267,7 +269,7 @@ public class ServicioIntent extends IntentService{
         Intent resultIntent = new Intent("LoginError");//le pongo un nombre al intent asi se como atraparlo despues.
         //resultIntent.putExtra("TNT", "Hay mesas de examenes");
         Bundle bundle = new Bundle();
-        bundle.putString("Nombre","Ha ocurrido un error.");
+        bundle.putString("Nombre","Ups.. ocurrio un error, volvete a loguear!.");
         resultIntent.putExtras(bundle);
         broadcastManager.sendBroadcast(resultIntent);//envio el intent a toda la plataforma para que alguien lo capture.
 
