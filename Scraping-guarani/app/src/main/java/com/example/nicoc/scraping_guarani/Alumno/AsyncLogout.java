@@ -31,12 +31,14 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        alumnoActivity.desregistrarBroadcasts();
         alumnoActivity.mostrarProgressDialog();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        alumnoActivity.desregistrarBroadcasts();
         Intent intent = new Intent(alumnoActivity, LoginActivity.class);
         alumnoActivity.desloguearse();
         //Toast.makeText(alumnoActivity,"OKOKKKOKO",Toast.LENGTH_LONG);
@@ -47,6 +49,7 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         boolean bandera = isMyServiceRunning(ServicioIntent.class);
+        alumnoActivity.desregistrarBroadcasts();
         while(bandera){
             try {
                 Thread.sleep(1000 * 5);
