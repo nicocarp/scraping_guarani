@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import android.widget.TextView;
@@ -149,7 +150,7 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
 
-    private BroadcastReceiver broadcastManagerMesas = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastManagerMesas = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -160,7 +161,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         }
     };
 
-    private BroadcastReceiver broadcastManagerError = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastManagerError = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -170,20 +171,42 @@ public class AlumnoActivity extends AppCompatActivity implements
         }
     };
 
+    private final IntentFilter filterMesas = new IntentFilter("MesasActivity");
+    private final IntentFilter filterLogin = new IntentFilter("LoginError");
+    //private BroadcastMesas bm = new BroadcastMesas();
 
     private void registrarBroadcasts(){
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,new IntentFilter("MesasActivity"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,new IntentFilter("LoginError"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,new IntentFilter("MesasActivity"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,new IntentFilter("LoginError"));
+        //this.registerReceiver(bm,filterMesas);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,filterMesas);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,filterLogin);
         Log.i("registrarBroadcasts","ENTRE");
     }
 
     public void desregistrarBroadcasts(){
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerMesas);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerError);
-        Log.i("desregistrarBroadcasts","ENTRE");
+        /*Log.i("desregistrarBroadcasts","ENTRE");
+
+        try{
+            this.unregisterReceiver(bm);
+        }catch(Exception e){
+
+        }*/
     }
 
 
+
+    private class BroadcastMesas extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
+            matarNotificaciones();
+            cerrarSesion();
+        }
+    }
 
 
 
@@ -370,7 +393,7 @@ public class AlumnoActivity extends AppCompatActivity implements
             if (mesa.puedeInscribirse()){
                 mostrarDialogInscripcion(mesa, carrera, materia);
             }else{
-                mostrarDialogFaltanMaterias();
+                mostrarDialogFaltanMaterias(materia);
             }
         }
 
@@ -462,17 +485,19 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
 
-    private void mostrarDialogFaltanMaterias(){
+    private void mostrarDialogFaltanMaterias(Materia materia){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_faltan_materias,null);
         dialogBuilder.setView(dialogView);
+        ((EditText) dialogView.findViewById(R.id.editText)).setText(materia.getCorrelatividad());
         dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //aca va el codigo que actualiza la activity
+
             }
         });
 
