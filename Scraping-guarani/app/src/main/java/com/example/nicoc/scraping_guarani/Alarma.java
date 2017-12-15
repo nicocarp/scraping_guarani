@@ -25,13 +25,10 @@ public class Alarma extends Thread{
     private static AlarmManager alarmMgr;
     private static PendingIntent alarmIntent;
 
-
     public static Context contexto;
     private Class clase_del_servicio;
     private Calendar calendar;
-    //private int tiempo_repeticion = 1000 * 60 * 60 * 12;// 12 hs
-    private int tiempo_repeticion = 1000 * 20;// 12 hs
-    private int hora;
+    private int tiempo_repeticion = 1000 * 60 * 60 * 12;// cada 12 hs
 
 
     public Alarma (Context contexto, Class clase_del_servicio){
@@ -89,16 +86,11 @@ public class Alarma extends Thread{
 
     public static void cancelarAlarma()
     {
-        // If the alarm has been set, cancel it.
+        // Si la alarma ha sido seteada, la cancelo.
         try{
             if (alarmMgr!= null) {
-                //Intent checkIntent = new Intent(contexto, clase_del_servicio);
-                //boolean alarmUp = (PendingIntent.getService(contexto,0,checkIntent,PendingIntent.FLAG_NO_CREATE) != null);
                 alarmMgr.cancel(alarmIntent);
                 Log.i("Alarma: ","ha sido cancelada");
-
-
-
             }
         }catch(Exception e){
             Log.i("Alarma: ","ha ocurrido un error al intentar cancelar la alarma, \n, " +
@@ -106,39 +98,25 @@ public class Alarma extends Thread{
                     "lo cual hizo que el servicio se parara mientras se estaba ejecutando. \n" +
                     " Datos del Error: " + e.getMessage());
         }
-
-
     }
 
     public void run(){
-
         try {
             Log.i("Alarma: ", "ha comenzado la alarma");
 
-
-            //https://developer.android.com/training/scheduling/alarms.html
             alarmMgr = (AlarmManager) contexto.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(contexto, clase_del_servicio);
             alarmIntent = PendingIntent.getService(contexto, 0, intent, 0);
 
-
-            // Set the alarm to start at 14:51 p.m.
             calendar = Calendar.getInstance();
-            //hora = calendar.get(Calendar.HOUR_OF_DAY) - 1;
-            //if (hora == -1) hora = 23;
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR_OF_DAY, 12); //Se disparará la alarma a las 12:00 pm
             calendar.set(Calendar.MINUTE, 00);//30
             calendar.set(Calendar.SECOND, 00);
 
-
-            // setRepeating() lets you specify a precise custom interval--in this case,
-            // 20 minutes.
+            // Alarma seteada a las 12:00 PM y se repite el servicio cada 12hs.
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     tiempo_repeticion, alarmIntent);//60 segundos
-            //tiempo_repeticion = 1000 * 60 = 1 minuto
-            // setearle horas predefinidas: por ejemplo a las 12 y a las 12, y correr el servicio YA,
-            //contexto.startService(intent);
 
         }catch(Exception e){
             Log.i("Alarma RUNTIME ERRROR: ","" + e.getMessage());

@@ -265,7 +265,13 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     }
 
+    public void ocultarProgressDialog(){
+        try{
+            progressDialog.dismiss();
+        }catch(Exception e){
 
+        }
+    }
 
 
     private void verificar_login(){
@@ -362,6 +368,8 @@ public class AlumnoActivity extends AppCompatActivity implements
         confirmaDesinscripcion.setMessage(getResources().getString(R.string.confirmar_mensaje2));
         View dialogView = inflater.inflate(R.layout.dialog_desinscripcion,null);
         dialogBuilder.setView(dialogView);
+        //
+        //_alumno.getCarreraById()
         ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(inscripcion.getCarrera());
         ((TextView) dialogView.findViewById(R.id.lblMateria)).setText(inscripcion.getMateria());
         ((TextView) dialogView.findViewById(R.id.lblFecha)).setText(inscripcion.getFecha());

@@ -80,6 +80,7 @@ public class ListadoMesasAdapter extends BaseAdapter  {
         Carrera carrera = alumno.getCarreraById(mesa.getCarrera());
         Materia materia = carrera.getMateriaById(mesa.getMateria());
 
+        // este es un boolean mesa.puedeInscribirse();
         view_txt_codigo.setText(materia.getNombre());
         view_txt_nombre.setText(mesa.getFecha());
         //view_txt_nombre.setText(carrera.getNombre().toLowerCase());
