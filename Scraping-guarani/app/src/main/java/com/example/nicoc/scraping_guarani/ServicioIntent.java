@@ -79,8 +79,9 @@ public class ServicioIntent extends IntentService{
             String password = preferences.getString("password", "");
 
             if (usuario.isEmpty() || password.isEmpty()){
-                notificarError();
-                enviarBroadcastError();
+                Alarma.cancelarAlarma();
+                //throw exception
+
                 return; // debemos mandar notificar esto es un error.
             }
             Guarani.setAuth(new Auth(usuario, password));
@@ -139,11 +140,16 @@ public class ServicioIntent extends IntentService{
         if (inscripciones_json_guardadas.isEmpty())
             inscripciones_json_guardadas = "[]";
 
+        //1.) throw exception si pass y user es vacio y cancelo alarma
+        //2.)arreglar notificaciones: dejar lo que hizo nico...
+        //3.)cuando pido mesa en guarani puede cagarse todo aca: illegalargument excepton.....cambio de password
         Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
         ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
         collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
         ArrayList<Inscripcion> inscripciones_guardadas = new Gson().fromJson(inscripciones_json_guardadas, collectionType);
 
+        //mis mesas guardadas < mesas del guarani-->no tengo mesas
+        //inscripciones guaradadas < inscripciones de guarani..>no tengo inscripciones
         notificar = (mesas_guardadas.size() < mesas.size());
         lanzar_broadcast = (inscripciones_guardadas.size() != inscripciones.size() || notificar);
 

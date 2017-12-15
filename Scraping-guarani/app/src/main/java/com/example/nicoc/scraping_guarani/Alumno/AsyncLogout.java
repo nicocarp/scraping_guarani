@@ -31,14 +31,12 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        alumnoActivity.desregistrarBroadcasts();
         alumnoActivity.mostrarProgressDialog();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        alumnoActivity.desregistrarBroadcasts();
         Intent intent = new Intent(alumnoActivity, LoginActivity.class);
         alumnoActivity.desloguearse();
         //Toast.makeText(alumnoActivity,"OKOKKKOKO",Toast.LENGTH_LONG);
@@ -49,7 +47,6 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         boolean bandera = isMyServiceRunning(ServicioIntent.class);
-        alumnoActivity.desregistrarBroadcasts();
         while(bandera){
             try {
                 Thread.sleep(1000 * 5);
@@ -59,7 +56,7 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
                 bandera = isMyServiceRunning(ServicioIntent.class);
             }
         }
-        return null;//NOTA: Si mato el servicio de una puede lanzar error
+        return null;
     }
 
 
@@ -73,26 +70,6 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
         return false;
     }
 
-    private void eliminarServicio(){
-        ActivityManager am = (ActivityManager) alumnoActivity.getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
-
-        Iterator<ActivityManager.RunningAppProcessInfo> iter = runningAppProcesses.iterator();
-
-        while(iter.hasNext()){
-            ActivityManager.RunningAppProcessInfo next = iter.next();
-
-            String pricessName = alumnoActivity.getPackageName() + ":service";
-
-            if(next.processName.equals(pricessName)){
-                Process.killProcess(next.pid);
-                break;
-            }
-        }
-    }
 
 
-    //Nota: para matar el intent service
-    //https://stackoverflow.com/questions/11258083/how-to-force-an-intentservice-to-stop-immediately-with-a-cancel-button-from-an-a
-    //https://stackoverflow.com/questions/8709989/how-to-stop-intentservice-in-android
 }

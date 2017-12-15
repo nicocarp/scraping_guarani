@@ -64,8 +64,7 @@ public class AlumnoActivity extends AppCompatActivity implements
     private SharedPreferences loginPreferences;
     private ProgressDialog progressDialog;
     private SharedPreferences.Editor loginPrefsEditor;
-    private android.app.AlertDialog alertDialog;
-    private static final String KEY_1 = "alertDialog";
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_a, menu);
@@ -99,15 +98,8 @@ public class AlumnoActivity extends AppCompatActivity implements
         this.presenter.getAlumno();
         verificar_login();
 
-        //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
-        /*if (savedInstanceState != null) {
-            String estado_dialog = savedInstanceState.getString(KEY_1);
-            if(estado_dialog.equals("Visible"))
-                mostrarDialog();
-        }*/
-
         alarma();
-        //registrarBroadcasts();
+
     }
 
     public void setAlumno(Alumno alumno) {
@@ -146,10 +138,6 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
 
-
-
-
-
     private final BroadcastReceiver broadcastManagerMesas = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -173,12 +161,9 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     private final IntentFilter filterMesas = new IntentFilter("MesasActivity");
     private final IntentFilter filterLogin = new IntentFilter("LoginError");
-    //private BroadcastMesas bm = new BroadcastMesas();
+
 
     private void registrarBroadcasts(){
-        //LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,new IntentFilter("MesasActivity"));
-        //LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,new IntentFilter("LoginError"));
-        //this.registerReceiver(bm,filterMesas);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,filterMesas);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,filterLogin);
         Log.i("registrarBroadcasts","ENTRE");
@@ -187,25 +172,6 @@ public class AlumnoActivity extends AppCompatActivity implements
     public void desregistrarBroadcasts(){
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerMesas);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerError);
-        /*Log.i("desregistrarBroadcasts","ENTRE");
-
-        try{
-            this.unregisterReceiver(bm);
-        }catch(Exception e){
-
-        }*/
-    }
-
-
-
-    private class BroadcastMesas extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-            matarNotificaciones();
-            cerrarSesion();
-        }
     }
 
 
@@ -249,58 +215,14 @@ public class AlumnoActivity extends AppCompatActivity implements
         this.fragment.updateList();
     }
 
-    private void mostrarDialog(){
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialog_mesas,null);
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.setPositiveButton("Actualizar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //aca va el codigo que actualiza la activity
-                updateItems();
-            }
-        });
-        dialogBuilder.setCancelable(false);
-        AlertDialog alertDialog = dialogBuilder.create();
-        if (alertDialog!=null)alertDialog.show();
-    }
 
-    private void mostrarDialogError(){
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.dialog_login_error,null);
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //aca va el codigo que actualiza la activity
-                cerrarSesion();
-            }
-        });
-        dialogBuilder.setCancelable(false);
-        AlertDialog alertDialog = dialogBuilder.create();
-        if (alertDialog!=null)alertDialog.show();
-    }
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        try{
-            if(alertDialog!=null){
-                if(alertDialog.isShowing())
-                    outState.putString(KEY_1, "Visible");
-                else
-                    outState.putString(KEY_1, "Invisible");
-            }
-        }catch(NullPointerException npe){
-            npe.printStackTrace();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+
     }
 
 
@@ -343,23 +265,8 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     }
 
-    public void ocultarProgressDialog(){
-        try{
-            progressDialog.dismiss();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     private void verificar_login(){
         if (_alumno!=null)
@@ -496,7 +403,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         dialogBuilder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //aca va el codigo que actualiza la activity
+                //no hace nada.
 
             }
         });
