@@ -102,6 +102,8 @@ public class Guarani {
      * @throws IOException
      */
     public synchronized boolean inscribirseMesaById(Alumno alumno, Mesa mesa, String _tipo) throws IOException {
+        if (!estaLogueado())
+            login();
         String tipo = _tipo.toLowerCase();
         Document document = this.document_base;
         String url;
@@ -170,6 +172,8 @@ public class Guarani {
     }
 
     public synchronized ArrayList<Inscripcion> getMesasAnotadas() throws IOException {
+        if (!estaLogueado())
+            login();
         Document document = this.document_base;
         String url;
 
@@ -216,6 +220,8 @@ public class Guarani {
      * @throws IOException
      */
     public synchronized Boolean desinscribirseDeMesa(String id_carrera, String id_materia) throws IOException {
+        if (!estaLogueado())
+            login();
         Document document = this.document_base;
         String url;
 
