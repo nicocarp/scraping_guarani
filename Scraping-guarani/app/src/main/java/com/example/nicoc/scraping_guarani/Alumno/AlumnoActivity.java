@@ -143,7 +143,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-            matarNotificaciones();
+            //matarNotificaciones();
             //mostrarDialog();
             updateItems();
         }
@@ -154,7 +154,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             Toast.makeText(AlumnoActivity.this, bundle.getString("Nombre"), Toast.LENGTH_LONG).show();
-            matarNotificaciones();
+            //matarNotificaciones();
             cerrarSesion();
         }
     };
