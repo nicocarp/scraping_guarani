@@ -226,9 +226,18 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
 
+    /* Cerrar sesion con AsyncTask sin matar servicio */
     private void cerrarSesion() {
+        Alarma.cancelarAlarma();
         desregistrarBroadcasts();
         AsyncTask<Void, Void, Void> myAsyncTask = new AsyncLogout(this).execute();
+    }
+
+    /* Cerrar sesión matando el servicio */
+    private void cerrarSesionMatandoServicio(){
+        Alarma.cancelarAlarma();
+        stopService(new Intent(this,ServicioIntent.class)); //te lo mata de una.
+        desloguearse();
     }
 
 
@@ -242,7 +251,6 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
     public void desloguearse(){
-        Alarma.cancelarAlarma();
         desregistrarBroadcasts();
         this.presenter.desloguearse();
         finish();

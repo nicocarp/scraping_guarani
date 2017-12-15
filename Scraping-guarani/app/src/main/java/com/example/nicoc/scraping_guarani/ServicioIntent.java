@@ -222,4 +222,6 @@ public class ServicioIntent extends IntentService{
         super.onDestroy();
         Log.i("Intent Service"," Me mataron.");
     }
+
+
 }
