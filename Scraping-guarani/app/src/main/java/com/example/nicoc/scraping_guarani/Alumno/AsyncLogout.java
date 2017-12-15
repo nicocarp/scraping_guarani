@@ -39,7 +39,6 @@ class AsyncLogout extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         alumnoActivity.desloguearse();
         alumnoActivity.ocultarProgressDialog();
-        Intent intent = new Intent(alumnoActivity, LoginActivity.class);
     }
 
     @Override
