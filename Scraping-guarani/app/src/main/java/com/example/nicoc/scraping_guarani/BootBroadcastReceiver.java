@@ -11,8 +11,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
+
         SharedPreferences preferences = context.getSharedPreferences("loginPrefs", MODE_PRIVATE);
         String usuario = preferences.getString("username", "");
         String password = preferences.getString("password", "");

@@ -45,7 +45,7 @@ public class ServicioIntent extends IntentService{
     private static final int MAXIMA_REPETICION = 2;
     private boolean bandera = true;
     private int contador = 1;
-    private ConectividadBroadcastReceiver receiver;
+
 
     public static final int NOTIFICACION_INSCRIPCION = 1234;
     public static final int NOTIFICACION_ERROR = 234;
@@ -82,6 +82,7 @@ public class ServicioIntent extends IntentService{
                 Alarma.cancelarAlarma();
                 throw new RuntimeException("No existe usuario registrado.");
             }
+
             Guarani.setAuth(new Auth(usuario, password));
 
             while(bandera==true && contador<=MAXIMA_REPETICION){
@@ -135,6 +136,8 @@ public class ServicioIntent extends IntentService{
         if (inscripciones_json_guardadas.isEmpty())
             inscripciones_json_guardadas = "[]";
 
+        /* Este codigo puede generar error si el usuario cambia la password */
+
         Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
         ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
         collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
@@ -176,7 +179,7 @@ public class ServicioIntent extends IntentService{
     }
 
     private void notificar(String mensaje){
-        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
         int icono = R.mipmap.ic_launcher;
         Intent intent = new Intent(ServicioIntent.this, AlumnoActivity.class);
@@ -185,7 +188,6 @@ public class ServicioIntent extends IntentService{
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
                 .setContentTitle("SIU GUARANI")
-                //.setStyle(new NotificationCompat.BigTextStyle().bigText("Ya te podes inscribir!.\nHay Mesas de examen disponibles!."))
                 .setContentText(mensaje)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .setDefaults(NotificationCompat.DEFAULT_SOUND)
@@ -201,11 +203,13 @@ public class ServicioIntent extends IntentService{
         Bundle bundle = new Bundle();
         bundle.putString("Nombre",mensaje);
         resultIntent.putExtras(bundle);
-        //envio el intent a toda la plataforma para que alguien lo capture.
         broadcastManager.sendBroadcast(resultIntent);
     }
 
-    //Metodo devuelve si hay conexion a Internet o no.
+    /**
+     * Metodo que se encarga de informar si hay conexion a internet o no.
+     * @return
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
