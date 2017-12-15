@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
     private ILogin.Presenter presenter;
     private ProgressDialog progressDialog;
 
-    private static final String KEY_1 = "btnLogin";
+
     private static final String KEY_2 = "progressDialog";
 
     @Override
@@ -55,44 +55,18 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         ButterKnife.bind(this);
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         iniciarViews();
+
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estadoProgressDialog = savedInstanceState.getString(KEY_2);
-            if(estadoProgressDialog.equals("Visible")){
-                //iniciarViews();
-                mostrarProgressBar();
-            }
-            else{
-                ocultarProgressBar();
-            }
+            if(estadoProgressDialog.equals("Visible"))mostrarProgressBar();
+            else ocultarProgressBar();
         }
 
-        escucharBroadcasts();
         getAlumno();
     }
 
-    private void escucharBroadcasts(){
-        //Escucho por mensajes que vienen a mi.....
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter filter = new IntentFilter("MesasActivity");
-        //filter.addAction(CountService.EXTRA_COUNT_TARGET);
-        broadcastManager.registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        Log.i("AlumnoActivity....","encontre el mensaje brodcasteado!");
-                        Bundle bundle = intent.getExtras();
-                        //Aqui hay que hacer la consulta a la BD de MESAS para mostrar mesas disponibles.
-                        Toast.makeText(LoginActivity.this,bundle.getString("Nombre"),Toast.LENGTH_LONG).show();
 
-                        //aca elimino la notificacion
-                        NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                        mNotifyMgr.cancel(1);//aca estoy matando automaticamente a la notificacion en el panel de notificaciones.
-                    }
-                },
-                filter
-        );
-    }
 
     public void iniciarViews(){
 
@@ -117,9 +91,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         alarma.start();
 
         Intent intent = new Intent(this, AlumnoActivity.class);
-
         startService(new Intent(this, ServicioIntent.class));
-
         startActivity(intent);
     }
 
@@ -150,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         try{
             progressDialog.show();
         }catch (Exception e){
+            Log.i("LoginActivity","Error en mostrarProgressBar()");
         }
         btnLogin.setEnabled(false);
         btnLogin.setBackgroundColor(getResources().getColor(R.color.colorGris));
@@ -159,29 +132,17 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         try{
             progressDialog.dismiss();
          }catch (Exception e){
+            Log.i("LoginActivity","Error en ocultarProgressBar()");
         }
         btnLogin.setEnabled(true);
         btnLogin.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 
-/*    @Override
-    protected void onStop() {
-        super.onStop();
-        //ocultarProgressBar();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //ocultarProgressBar();
-    }
-*/
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(progressDialog.isShowing())
-            outState.putString(KEY_2, "Visible");
-        else
-            outState.putString(KEY_2, "Invisible");
+        if(progressDialog.isShowing()) outState.putString(KEY_2, "Visible");
+        else outState.putString(KEY_2, "Invisible");
     }
 }
