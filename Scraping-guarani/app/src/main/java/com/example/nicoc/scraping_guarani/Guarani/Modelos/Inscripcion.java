@@ -35,8 +35,16 @@ public class Inscripcion {
         this.tipo = tipo;
     }
 
-    public String getFecha() {
+    public String getFechayHora() {
         return fecha;
+    }
+    public String getHora(){
+        String[] result = this.getFechayHora().split(" ");
+        return result[1];
+    }
+    public String getFecha(){
+        String[] result = this.getFechayHora().split(" ");
+        return result[0];
     }
 
     public void setFecha(String fecha) {

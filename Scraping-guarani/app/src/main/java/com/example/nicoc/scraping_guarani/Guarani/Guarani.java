@@ -20,8 +20,13 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,6 +203,7 @@ public class Guarani {
                 inscripcion.setCarrera(cod_carrera);
                 inscripcion.setMateria(cod_materia);
                 inscripcion.setTipo(table_mesas.get(i).select("tr").get(1).children().get(5).text().toLowerCase());
+                inscripcion.setFecha(table_mesas.get(i).select("tr").get(1).children().get(4).text().toLowerCase());
                 inscripciones.add(inscripcion);
             }
         }
@@ -573,8 +579,8 @@ public class Guarani {
     }
 
     // EJEMPLO DE USO DE GUARANI.
-    public static void main(String [] args) throws IOException, NoSuchAlgorithmException {
-
+    public static void main(String [] args) throws IOException, NoSuchAlgorithmException, ParseException {
+/*
         Guarani.setAuth(new Auth("username", "password"));
         Guarani g = getInstance();
 
@@ -618,5 +624,15 @@ public class Guarani {
         }catch(NullPointerException e){
             System.out.println(e.getMessage());
         }
+        */
+        String fecha = "15/12/2017 18:00";
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = format.parse(fecha);
+        Date today = format.parse(format.format((new Date())));
+        if (today.equals(date))
+            System.out.println("SN IGUALES");
+        else
+            System.out.println("NO SON IGUALES");
+
     }
 }
