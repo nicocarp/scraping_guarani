@@ -265,7 +265,13 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     }
 
+    public void ocultarProgressDialog(){
+        try{
+            progressDialog.dismiss();
+        }catch(Exception e){
 
+        }
+    }
 
 
     private void verificar_login(){
