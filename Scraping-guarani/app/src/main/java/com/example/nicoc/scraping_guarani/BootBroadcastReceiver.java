@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/* Clase que se encarga de disparar nuevamente la alarma cuando
+* el dispositivo se reinicia o se apaga.
+* */
 public class BootBroadcastReceiver extends BroadcastReceiver {
 
     @Override
