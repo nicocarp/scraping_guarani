@@ -11,6 +11,10 @@ public class Inscripcion {
     private String tipo;
     private String materia;
 
+    /**
+     * Retornamos el id de la carrera de la materia.
+     * @return String id de la carrera.
+     */
     public String getCarrera() {
         return carrera;
     }
@@ -35,6 +39,10 @@ public class Inscripcion {
         this.tipo = tipo;
     }
 
+    /**
+     * Retornamos la fecha y la hora de la mesa inscripta.
+     * @return String fecha dd/MM/aaaa mm:ss.
+     */
     public String getFechayHora() {
         return fecha;
     }
@@ -42,6 +50,11 @@ public class Inscripcion {
         String[] result = this.getFechayHora().split(" ");
         return result[1];
     }
+
+    /**
+     * Retornamos la fecha de la mesa inscripta.
+     * @return String fecha dd/mm/aaaa
+     */
     public String getFecha(){
         String[] result = this.getFechayHora().split(" ");
         return result[0];
@@ -51,11 +64,21 @@ public class Inscripcion {
         this.fecha = fecha;
     }
 
+    /**
+     * Retornamos true si la inscripcion corresponde a la mesa.
+     * Se comparan los id que son codigo_carrera+codigo_materia
+     * @param mesa instancia de Mesa.
+     * @return
+     */
     public boolean esDeLaMesa(Mesa mesa) {
         return this.getCarrera().equals(mesa.getCarrera()) &&
                 this.getMateria().equals(mesa.getMateria());
     }
 
+    /**
+     * Retornamos ID de inscripcion: codigo_carrera+codigo_materia
+     * @return
+     */
     public String getId() {
         return this.getCarrera()+this.getMateria();
     }
