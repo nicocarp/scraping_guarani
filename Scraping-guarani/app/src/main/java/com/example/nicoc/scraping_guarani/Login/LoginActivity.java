@@ -1,13 +1,9 @@
 package com.example.nicoc.scraping_guarani.Login;
 
-import android.app.NotificationManager;
+
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,12 +33,8 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
     @BindView(R.id.btnLogin) Button btnLogin;
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
-    private SharedPreferences loginPreferences;
-
     private ILogin.Presenter presenter;
     private ProgressDialog progressDialog;
-
-
     private static final String KEY_2 = "progressDialog";
 
     @Override
@@ -62,7 +54,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
             if(estadoProgressDialog.equals("Visible"))mostrarProgressBar();
             else ocultarProgressBar();
         }
-
         getAlumno();
     }
 
@@ -89,7 +80,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
 
         Alarma alarma = new Alarma(this,ServicioIntent.class);
         alarma.start();
-
         Intent intent = new Intent(this, AlumnoActivity.class);
         startService(new Intent(this, ServicioIntent.class));
         startActivity(intent);
