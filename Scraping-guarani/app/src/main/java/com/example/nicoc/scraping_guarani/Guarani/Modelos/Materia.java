@@ -1,9 +1,5 @@
 package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by nicoc on 24/11/17.
