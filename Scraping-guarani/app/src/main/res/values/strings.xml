@@ -17,6 +17,8 @@
     <string name="seleccioneCarrera_titulo">Seleccione Carrera</string>
     <string name="materias_titulo">Materias</string>
     <string name="iniciarsesion_titulo">Iniciar Sesion</string>
+    <string name="inscripcion_titulo">Inscripción</string>
+    <string name="desinscripcion_titulo">Desinscripción</string>
 
     <string name="confirmar_titulo">Confirmar Inscripcion</string>
     <string name="confirmar_mensaje">¿Desea inscribirse en esta materia?</string>
