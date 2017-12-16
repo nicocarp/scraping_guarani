@@ -55,4 +55,8 @@ public class Inscripcion {
         return this.getCarrera().equals(mesa.getCarrera()) &&
                 this.getMateria().equals(mesa.getMateria());
     }
+
+    public String getId() {
+        return this.getCarrera()+this.getMateria();
+    }
 }

@@ -13,8 +13,28 @@ public class Mesa {
     private ArrayList<Profesor> profesores;
     private ArrayList<String> materias_necesarias;
     private String anio_acedemico;
+    private Boolean inscripto;
+    private Boolean habilitada;
+    public Boolean getInscripto() {
+        return inscripto;
+    }
+
+    public void setInscripto(Boolean inscripto) {
+        this.inscripto = inscripto;
+    }
+
+    public Boolean getHabilitada() {
+        return habilitada;
+    }
+
+    public void setHabilitada(Boolean habilitada) {
+        this.habilitada = habilitada;
+    }
+
 
     public Mesa(){
+        this.inscripto = false;
+        this.habilitada = true;
         this.materias_necesarias = new ArrayList<String>();
     }
 
@@ -23,7 +43,7 @@ public class Mesa {
      * @return String correspondiente al idetnficiador de la mesa.
      */
     public String getId(){
-        return this.carrera + this.materia;
+        return this.carrera+this.materia;
     }
     public String getCarrera() {
         return carrera;
@@ -66,6 +86,8 @@ public class Mesa {
     }
 
     public String getFecha() {
+        if (this.fecha == null)
+            return "";
         return fecha;
     }
 
@@ -116,5 +138,27 @@ public class Mesa {
 
     public void setAnio_acedemico(String anio_acedemico) {
         this.anio_acedemico = anio_acedemico;
+    }
+
+    public void setInscripcion(ArrayList<Inscripcion> inscripciones) {
+        Boolean inscripto = false;
+        for (Inscripcion inscripcion : inscripciones){
+            if (inscripcion.getId().equals(this.getId())){
+                inscripto = true;
+                break;
+            }
+        }
+        this.setInscripto(inscripto);
+    }
+
+    public void setHabilitada(ArrayList<Mesa> mesas) {
+        Boolean habilitada = false;
+        for (Mesa mesa:mesas){
+            if (mesa.getId().equals(this.getId())){
+                habilitada = true;
+                break;
+            }
+        }
+        this.setHabilitada(habilitada);
     }
 }

@@ -71,16 +71,9 @@ public class Alumno{
      * @return true si el alumno esta inscripto a la mesa.
      */
     public Boolean estaInscripto(Mesa mesa){
-        Boolean result = false;
-        for (Inscripcion inscripcion : this.getInscripciones()){
-            if (inscripcion.getMateria().equals(mesa.getMateria()) &&
-                    inscripcion.getCarrera().equals(mesa.getCarrera())
-                    ){
-                result = true;
-                break;
-            }
-        }
-        return result;
+
+        return mesa.getInscripto();
+
     }
 
     /**
@@ -113,6 +106,16 @@ public class Alumno{
      */
     public void loadInscripciones(ArrayList<Inscripcion> inscripciones) {
         this.inscripciones= inscripciones;
+    }
+    private Mesa getMesa(String carrera, String materia){
+        Mesa result = null;
+        for (Mesa mesa : this.getMesas()){
+            if (mesa.getCarrera().equals(carrera) && mesa.getMateria().equals(materia)){
+                result = mesa;
+                break;
+            }
+        }
+        return result;
     }
     public ArrayList<Mesa> getMesas(){
         return this.mesas;

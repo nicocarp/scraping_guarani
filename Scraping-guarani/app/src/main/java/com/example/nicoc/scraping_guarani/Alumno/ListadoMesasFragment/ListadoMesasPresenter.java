@@ -31,8 +31,8 @@ class ListadoMesasPresenter implements IListadoMesasFragment.Presenter {
 
     @Override
     public void setItems(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
-        _alumno.loadInscripciones(inscripciones);
         _alumno.loadMesas(mesas);
+        _alumno.loadInscripciones(inscripciones);
         this.view.setItems();
     }
 

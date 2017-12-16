@@ -115,13 +115,6 @@ public class AlumnoActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones) {
-        _alumno.loadInscripciones(inscripciones);
-        _alumno.loadMesas(mesas);
-        this.fragment.updateList();
-    }
-
-    @Override
     public void inscriptoCorrectamente(String mensaje) {
         mostrarError(mensaje);
         startService(new Intent(this, ServicioIntent.class));

@@ -14,10 +14,7 @@ public class IAlumno {
     public interface View {
         public void mostrarError(String error);
         public void setAlumno(Alumno alumno);
-        public void setMesasEInscripciones(ArrayList<Mesa> mesas, ArrayList<Inscripcion> inscripciones);
-
         void inscriptoCorrectamente(String mensaje);
-
         void desinscriptoCorrectamente(String mensaje);
     }
     public interface Presenter {

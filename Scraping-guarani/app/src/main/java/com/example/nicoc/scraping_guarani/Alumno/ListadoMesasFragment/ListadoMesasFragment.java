@@ -4,27 +4,24 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.example.nicoc.scraping_guarani.Alumno.AlumnoActivity;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
-import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnItemClick;
 import butterknife.OnItemSelected;
 
@@ -40,6 +37,9 @@ public class ListadoMesasFragment extends Fragment implements
 
     @BindView(R.id.lista) ListView lista;
     @BindView(R.id.cmb_carreras) Spinner cmb_carreras;
+    @BindView(R.id.ckb_insc) CheckBox check_insc;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,15 +104,23 @@ public class ListadoMesasFragment extends Fragment implements
         }
         cmb_carreras.setAdapter(new ArrayAdapter<String>(getActivity(), simple_spinner_item, carrera));
     }
+
+    private void filtrado(){
+        String carrera = cmb_carreras.getItemAtPosition(cmb_carreras.getSelectedItemPosition()).toString();
+        boolean insc = check_insc.isChecked();
+        if (!carrera.contains("Todas")){
+            carrera = _alumno.getCarreraByName(carrera).getCodigo();
+        }
+        ListadoMesasAdapter adapter = (ListadoMesasAdapter) this.lista.getAdapter();
+        adapter.filtrado(carrera, insc);
+    }
+    /* Filtrado de mesas */
     @OnItemSelected(R.id.cmb_carreras)
-    public void spinnerItemSelected(int position) {
-        String nombre_carrera = cmb_carreras.getItemAtPosition(position).toString();
-        ListadoMesasAdapter adapter = (ListadoMesasAdapter) lista.getAdapter();
-        if (nombre_carrera.contains("Todas las carreras"))
-            adapter.limpiarFiltro();
-        else
-            adapter.filtrado(_alumno.getCarreraByName(nombre_carrera).getCodigo());
+    void spinnerItemSelected() {
+        filtrado();
     }
 
-
+    @OnCheckedChanged(R.id.ckb_insc) void check_insc(boolean checked){
+        filtrado();
+    }
 }

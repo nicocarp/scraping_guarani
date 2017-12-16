@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
+import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
 import com.example.nicoc.scraping_guarani.R;
@@ -33,6 +34,8 @@ public class ListadoMesasAdapter extends BaseAdapter  {
     private List<Mesa> items = Collections.emptyList();
     private List<Mesa> items_all = Collections.emptyList();
     private Alumno alumno;
+    private Boolean mesas=true;
+
     public ListadoMesasAdapter(ListadoMesasFragment fragment, Alumno alumno){
         this.context = fragment.getActivity();
         this.alumno = alumno;
@@ -44,6 +47,7 @@ public class ListadoMesasAdapter extends BaseAdapter  {
     @Override
     public int getCount() {
         return this.items.size();
+
     }
 
     @Override
@@ -63,28 +67,27 @@ public class ListadoMesasAdapter extends BaseAdapter  {
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inf.inflate (R.layout.item_mesa_nuevo, null);
         }
-        //ImageView view_img_producto = (ImageView) v.findViewById(R.id.imagenProducto);
         TextView view_txt_nombre = (TextView) v.findViewById(R.id.txtNombre);
         TextView view_txt_codigo = (TextView) v.findViewById(R.id.txtCodigo);
 
-        // cargamos los datos
-        Mesa mesa = this.items.get(position);
-
-        // view_img_producto.setImageDrawable(p.getImagen()); ARREGLAR LO DE IMAGEN
-        if (alumno.estaInscripto(mesa))
-            v.setBackgroundColor(Color.rgb(202, 249, 192));
-
-        //txtNombre.setText(mesa.getMateria().getNombre()+" "+mesa.getCarrera().getCodigo());
-        if (!alumno.estaInscripto(mesa))
-            v.setBackgroundColor(Color.rgb(214, 216, 216));
+        Mesa mesa = (Mesa)this.items.get(position);
         Carrera carrera = alumno.getCarreraById(mesa.getCarrera());
         Materia materia = carrera.getMateriaById(mesa.getMateria());
 
-        // este es un boolean mesa.puedeInscribirse();
-        view_txt_codigo.setText(materia.getNombre());
-        view_txt_nombre.setText(mesa.getFecha());
-        //view_txt_nombre.setText(carrera.getNombre().toLowerCase());
+        String s = mesa.getFecha();
+        if (mesa.getHabilitada()) {
+            s = s.concat("Habilitada");
+        }
+        if (mesa.getInscripto()){
+            s = s.concat(" Inscripto");
+            v.setBackgroundColor(Color.rgb(202, 249, 192));
+        }
 
+        view_txt_codigo.setText("("+carrera.getCodigo()+") "+materia.getNombre());
+        view_txt_nombre.setText(s);
+        if (!mesa.getInscripto()) {
+            v.setBackgroundColor(Color.rgb(214, 216, 216));
+        }
         return v;
     }
 
@@ -117,16 +120,29 @@ public class ListadoMesasAdapter extends BaseAdapter  {
      * Metodo personalizado para filtrar listado de mesas por codigo carrera
      * @param codigo_carrera String
      */
-    public void filtrado(String codigo_carrera){
+    public void filtrado(String codigo_carrera, boolean inscripto){
+
         List<Mesa> filtrado = new ArrayList<>();
-
-        for (Mesa mesa : this.items_all){
-            if (mesa.getCarrera().equals(codigo_carrera))
+        if (!codigo_carrera.contains("Todas")){
+            for (Mesa mesa : this.items_all){
+                if (!mesa.getCarrera().equals(codigo_carrera))
+                    continue;
                 filtrado.add(mesa);
-        }
-        this.refreshData(filtrado);
-    }
+            }
+        }else
+            filtrado = this.items_all;
 
+        if (inscripto){
+            List<Mesa> filtrado2 = new ArrayList<>();
+            for (Mesa mesa : filtrado){
+                if (!mesa.getInscripto())
+                    continue;
+                filtrado2.add(mesa);
+            }
+            this.refreshData(filtrado2);
+        }else
+            this.refreshData(filtrado);
+    }
 
 
 }

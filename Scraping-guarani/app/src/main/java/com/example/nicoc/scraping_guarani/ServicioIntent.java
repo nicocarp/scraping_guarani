@@ -136,8 +136,6 @@ public class ServicioIntent extends IntentService{
         if (inscripciones_json_guardadas.isEmpty())
             inscripciones_json_guardadas = "[]";
 
-        /* Este codigo puede generar error si el usuario cambia la password */
-
         Type collectionType = new TypeToken<ArrayList<Mesa>>(){}.getType();
         ArrayList<Mesa> mesas_guardadas = new Gson().fromJson(mesas_json_guardadas, collectionType);
         collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
@@ -152,26 +150,20 @@ public class ServicioIntent extends IntentService{
             }
         }
 
+        /* Si existian mesas guardadas, las actualizo con las inscripciones */
+        if (!mesas_guardadas.isEmpty()){
+            for (Mesa mesa : mesas_guardadas){
+                mesa.setHabilitada(mesas);
+            }
+            for (Mesa mesa : mesas_guardadas){
+                mesa.setInscripcion(inscripciones);
+            }
+            mesas_json = gson.toJson(mesas_guardadas);
+        }
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();
 
-        // generamos recordatorio de incripciones del dia de hoy.
-        // debe ser solo UNA vez al dia.
-        for (Inscripcion inscripcion : inscripciones){
-            try {
-                String fecha = inscripcion.getFecha();
-                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date date = format.parse(fecha);
-                Date today = format.parse(format.format(new Date()));
-                if (today.equals(date)){
-                    Log.i("NOTIFICANDO INSCRIPCIONES", "hoy tenes una mesa de examen");
-                    break;
-                }
-            } catch (ParseException e) {
-                continue;
-            }
-        }
         if (!mensaje.isEmpty()){
             notificar(mensaje);
             enviarBroadcast(mensaje);
