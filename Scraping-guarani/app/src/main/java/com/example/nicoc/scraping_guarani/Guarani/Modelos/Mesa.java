@@ -2,6 +2,11 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa las mesas de examen. De cada mesa podemos obtener si el alumno esta
+ * inscripto, si la mesa esta habilitada para inscripcion, y si puede inscribirse o
+ * le faltan aprobar otras materias.
+ */
 public class Mesa {
 
     private String carrera;

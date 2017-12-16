@@ -3,6 +3,8 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 /**
  * Created by nicoc on 24/11/17.
+ * Clase que representa una materia. Guardamos codigo y nombre de la materia, año de cursada,
+ * periodo lectivo y sus correlatividades.
  */
 
 public class Materia{
@@ -20,6 +22,10 @@ public class Materia{
         correlatividad = "";
     }
 
+    /**
+     * Devolvemos un texto con todas las materias necesarias para cursar y aprobar la materia.
+     * @return
+     */
     public String getCorrelatividad() {
         return correlatividad;
     }

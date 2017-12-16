@@ -2,6 +2,11 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import java.util.ArrayList;
 
+/**
+ * Clase que representa las carreras del alumno. Por cada carrera seteamos su codigo,
+ *  nombre, plan, legajo del alumno para dicha carrera, si es alumno regular o no,
+ *  y las materias.
+ */
 public class Carrera{
     private String codigo;
     private String nombre;
@@ -62,9 +67,6 @@ public class Carrera{
     }
 
     public void setMaterias(ArrayList<Materia> materias) {
-        /*for (Materia materia : materias){
-            materia.setCarrera(this);
-        }*/
         this.materias = materias;
     }
 

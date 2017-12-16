@@ -2,6 +2,9 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 /**
  * Created by nicoc on 30/11/17.
+ * Esta clase representa las inscripciones a examen activas, que pueden ser canceladas.
+ * Guardamos codigo de carrera, codigo de materia, tipo si es regular o libre
+ *  y fecha de la mesa asociada a la inscripcion.
  */
 
 public class Inscripcion {
