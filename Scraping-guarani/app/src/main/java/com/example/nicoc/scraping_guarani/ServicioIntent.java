@@ -141,12 +141,23 @@ public class ServicioIntent extends IntentService{
         collectionType = new TypeToken<ArrayList<Inscripcion>>(){}.getType();
         ArrayList<Inscripcion> inscripciones_guardadas = new Gson().fromJson(inscripciones_json_guardadas, collectionType);
 
+
+        /* Que voy a notificar ? */
         String mensaje = "";
         if (mesas_guardadas.isEmpty() &&  !mesas.isEmpty()){
             mensaje = "Nuevas mesas de examen disponibles.";
         }else{
-            if (inscripciones_guardadas.size() != inscripciones.size()){
-                mensaje = "Actualizando inscripciones";
+            int cant_mesas_habilitadas = 0;
+            for (Mesa mesa : mesas_guardadas){
+                if (mesa.getHabilitada())
+                    cant_mesas_habilitadas++;
+            }
+            if (cant_mesas_habilitadas!=mesas.size())
+                mensaje = "Actualizando mesas";
+            else{
+                if (inscripciones_guardadas.size() != inscripciones.size()){
+                    mensaje = "Actualizando inscripciones";
+                }
             }
         }
 
@@ -158,8 +169,15 @@ public class ServicioIntent extends IntentService{
             for (Mesa mesa : mesas_guardadas){
                 mesa.setInscripcion(inscripciones);
             }
-            mesas_json = gson.toJson(mesas_guardadas);
+            ArrayList<Mesa> filtrado = new ArrayList<Mesa>();
+            for (Mesa mesa : mesas_guardadas){
+                if (!mesa.getHabilitada() && !mesa.getInscripto())
+                    continue;
+                filtrado.add(mesa);
+            }
+            mesas_json = gson.toJson(filtrado);
         }
+
         edit.putString("mesas", mesas_json);
         edit.putString("inscripciones", inscripciones_json);
         edit.commit();

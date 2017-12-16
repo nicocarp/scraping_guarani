@@ -130,7 +130,11 @@ public class Mesa {
      */
     public String getSoloFecha(){
         String[] result = this.getFecha().split(" ");
-        return result[0];
+        try{
+            return result[0];
+        }catch(ArrayIndexOutOfBoundsException e){
+            return "";
+        }
     }
 
     /**
@@ -139,7 +143,11 @@ public class Mesa {
      */
     public String getHora(){
         String[] result = this.getFecha().split(" ");
-        return result[1];
+        try{
+            return result[1];
+        }catch(ArrayIndexOutOfBoundsException e){
+            return "";
+        }
     }
 
     public String getAnio_acedemico() {

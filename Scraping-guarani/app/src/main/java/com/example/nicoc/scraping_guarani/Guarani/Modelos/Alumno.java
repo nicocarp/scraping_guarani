@@ -2,6 +2,11 @@ package com.example.nicoc.scraping_guarani.Guarani.Modelos;
 
 import java.util.ArrayList;
 
+/**
+ * Representa a un alumno. Guardamos su nombre, si es regular o no y sus carreras.
+ * Este objeto tiene atributos volatiles: mesas e inscripciones, no se almacenan localmente.
+ * Esto es asi para evitar inconsistencias con el servidor Guarani. Se setean y se pierden una vez
+ */
 public class Alumno{
 
     private String nombre;
@@ -37,7 +42,6 @@ public class Alumno{
     }
 
     public void setRegular(boolean regular) {
-
         if (!regular)
             for (Carrera carrera :this.getCarreras()){
                 carrera.setActivo(false);
@@ -45,35 +49,17 @@ public class Alumno{
         this.regular = regular;
     }
 
-    public void addInscripcion(Inscripcion inscripcion){
-        this.inscripciones.add(inscripcion);
-    }
-    public void addCarrera(Carrera carrera) {
-        this.carreras.add(carrera);
-    }
-
     public ArrayList<Inscripcion> getInscripciones() {
         return inscripciones;
     }
 
     /**
-     * Guardamos listado de inscripciones como atributo del alumno.
-     * @param inscripciones
-     */
-    public void setInscripciones(ArrayList<Inscripcion> inscripciones) {
-        this.inscripciones = inscripciones;
-    }
-
-    /**
-     * Recorremos las inscripciones del alumno y verificamos que coincida con la mesa recibida
-     * por parametro. Coinciden en codigo_materia y codigo_carrera.
+     * Retornamos si el alumno esta inscripto a la mesa.
      * @param mesa mesa habilitada para inscripcion.
      * @return true si el alumno esta inscripto a la mesa.
      */
     public Boolean estaInscripto(Mesa mesa){
-
         return mesa.getInscripto();
-
     }
 
     /**
@@ -107,6 +93,13 @@ public class Alumno{
     public void loadInscripciones(ArrayList<Inscripcion> inscripciones) {
         this.inscripciones= inscripciones;
     }
+
+    /**
+     * Retornamos la mesa buscandola por su id: codigo_carrera+codigo_materia
+     * @param carrera codigo
+     * @param materia codigo
+     * @return instancia de Mesa o null si no existe.
+     */
     private Mesa getMesa(String carrera, String materia){
         Mesa result = null;
         for (Mesa mesa : this.getMesas()){
@@ -128,10 +121,9 @@ public class Alumno{
      * @return Carrera o null si no existe.
      */
     public Carrera getCarreraByName(String nombre_carrera){
-        String buscadr = nombre_carrera.toLowerCase();
         Carrera result = null;
         for (Carrera carrera : this.getCarreras()){
-            if (carrera.getNombre().toLowerCase().equals(nombre_carrera)){
+            if (carrera.getNombre().toLowerCase().equals(nombre_carrera.toLowerCase())){
                 result = carrera;
                 break;
             }
@@ -139,6 +131,11 @@ public class Alumno{
         return result;
     }
 
+    /**
+     * Retornamos la inscripcion asociada a la mesa recibida por parametro.
+     * @param mesa instancia
+     * @return Inscripcion instancia o null si no existe.
+     */
     public Inscripcion getInscripcionByMesa(Mesa mesa) {
         Inscripcion result = null;
         for (Inscripcion inscripcion : this.getInscripciones()){
