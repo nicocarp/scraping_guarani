@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by nicoc on 06/12/17.
+ * Clase con funciones necesarias por Guarani.
  */
 
 public class Utils {

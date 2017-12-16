@@ -1,15 +1,11 @@
 package com.example.nicoc.scraping_guarani.Guarani;
 
-import android.util.Log;
-
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Alumno;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Auth;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Carrera;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Inscripcion;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Materia;
 import com.example.nicoc.scraping_guarani.Guarani.Modelos.Mesa;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,7 +14,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,13 +21,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by nicoc on 23/11/17.
+ * Modulo representante del servidor SIU GUARANI. Presenta una api para la aplicacion.
+ * Se realizan peticiones http por lo que deben ejecutarse en tareas en segundo pĺano.
+ * Guarani es un singleton, con metodos synchronized para evitar inconsistencias entre hilos.
  */
 
 public class Guarani {
@@ -176,6 +171,12 @@ public class Guarani {
         return false;
     }
 
+    /**
+     * Devolvemos un listado de las inscripciones del alumno. Representan inscripcinoes que pueden
+     *  se canceladas.
+     * @return ArrayList<Inscripcion>
+     * @throws IOException
+     */
     public synchronized ArrayList<Inscripcion> getMesasAnotadas() throws IOException {
         if (!estaLogueado())
             login();
@@ -327,6 +328,11 @@ public class Guarani {
         return alumno;
     }
 
+    /**
+     * Este metodo devuelve las mesas de examenes habilitadas para inscripcion.
+     * @return ArrayList<Mesa>
+     * @throws IOException
+     */
     public synchronized ArrayList<Mesa> getMesasDeExamen() throws IOException {
 
         if (!estaLogueado())
@@ -580,7 +586,7 @@ public class Guarani {
 
     // EJEMPLO DE USO DE GUARANI.
     public static void main(String [] args) throws IOException, NoSuchAlgorithmException, ParseException {
-/*
+
         Guarani.setAuth(new Auth("username", "password"));
         Guarani g = getInstance();
 
@@ -614,7 +620,7 @@ public class Guarani {
             else
                 System.out.println(g.getError());
 
-            alumno.setInscripciones(g.getMesasAnotadas());
+            alumno.loadInscripciones(g.getMesasAnotadas());
             System.out.println("6- Mesas a las que esta anotado");
             System.out.println(alumno.getInscripciones());
         }catch(IOException e){
@@ -624,15 +630,8 @@ public class Guarani {
         }catch(NullPointerException e){
             System.out.println(e.getMessage());
         }
-        */
-        String fecha = "15/12/2017 18:00";
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = format.parse(fecha);
-        Date today = format.parse(format.format((new Date())));
-        if (today.equals(date))
-            System.out.println("SN IGUALES");
-        else
-            System.out.println("NO SON IGUALES");
+
+
 
     }
 }
