@@ -217,9 +217,9 @@ public class Guarani {
                 inscripcion.setCarrera("LICENCIATURA EN SISTEMAS");
                 inscripcion.setFecha(" 23/02/2017");
                 inscripciones.add(inscripcion);
-        }
+        }*/
         return inscripciones;
-    }*/
+    }
 
     /**
      * Se desinscribe de una mesa de examen, identificandola por codigo de carrera y materia.
@@ -408,7 +408,7 @@ public class Guarani {
             links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         }
         /* Probando tirar datos*/
-    /*    if (mesas.isEmpty()){
+        if (mesas.isEmpty()){
             Mesa m = new Mesa();
             m.setCarrera("Analista Programador Universitario (Plan 2010)");
             m.setMateria("IF003");
@@ -473,7 +473,7 @@ public class Guarani {
             mesas.add(m9);
         }
         return mesas;
-    }*/
+    }
 
     /**
      * Determinamos si el alumno esta logueado ingresando al menu.
