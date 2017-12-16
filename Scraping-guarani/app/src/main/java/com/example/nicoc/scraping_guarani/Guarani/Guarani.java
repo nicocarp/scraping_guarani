@@ -208,16 +208,18 @@ public class Guarani {
                 inscripciones.add(inscripcion);
             }
         }
-        /*if (inscripciones.size() == 0){
+
+    /*    //if (inscripciones.size() == 0){
+        if (inscripciones.size() != 0){
                 Inscripcion inscripcion = new Inscripcion();
                 inscripcion.setTipo("regular");
-                inscripcion.setMateria("IF005");
-                inscripcion.setCarrera("38");
+                inscripcion.setMateria("IF005 ADMINISTRACION DE PROYECTOS");
+                inscripcion.setCarrera("LICENCIATURA EN SISTEMAS");
                 inscripcion.setFecha(" 23/02/2017");
                 inscripciones.add(inscripcion);
-        }*/
+        }
         return inscripciones;
-    }
+    }*/
 
     /**
      * Se desinscribe de una mesa de examen, identificandola por codigo de carrera y materia.
@@ -406,40 +408,72 @@ public class Guarani {
             links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
         }
         /* Probando tirar datos*/
-        /*if (mesas.isEmpty()){
+    /*    if (mesas.isEmpty()){
             Mesa m = new Mesa();
-            m.setCarrera("38");
+            m.setCarrera("Analista Programador Universitario (Plan 2010)");
             m.setMateria("IF003");
             m.setFecha("11/12/2013");
-            m.setTurno("un-turno");
+            m.setTurno("Regular");
             mesas.add(m);
             Mesa m1 = new Mesa();
-            m1.setCarrera("38");
+            m1.setCarrera("Analista Programador Universitario (Plan 2010)");
             m1.setMateria("MA008");
             m1.setFecha("11/12/2013");
-            m1.setTurno("un-turno");
+            m1.setTurno("Regular");
             mesas.add(m1);
             Mesa m2 = new Mesa();
-            m2.setCarrera("38");
+            m2.setCarrera("Analista Programador Universitario (Plan 2010)");
             m2.setMateria("IF005");
             m2.setFecha("11/12/2013");
-            m2.setTurno("un-turno");
+            m2.setTurno("Regular");
             mesas.add(m2);
             Mesa m3 = new Mesa();
-            m3.setCarrera("18");
+            m3.setCarrera("Analista Programador Universitario (Plan 2010)");
             m3.setMateria("MA008");
             m3.setFecha("11/12/2013");
-            m3.setTurno("un-turno");
+            m3.setTurno("Regular");
             mesas.add(m3);
             Mesa m4 = new Mesa();
-            m4.setCarrera("18");
+            m4.setCarrera("Analista Programador Universitario (Plan 2010)");
             m4.setMateria("IF005");
             m4.setFecha("11/12/2013");
-            m4.setTurno("un-turno");
+            m4.setTurno("Regular");
             mesas.add(m4);
-        }*/
+
+            //Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos (Plan 2010)
+            Mesa m5 = new Mesa();
+            m5.setCarrera("Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos");
+            m5.setMateria("IF003");
+            m5.setFecha("11/12/2013");
+            m5.setTurno("Regular");
+            mesas.add(m5);
+            Mesa m6 = new Mesa();
+            m6.setCarrera("Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos");
+            m6.setMateria("MA008");
+            m6.setFecha("11/12/2013");
+            m6.setTurno("Regular");
+            mesas.add(m6);
+            Mesa m7 = new Mesa();
+            m7.setCarrera("Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos");
+            m7.setMateria("IF005");
+            m7.setFecha("11/12/2013");
+            m7.setTurno("Regular");
+            mesas.add(m7);
+            Mesa m8 = new Mesa();
+            m8.setCarrera("Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos");
+            m8.setMateria("MA008");
+            m8.setFecha("11/12/2013");
+            m8.setTurno("Regular");
+            mesas.add(m8);
+            Mesa m9 = new Mesa();
+            m9.setCarrera("Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos");
+            m9.setMateria("IF005");
+            m9.setFecha("11/12/2013");
+            m9.setTurno("Regular");
+            mesas.add(m9);
+        }
         return mesas;
-    }
+    }*/
 
     /**
      * Determinamos si el alumno esta logueado ingresando al menu.
