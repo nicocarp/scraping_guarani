@@ -45,7 +45,7 @@ public class AsyncLogin extends AsyncTask<String, Void, Alumno> {
             this.error = e.getMessage().toString();
         } catch (IOException e) {
             e.printStackTrace();
-            this.error = "Error en la conexion";
+            this.error = "Error en la conexión";
         }
         return null;
     }
