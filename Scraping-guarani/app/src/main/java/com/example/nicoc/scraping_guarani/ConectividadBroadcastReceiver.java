@@ -11,6 +11,9 @@ import android.util.Log;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/* Clase que se encarga de ver conectividad de la red,
+* y reiniciar el servicio (ServicioIntent) cuando vuelve la conexion.
+* */
 public class ConectividadBroadcastReceiver extends BroadcastReceiver {
 
     @Override
@@ -22,12 +25,9 @@ public class ConectividadBroadcastReceiver extends BroadcastReceiver {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         Boolean conectado =  activeNetworkInfo != null && activeNetworkInfo.isConnected();
-        //Log.i("BROADCAST RECEVIER", "0-me llamo la plataforma.");
-        //Log.i("BROADCAST RECEVIER", "Avisar "+aviso +" Conectado:"+ conectado);
+
         if (conectado && aviso){
-            //Log.i("BROADCAST RECEVIER", "1- estoy conectado");
             context.startService(new Intent(context.getApplicationContext(), ServicioIntent.class));
-            //Log.i("BROADCAST RECEVIER", "2- despues de llamar al servicio");
         }
     }
 }

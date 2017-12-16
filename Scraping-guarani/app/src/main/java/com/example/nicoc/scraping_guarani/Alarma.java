@@ -18,6 +18,7 @@ import static android.os.Looper.getMainLooper;
 
 /**
  * Created by Ivan on 26/11/2017.
+ * Clase que se encarga de disparar una alarma para que ServicioIntent.java se ejecute cada 12 hs.
  */
 
 public class Alarma extends Thread{
@@ -84,6 +85,7 @@ public class Alarma extends Thread{
         this.tiempo_repeticion = tiempo_repeticion;
     }
 
+    /* Cancelo la alarma para que ya no siga ejecutando el servicio */
     public static void cancelarAlarma()
     {
         // Si la alarma ha sido seteada, la cancelo.
@@ -99,6 +101,7 @@ public class Alarma extends Thread{
                     " Datos del Error: " + e.getMessage());
         }
     }
+
 
     public void run(){
         try {

@@ -130,7 +130,7 @@ public class AlumnoActivity extends AppCompatActivity implements
 
 
 
-
+    /* Se queda a la escucha del mensaje enviado por ServiceIntent.java */
     private final BroadcastReceiver broadcastManagerMesas = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -156,12 +156,14 @@ public class AlumnoActivity extends AppCompatActivity implements
     private final IntentFilter filterLogin = new IntentFilter("LoginError");
 
 
+    /* le dijo a los broadcast que comiencen a escuchar */
     private void registrarBroadcasts(){
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerMesas,filterMesas);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastManagerError,filterLogin);
         Log.i("registrarBroadcasts","ENTRE");
     }
 
+    /* le dijo a los broadcast que dejen de escuchar */
     public void desregistrarBroadcasts(){
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerMesas);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastManagerError);
@@ -233,7 +235,7 @@ public class AlumnoActivity extends AppCompatActivity implements
         desloguearse();
     }
 
-
+    /* Elimina todas las notificaciones que están en el area de notificaciones del dispositivo */
     private void matarNotificaciones(){
         NotificationManager mNotifyMgr =(NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.cancel(ServicioIntent.NOTIFICACION_INSCRIPCION);
@@ -242,7 +244,7 @@ public class AlumnoActivity extends AppCompatActivity implements
 
     }
 
-
+    /* acciones a llevar a cabo para desloguearse */
     public void desloguearse(){
         desregistrarBroadcasts();
         this.presenter.desloguearse();

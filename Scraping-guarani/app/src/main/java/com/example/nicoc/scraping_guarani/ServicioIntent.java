@@ -37,6 +37,11 @@ import java.util.Date;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
+
+
+/* Clase que se encargaa de pedir mesas e inscripciones a Guarani
+* y comunicarle al usuario via notifitions o broadcast
+* */
 public class ServicioIntent extends IntentService{
 
     NotificationCompat.Builder mBuilder;
@@ -105,6 +110,7 @@ public class ServicioIntent extends IntentService{
         stopSelf();
     }
 
+    /* Espero 15 segundos para luego volver a ejecutar los metodos de Guarani */
     private void esperar() {
         bandera = true;
         contador++;
@@ -188,6 +194,7 @@ public class ServicioIntent extends IntentService{
         }
     }
 
+    /* Creamos una notificacion con un mensaje, la cual quedara en la zona de notificaciones del dispositivo */
     private void notificar(String mensaje){
         NotificationManager mNotifyMgr = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
 
@@ -206,8 +213,8 @@ public class ServicioIntent extends IntentService{
         mNotifyMgr.notify(NOTIFICACION_MESAS, mBuilder.build());
     }
 
+    /* Envio un mensaje broadcast para que sea atrapado por AlumnoActivity */
     private void enviarBroadcast(String mensaje){
-        Log.i("MyService....","estoy en sendBroadcast.");
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(ServicioIntent.this);
         Intent resultIntent = new Intent("MesasActivity");//le pongo un nombre al intent asi se como atraparlo despues.
         Bundle bundle = new Bundle();
