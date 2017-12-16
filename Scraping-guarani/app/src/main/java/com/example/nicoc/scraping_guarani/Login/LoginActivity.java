@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -47,7 +48,6 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         ButterKnife.bind(this);
         this.validator = new AwesomeValidation(ValidationStyle.BASIC);
         iniciarViews();
-
         //Si paso de portrait a landscape o viceversa, veo en que estado quedo.
         if (savedInstanceState != null) {
             String estadoProgressDialog = savedInstanceState.getString(KEY_2);
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements ILogin.View {
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("Iniciando Sesión...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
 

@@ -14,24 +14,18 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Login.LoginActivity"
-            android:screenOrientation="sensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Alumno.AlumnoActivity"
             android:screenOrientation="sensor" />
-        <activity
-            android:name=".Mesa.Listado.MesaActivity"
-            android:screenOrientation="sensor" />
-
         <service
             android:name=".ServicioIntent"
             android:exported="false" />
-
         <receiver
             android:name=".ConectividadBroadcastReceiver"
             android:enabled="true"
@@ -50,5 +44,4 @@
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>
