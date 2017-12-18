@@ -372,8 +372,9 @@ public class AlumnoActivity extends AppCompatActivity implements
         View dialogView = inflater.inflate(R.layout.dialog_desinscripcion,null);
         dialogBuilder.setView(dialogView);
 
-        ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(_alumno.getCarreraById(inscripcion.getCarrera()).getNombre());
-        ((TextView) dialogView.findViewById(R.id.lblMateria)).setText(inscripcion.getMateria());
+        Carrera carrera = _alumno.getCarreraById(inscripcion.getCarrera());
+        ((TextView) dialogView.findViewById(R.id.lblCarrera)).setText(carrera.getNombre());
+        ((TextView) dialogView.findViewById(R.id.lblMateria)).setText(carrera.getMateriaById(inscripcion.getMateria()).getNombre());
         ((TextView) dialogView.findViewById(R.id.lblFecha)).setText(inscripcion.getFecha());
         ((TextView) dialogView.findViewById(R.id.lblTipo)).setText(inscripcion.getTipo());
         dialogBuilder.setPositiveButton("Desinscribir", new DialogInterface.OnClickListener() {
