@@ -216,7 +216,7 @@ public class Guarani {
                 inscripcion.setTipo("regular");
                 inscripcion.setMateria("IF005");
                 inscripcion.setCarrera("38");
-                inscripcion.setFecha(" 23/02/2017");
+                inscripcion.setFecha("23/02/2017 18:00");
                 inscripciones.add(inscripcion);
         }
         return inscripciones;

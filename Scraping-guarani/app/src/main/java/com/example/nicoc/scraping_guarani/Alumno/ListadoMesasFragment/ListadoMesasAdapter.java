@@ -81,15 +81,15 @@ public class ListadoMesasAdapter extends BaseAdapter  {
         if (mesa.getInscripto()){
             s = s.concat(" Inscripto");
             v.setBackgroundColor(Color.rgb(202, 249, 192));
+        }else{
+            v.setBackgroundColor(Color.rgb(214, 216, 216));
         }
         if (!mesa.puedeInscribirse())
             v.setBackgroundColor(Color.RED);
 
         view_txt_codigo.setText("("+carrera.getCodigo()+") "+materia.getNombre());
         view_txt_nombre.setText(s);
-        if (!mesa.getInscripto()) {
-            v.setBackgroundColor(Color.rgb(214, 216, 216));
-        }
+
         return v;
     }
 
