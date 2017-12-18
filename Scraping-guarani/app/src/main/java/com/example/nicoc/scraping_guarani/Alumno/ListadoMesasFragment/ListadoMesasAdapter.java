@@ -82,10 +82,10 @@ public class ListadoMesasAdapter extends BaseAdapter  {
             s = s.concat(" Inscripto");
             v.setBackgroundColor(Color.rgb(202, 249, 192));
         }else{
-            v.setBackgroundColor(Color.rgb(214, 216, 216));
+            v.setBackgroundColor(Color.WHITE);
         }
         if (!mesa.puedeInscribirse())
-            v.setBackgroundColor(Color.RED);
+            v.setBackgroundColor(Color.rgb(255,156,138));
 
         view_txt_codigo.setText("("+carrera.getCodigo()+") "+materia.getNombre());
         view_txt_nombre.setText(s);
