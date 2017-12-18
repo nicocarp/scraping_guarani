@@ -76,7 +76,7 @@ public class ListadoMesasAdapter extends BaseAdapter  {
 
         String s = mesa.getFecha();
         if (mesa.getHabilitada()) {
-            s = s.concat("Habilitada");
+            s = s.concat(" Abierta");
         }
         if (mesa.getInscripto()){
             s = s.concat(" Inscripto");
