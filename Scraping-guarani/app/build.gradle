@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     compileSdkVersion 26
@@ -19,9 +18,7 @@ android {
         }
     }
 }
-greendao {
-    schemaVersion 2
-}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -36,8 +33,7 @@ dependencies {
 
     // FORM VALIDATOR
     compile 'com.basgeekball:awesome-validation:2.0'
-    // ORM
-    compile 'org.greenrobot:greendao:3.2.2'
+
     // PARA TRABAJAR CON JSON
     compile 'com.google.code.gson:gson:2.8.2'
 }

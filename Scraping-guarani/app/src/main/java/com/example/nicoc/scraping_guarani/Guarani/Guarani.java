@@ -15,12 +15,9 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -210,15 +207,6 @@ public class Guarani {
             }
         }
 
-        //if (inscripciones.size() == 0){
-        if (inscripciones.size() != 0){
-                Inscripcion inscripcion = new Inscripcion();
-                inscripcion.setTipo("regular");
-                inscripcion.setMateria("IF005");
-                inscripcion.setCarrera("38");
-                inscripcion.setFecha("23/02/2017 18:00");
-                inscripciones.add(inscripcion);
-        }
         return inscripciones;
     }
 
@@ -403,83 +391,9 @@ public class Guarani {
                     link_mesas = document.select("[href*=elegirMesaInscExamen]");
                 }
             }
-
             /* Refecargamosla pagina*/
             document = this.connection.url(url_inscripcion).get();
             links_carreras = document.select("a[href*=elegirMateriaInscExamen]");
-        }
-        /* Probando tirar datos*/
-        if (mesas.isEmpty()){
-            Mesa m = new Mesa();
-            m.setCarrera("18");
-            m.setMateria("IF003");
-            m.setFecha("11/12/2013");
-            m.setTurno("Regular");
-            mesas.add(m);
-            Mesa m1 = new Mesa();
-            m1.setCarrera("18");
-            m1.setMateria("MA008");
-            m1.setFecha("11/12/2013");
-            m1.setTurno("Regular");
-            mesas.add(m1);
-            Mesa m2 = new Mesa();
-            m2.setCarrera("18");
-            m2.setMateria("IF005");
-            m2.setFecha("11/12/2013");
-            m2.setTurno("Regular");
-            mesas.add(m2);
-            Mesa m3 = new Mesa();
-            m3.setCarrera("18");
-            m3.setMateria("MA008");
-            m3.setFecha("11/12/2013");
-            m3.setTurno("Regular");
-            mesas.add(m3);
-            Mesa m4 = new Mesa();
-            m4.setCarrera("18");
-            m4.setMateria("IF005");
-            m4.setFecha("11/12/2013");
-            m4.setTurno("Regular");
-            mesas.add(m4);
-
-            //Licenciatura en Sistemas (Or. Planificación, Gestión y Control de Proyectos Informáticos (Plan 2010)
-            Mesa m5 = new Mesa();
-            m5.setCarrera("38");
-            m5.setMateria("IF003");
-            m5.setFecha("11/12/2013");
-            m5.setTurno("Regular");
-            mesas.add(m5);
-            Mesa m6 = new Mesa();
-            m6.setCarrera("38");
-            m6.setMateria("MA008");
-            m6.setFecha("11/12/2013");
-            m6.setTurno("Regular");
-            mesas.add(m6);
-            Mesa m7 = new Mesa();
-            m7.setCarrera("38");
-            m7.setMateria("IF005");
-            m7.setFecha("11/12/2013");
-            m7.setTurno("Regular");
-            mesas.add(m7);
-            Mesa m8 = new Mesa();
-            m8.setCarrera("38");
-            m8.setMateria("MA008");
-            m8.setFecha("11/12/2013");
-            m8.setTurno("Regular");
-            mesas.add(m8);
-            Mesa m9 = new Mesa();
-            m9.setCarrera("38");
-            m9.setMateria("IF005");
-            m9.setFecha("11/12/2013");
-            m9.setTurno("Regular");
-            mesas.add(m9);
-            Mesa m10 = new Mesa();
-            m10.setCarrera("38");
-            m10.setMateria("IF049");
-            m10.setFecha(null);
-            m10.setMaterias_necesarias( new ArrayList<String>(
-                    Arrays.asList("Buenos Aires", "Córdoba", "La Plata")));
-            m10.setTurno("Regular");
-            mesas.add(m10);
         }
         return mesas;
     }
